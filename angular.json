@@ -28,12 +28,11 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "src/assets",
+                "output": "assets/"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["node_modules/@primeng/themes/lara-light-blue/theme.css","node_modules/primeng/resources/primeng.min.css","src/styles.scss","node_modules/primeicons/primeicons.css"],
             "scripts": []
           },
           "configurations": {
@@ -87,7 +86,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "src/assets",
+                "output": "assets/"
               }
             ],
             "styles": [
@@ -98,5 +98,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

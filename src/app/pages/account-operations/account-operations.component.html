@@ -1,0 +1,198 @@
+<div class="account-operations">
+  <p-toast></p-toast>
+  <p-card header="Account Operations" [style]="{ 'margin-bottom': '2rem' }">
+    <div class="card-content">
+      <div class="operation-description">
+        <i
+          class="pi pi-wallet"
+          style="
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-right: 1rem;
+          "
+        ></i>
+        <div>
+          <h3>Manage Your Funds</h3>
+          <p>
+            Deposit money into your account or make a withdrawal. All
+            transactions have a minimum amount of $10.
+          </p>
+        </div>
+      </div>
+
+      <div class="operation-buttons">
+        <button
+          pButton
+          type="button"
+          label="Deposit"
+          icon="pi pi-plus"
+          class="custom-op-btn deposit-btn"
+          (click)="openDialog('deposit')"
+        ></button>
+        <button
+          pButton
+          type="button"
+          label="Withdraw"
+          icon="pi pi-minus"
+          class="custom-op-btn withdraw-btn"
+          (click)="openDialog('withdraw')"
+        ></button>
+      </div>
+    </div>
+  </p-card>
+
+  <p-dialog
+    [header]="(operationType === 'deposit' ? 'Deposit' : 'Withdraw') + ' Funds'"
+    [(visible)]="showDialog"
+    [modal]="true"
+    [style]="{ width: '450px' }"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="!processing"
+    [closeOnEscape]="!processing"
+    (onHide)="closeDialog()"
+    class="operation-dialog"
+  >
+    <form [formGroup]="transactionForm" (ngSubmit)="submitTransaction()">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="account">Account</label>
+          <p-dropdown
+            id="account"
+            formControlName="account"
+            [options]="accountOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select an account"
+            [showClear]="true"
+            [filter]="true"
+            filterBy="label"
+            [autoDisplayFirst]="false"
+            (onChange)="onAccountSelect($event.value)"
+            [disabled]="processing"
+          >
+            <ng-template let-account pTemplate="selectedItem">
+              <div class="selected-account">
+                <span>{{ account?.label || "Select an account" }}</span>
+              </div>
+            </ng-template>
+            <ng-template let-account pTemplate="item">
+              <div class="account-option">
+                <div class="account-info">
+                  <i class="pi pi-credit-card" style="margin-right: 0.5rem"></i>
+                  <div>
+                    <div class="account-number">{{ account.label }}</div>
+                    <div
+                      class="account-balance"
+                      *ngIf="getAccountDetails(account.value) as acc"
+                    >
+                      Balance: {{ formatCurrency(acc.balance) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+          <small
+            class="p-error"
+            *ngIf="
+              formSubmitted &&
+              transactionForm.get('account')?.hasError('required')
+            "
+          >
+          </small>
+        </div>
+
+        <div class="p-field">
+          <div class="flex justify-content-between">
+            <label for="amount">
+              {{ operationType === "deposit" ? "Deposit" : "Withdraw" }} Amount
+              <span class="text-sm">(min $10)</span>
+            </label>
+            <span class="text-500 text-sm" *ngIf="selectedAccountDetails">
+              Available: {{ formatCurrency(selectedAccountDetails.balance) }}
+            </span>
+          </div>
+          <p-inputNumber
+            id="amount"
+            formControlName="amount"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            [min]="10"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [style]="{ width: '100%' }"
+            [disabled]="!selectedAccountDetails || processing"
+            inputStyleClass="w-full"
+          >
+          </p-inputNumber>
+          <small
+            class="p-error"
+            *ngIf="
+              formSubmitted &&
+              transactionForm.get('amount')?.hasError('required')
+            "
+          >
+            Please enter an amount
+          </small>
+          <small
+            class="p-error"
+            *ngIf="
+              formSubmitted && transactionForm.get('amount')?.hasError('min')
+            "
+          >
+            Minimum amount is $10
+          </small>
+          <small
+            class="p-error"
+            *ngIf="
+              formSubmitted && transactionForm.get('amount')?.hasError('max')
+            "
+          >
+            Amount exceeds available balance
+          </small>
+        </div>
+
+        <div
+          class="p-message p-message-error p-mt-3"
+          *ngIf="formMessage && formMessageType === 'error'"
+        >
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ formMessage }}</span>
+        </div>
+      </div>
+    </form>
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        type="button"
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="closeDialog()"
+        [disabled]="processing"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        [label]="
+          (operationType === 'deposit' ? 'Deposit' : 'Withdraw') +
+          (processing ? 'ing...' : '')
+        "
+        [icon]="operationType === 'deposit' ? 'pi pi-plus' : 'pi pi-minus'"
+        [class]="
+          operationType === 'deposit' ? 'p-button-success' : 'p-button-danger'
+        "
+        [disabled]="processing || transactionForm.invalid"
+        (click)="submitTransaction()"
+      >
+        <i
+          *ngIf="processing"
+          class="pi pi-spin pi-spinner"
+          style="margin-right: 0.5rem"
+        ></i>
+      </button>
+    </ng-template>
+  </p-dialog>
+</div>

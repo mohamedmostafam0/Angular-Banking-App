@@ -1,0 +1,92 @@
+<p-card header="Transactions" styleClass="transactions-card">
+  <p-table
+    #dt
+    [value]="transactions"
+    [paginator]="true"
+    [globalFilterFields]="['date', 'description', 'amount', 'accountNumber']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    scrollHeight="400px"
+    [scrollable]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div class="table-header">
+        <span class="p-input-icon-left"> </span>
+        <p-button
+          label="Clear"
+          styleClass="p-button-outlined"
+          icon="pi pi-filter-slash"
+          (onClick)="clear(dt)"
+        ></p-button>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="date">
+          <div class="flex justify-content-between align-items-center">
+            Date
+            <p-sortIcon field="date"></p-sortIcon>
+            <p-columnFilter
+              type="date"
+              field="date"
+              display="menu"
+            ></p-columnFilter>
+          </div>
+        </th>
+        <th pSortableColumn="description">
+          <div class="flex justify-content-between align-items-center">
+            Description
+            <p-sortIcon field="description"></p-sortIcon>
+            <p-columnFilter
+              type="text"
+              field="description"
+              display="menu"
+            ></p-columnFilter>
+          </div>
+        </th>
+        <th pSortableColumn="amount">
+          <div class="flex justify-content-between align-items-center">
+            Amount
+            <p-sortIcon field="amount"></p-sortIcon>
+            <p-columnFilter
+              type="numeric"
+              field="amount"
+              display="menu"
+            ></p-columnFilter>
+          </div>
+        </th>
+        <th pSortableColumn="accountNumber">
+          <div class="flex justify-content-between align-items-center">
+            Account No.
+            <p-sortIcon field="accountNumber"></p-sortIcon>
+            <p-columnFilter
+              field="accountNumber"
+              matchMode="equals"
+              [showMenu]="false"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filter">
+                <p-dropdown
+                  [options]="accountOptions"
+                  [(ngModel)]="accountFilterValue"
+                  (onChange)="onAccountFilterChange($event.value)"
+                  placeholder="Any"
+                  [showClear]="true"
+                >
+                </p-dropdown>
+              </ng-template>
+            </p-columnFilter>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-transaction>
+      <tr>
+        <td>{{ transaction.date | date : "short" }}</td>
+        <td>{{ transaction.description }}</td>
+        <td>{{ transaction.amount | currency : "USD" }}</td>
+        <td>{{ transaction.accountNumber }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

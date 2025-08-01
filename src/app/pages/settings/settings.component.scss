@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  padding: 2rem;
+  background-color: #f9fafb;
+}
+
+.settings-card {
+  background-color: #f1f3f5;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  height: 80vh; /* Adjust this value as needed */
+  display: flex;
+  flex-direction: column;
+}

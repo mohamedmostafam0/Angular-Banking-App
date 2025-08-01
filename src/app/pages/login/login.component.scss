@@ -1,0 +1,115 @@
+:host ::ng-deep .login-p-card {
+  .p-card-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .p-card-subtitle {
+    font-size: 1rem;
+    color: #7f8c8d;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .p-card-content {
+    padding-top: 1rem;
+  }
+}
+
+.login-page {
+  display: flex;
+  height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f7f6;
+}
+
+.login-left {
+  flex: 1.2;
+  background: linear-gradient(135deg, #004785 0%, #002244 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+
+  img {
+    max-width: 60%;
+    height: auto;
+  }
+}
+
+.login-right {
+  flex: 1;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.login-card-wrapper {
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem;
+}
+
+.p-field {
+  margin-bottom: 1.5rem;
+
+  label {
+    font-weight: 500;
+    color: #34495e;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+}
+
+.p-inputtext {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #dcdfe6;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+
+  &:focus {
+    border-color: #004785;
+    box-shadow: 0 0 0 2px rgba(0, 71, 133, 0.2);
+  }
+}
+
+
+.p-error {
+  color: #e74c3c;
+  font-size: 0.875em;
+  margin-top: 0.5rem;
+}
+
+.login-button-wrapper {
+  margin-top: 2rem;
+}
+
+:host ::ng-deep .login-button .p-button {
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.p-message {
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 992px) {
+  .login-left {
+    display: none;
+  }
+
+  .login-right {
+    flex: 1;
+    justify-content: center;
+  }
+} 

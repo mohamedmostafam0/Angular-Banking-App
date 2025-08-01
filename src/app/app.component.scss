@@ -1,0 +1,30 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  margin-top: 64px; /* Height of the header */
+}
+
+.sidebar-container {
+  width: 280px;
+  background-color: #f4f4f4;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+}
+
+
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+
+  &.logged-in {
+    padding-bottom: 50px; /* Adjust this value to match your footer's height */
+    padding-left: 20px;
+  }
+}

@@ -1,0 +1,66 @@
+.app-header {
+  background: #004785;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+
+  .header-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .header-logo {
+      height: 2.5rem;
+      width: auto;
+      object-fit: contain;
+      cursor: pointer;
+    }
+
+    .back-icon {
+      font-size: 1.2rem;
+      color: white;
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    .user-name {
+      font-weight: 500;
+      font-size: 1rem;
+      white-space: nowrap;
+    }
+
+    .lang-toggle {
+      font-size: 0.95rem;
+    }
+
+    .user-avatar {
+      background-color: white;
+      color: #004785;
+    }
+
+    .dropdown-trigger {
+      font-size: 1.2rem;
+      color: white;
+    }
+  }
+}

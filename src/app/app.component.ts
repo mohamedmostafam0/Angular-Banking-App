@@ -1,13 +1,61 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterOutlet, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { AuthService } from './services/auth.service';
+import { HeaderComponent } from './components/header/header.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { CommonModule } from '@angular/common';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Title } from '@angular/platform-browser';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    SidebarComponent,
+    FooterComponent,
+    CommonModule,
+    ToastModule,
+    ConfirmDialogModule,
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  title = 'banking';
+export class AppComponent implements OnInit {
+
+  constructor(
+    public authService: AuthService, 
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private titleService: Title
+  ) {}
+
+  ngOnInit() {
+    this.authService.authState$.subscribe(isAuth => {
+      if (!isAuth) {
+        this.router.navigate(['/login']);
+      }
+    });
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(() => {
+        let route = this.activatedRoute;
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
+        return route;
+      }),
+      filter(route => route.outlet === 'primary'),
+      map(route => route.snapshot.title)
+    ).subscribe((title: string | undefined) => {
+      if (title) {
+        this.titleService.setTitle(`${title} - Banking App`);
+      }
+    });
+  }
 }

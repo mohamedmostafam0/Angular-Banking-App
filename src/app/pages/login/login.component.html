@@ -1,0 +1,61 @@
+<div class="login-page">
+  <div class="login-left">
+    <img src="assets/cubic_logo_white@2.svg" alt="Cubic Logo" />
+  </div>
+  <div class="login-right">
+    <div class="login-card-wrapper">
+      <p-card styleClass="login-p-card">
+        <ng-template pTemplate="title"> Welcome Back </ng-template>
+        <ng-template pTemplate="subtitle"> Sign in to continue </ng-template>
+        <ng-template pTemplate="content">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="p-field">
+              <label for="username">Username</label>
+              <input
+                id="username"
+                pInputText
+                formControlName="username"
+                placeholder="Enter your username"
+              />
+              <div
+                *ngIf="submitted && loginForm.get('username')?.invalid"
+                class="p-error"
+              >
+                Username is required.
+              </div>
+            </div>
+            <div class="p-field">
+              <label for="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                pInputText
+                formControlName="password"
+                placeholder="Enter your password"
+              />
+              <div
+                *ngIf="submitted && loginForm.get('password')?.invalid"
+                class="p-error"
+              >
+                Password is required.
+              </div>
+            </div>
+            <p-message
+              *ngIf="errorMsg"
+              severity="error"
+              [text]="errorMsg"
+            ></p-message>
+            <div class="login-button-wrapper">
+              <p-button
+                label="Login"
+                type="submit"
+                styleClass="login-button"
+                [disabled]="loginForm.invalid"
+              ></p-button>
+            </div>
+          </form>
+        </ng-template>
+      </p-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<header class="app-header">
+  <div class="header-container">
+    <!-- Left: Logo + Back Button -->
+    <div class="header-left">
+      <a href="https://cubicsystems.com/" target="_blank">
+        <img
+          src="assets/cubic_logo_white@2.svg"
+          alt="Cubic Logo"
+          class="header-logo"
+        />
+      </a>
+    </div>
+
+    <!-- Right: User Info -->
+    <div class="header-right">
+      <span class="user-name">{{ username }} | Cubic Information Systems</span>
+      <span class="lang-toggle">عربي</span>
+
+      <p-avatar
+        icon="pi pi-user"
+        shape="circle"
+        styleClass="user-avatar"
+      ></p-avatar>
+
+      <!-- Dropdown trigger icon -->
+      <i
+        class="pi pi-ellipsis-v dropdown-trigger"
+        (click)="menu.toggle($event)"
+        style="cursor: pointer"
+      ></i>
+
+      <p-menu #menu [model]="items" [popup]="true"></p-menu>
+    </div>
+  </div>
+</header>

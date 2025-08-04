@@ -1,4 +1,12 @@
-<p-card header="Accounts" styleClass="accounts-card">
+<p-card styleClass="accounts-card">
+  <ng-template pTemplate="header">
+    <div class="card-title-bar">
+      <h2 class="card-title">Accounts</h2>
+    </div>
+  </ng-template>
+  
+  <p-toast></p-toast>
+
   <p-table
     #dt
     [value]="accounts"
@@ -10,95 +18,93 @@
     scrollable="true"
     scrollHeight="400px"
   >
-    <ng-template pTemplate="caption">
-      <div
-        class="table-header"
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: right;
-        "
-      >
-        <p-button
-          label="Clear"
-          styleClass="p-button-outlined"
-          icon="pi pi-filter-slash"
-          (onClick)="clear(dt)"
-        ></p-button>
-      </div>
-    </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="number" style="width: 20%">
+        <th style="width: 15%">
+          <div class="flex justify-content-between align-items-center">
+            Nickname
+          </div>
+        </th>
+        <th pSortableColumn="number" style="width: 15%">
           <div class="flex justify-content-between align-items-center">
             Account No.
             <p-sortIcon field="number"></p-sortIcon>
-            <p-columnFilter
-              type="text"
-              field="number"
-              display="menu"
-            ></p-columnFilter>
+            <p-columnFilter type="text" field="number" display="menu"></p-columnFilter>
           </div>
         </th>
+
         <th pSortableColumn="type" style="width: 20%">
           <div class="flex justify-content-between align-items-center">
             Type
             <p-sortIcon field="type"></p-sortIcon>
-            <p-columnFilter field="type" matchMode="equals" [showMenu]="false">
-              <ng-template pTemplate="filter" let-value let-filter="filter">
-                <p-dropdown
-                  [options]="typeOptions"
-                  [ngModel]="value"
-                  (onChange)="filter($event.value)"
-                  placeholder="Any"
-                  [showClear]="true"
-                >
-                </p-dropdown>
-              </ng-template>
-            </p-columnFilter>
+            <p-columnFilter type="text" field="type" display="menu"></p-columnFilter>
           </div>
         </th>
+
         <th pSortableColumn="balance" style="width: 20%">
           <div class="flex justify-content-between align-items-center">
             Balance
             <p-sortIcon field="balance"></p-sortIcon>
-            <p-columnFilter
-              type="numeric"
-              field="balance"
-              display="menu"
-            ></p-columnFilter>
+            <p-columnFilter type="numeric" field="balance" display="menu"></p-columnFilter>
           </div>
         </th>
+
         <th pSortableColumn="status" style="width: 20%">
           <div class="flex justify-content-between align-items-center">
             Status
             <p-sortIcon field="status"></p-sortIcon>
-            <p-columnFilter
-              field="status"
-              matchMode="equals"
-              [showMenu]="false"
-            >
-              <ng-template pTemplate="filter" let-value let-filter="filter">
-                <p-dropdown
-                  [options]="statusOptions"
-                  [ngModel]="value"
-                  (onChange)="filter($event.value)"
-                  placeholder="Any"
-                  [showClear]="true"
-                >
-                </p-dropdown>
-              </ng-template>
-            </p-columnFilter>
+            <p-columnFilter type="text" field="status" display="menu"></p-columnFilter>
           </div>
         </th>
+
         <th style="width: 20%">View account transactions</th>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-account>
       <tr>
+        <td>
+          <div class="nickname-edit">
+            <div *ngIf="!isEditing(account)" (click)="startEditing(account, $event)" class="nickname-display">
+              {{ account.nickname || 'Click to add nickname' }}
+              <i class="pi pi-pencil ml-2"></i>
+            </div>
+            <div *ngIf="isEditing(account)" class="nickname-edit-controls">
+              <input 
+                type="text" 
+                pInputText 
+                [(ngModel)]="editedNickname" 
+                (keyup.enter)="saveNickname(account)"
+                (keyup.escape)="cancelEditing()"
+                (click)="$event.stopPropagation()"
+                autofocus
+                pTooltip="Press Enter to save, Esc to cancel"
+                tooltipPosition="top"
+              >
+              <button 
+                pButton 
+                pRipple 
+                icon="pi pi-check" 
+                class="p-button-sm p-button-text p-button-success" 
+                (click)="saveNickname(account); $event.stopPropagation()"
+                pTooltip="Save"
+                tooltipPosition="top"
+              ></button>
+              <button 
+                pButton 
+                pRipple 
+                icon="pi pi-times" 
+                class="p-button-sm p-button-text p-button-danger" 
+                (click)="cancelEditing(); $event.stopPropagation()"
+                pTooltip="Cancel"
+                tooltipPosition="top"
+              ></button>
+            </div>
+          </div>
+        </td>
         <td>{{ account.number }}</td>
         <td>{{ account.type }}</td>
-        <td>{{ account.balance | currency : "USD" }}</td>
+        <td>{{ account.balance | currency : account.currency }}</td>
         <td>
           <p-tag
             [value]="account.status"
@@ -107,10 +113,13 @@
         </td>
         <td>
           <p-button
+            class="ViewTransactionsButton"
             pRipple
             icon="pi pi-eye"
             [routerLink]="['/transactions']"
             [queryParams]="{ account: account.number }"
+            [pTooltip]="'View transactions for ' + (account.nickname || account.number)"
+            tooltipPosition="top"
           ></p-button>
         </td>
       </tr>

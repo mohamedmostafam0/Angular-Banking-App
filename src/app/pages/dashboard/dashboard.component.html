@@ -11,10 +11,7 @@
         <a routerLink="/accounts" class="view-all-link">View All</a>
       </div>
       <div class="card-content">
-        <p-table
-          [value]="((accounts$ | async) || []).slice(0, 5)"
-          styleClass="p-datatable-striped"
-        >
+        <p-table [value]="((accounts$ | async) || []).slice(0, 5)">
           <ng-template pTemplate="header">
             <tr>
               <th>Account No.</th>
@@ -41,10 +38,7 @@
         <a routerLink="/transactions" class="view-all-link">View All</a>
       </div>
       <div class="card-content">
-        <p-table
-          [value]="((transactions$ | async) || []).slice(0, 5)"
-          styleClass="p-datatable-striped"
-        >
+        <p-table [value]="((transactions$ | async) || []).slice(0, 5)">
           <ng-template pTemplate="header">
             <tr>
               <th>Date</th>

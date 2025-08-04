@@ -1,72 +1,113 @@
+/* Main Card Styling */
 :host {
   display: block;
-  padding: 2rem;
-  background-color: #f9fafb;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  min-height: 100%;
 }
 
-.accounts-card {
-  background-color: #f1f3f5;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  padding: 2rem;
-  height: 80vh; /* Adjust this value as needed */
+
+/* Status Tags */
+::ng-deep .p-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 50px;
+  
+  &.p-tag-success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  &.p-tag-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+}
+
+/* Nickname Editing */
+.nickname-edit {
   display: flex;
-  flex-direction: column;
-
-  .table-header {
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  
+  .nickname-display {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
-
-    .p-input-icon-left {
-      .pi-search {
-        color: #6c757d;
-      }
-      input {
-        border-radius: 8px;
-      }
-    }
-  }
-
-  .p-datatable {
-    flex: 1;
-    overflow: auto;
-
-    .p-datatable-thead > tr > th {
-      background-color: #f1f3f5;
-      color: #495057;
-      font-weight: 600;
-      border: none;
-      text-align: left;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-
-    .p-datatable-tbody > tr > td {
-      border-bottom: 1px solid #dee2e6;
-      vertical-align: middle;
-    }
-
-    .p-dropdown {
-      border-radius: 8px;
-      background-color: #ffffff;
-    }
-  }
-
-  .p-paginator {
-    background-color: #ffffff;
-    border-top: 1px solid #dee2e6;
-    padding-top: 1rem;
-  }
-
-  .p-button.p-button-outlined {
-    color: #6c757d;
-    border-color: #ced4da;
-
+    padding: 0.5rem 0;
+    transition: all 0.2s;
+    
     &:hover {
-      background-color: #f8f9fa;
+      color: #1a237e;
+      
+      .pi-pencil {
+        color: #1a237e;
+      }
+    }
+  }
+  
+  .nickname-edit-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    
+    input {
+      flex: 1;
+      min-width: 120px;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      border: 1px solid #ced4da;
+      transition: border-color 0.2s;
+      
+      &:focus {
+        outline: none;
+        border-color: #1a237e;
+        box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.1);
+      }
+    }
+    
+    .p-button {
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      
+      &.p-button-sm {
+        width: 1.75rem;
+        height: 1.75rem;
+      }
+      
+      .pi {
+        font-size: 1rem;
+      }
     }
   }
 }
+
+/* View Button */
+.ViewTransactionsButton {
+  min-width: auto;
+  height: 1.8rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background-color: #003b8b;
+  color: white;
+  border: none;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+
+    &.p-button-icon-only {
+      min-width: 1.8rem;
+      width: 1.8rem;
+
+  &:hover {
+    background-color: #002e6b;
+  }
+}
+}
+

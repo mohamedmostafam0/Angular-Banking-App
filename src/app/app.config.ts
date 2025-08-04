@@ -3,7 +3,7 @@ import { provideRouter, withComponentInputBinding, withHashLocation } from '@ang
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import Lara from '@primeng/themes/lara';
+import aura from '@primeng/themes/aura';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
@@ -19,9 +19,11 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     providePrimeNG({ 
       theme: {
-        preset: Lara
+        preset: aura,
+        options: {
+          darkModeSelector: 'html.dark'
       }
-    }),
+    } }),
     MessageService,
     ConfirmationService
   ]

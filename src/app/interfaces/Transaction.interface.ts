@@ -3,4 +3,5 @@ export interface Transaction {
   description: string;
   amount: number;
   accountNumber: string;
+  currency: 'USD' | 'EUR' | 'EGP' | 'AED' | 'SAR';
 }

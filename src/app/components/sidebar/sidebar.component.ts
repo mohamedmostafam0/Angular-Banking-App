@@ -1,41 +1,57 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, PanelMenuModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
-  items: MenuItem[] = [];
 
-  ngOnInit() {
-    this.items = [
+
+export class SidebarComponent {
+sections = [
+  {
+    title: 'Dashboard',
+    items: [
+      { label: 'Overview', route: '/dashboard/overview', icon: 'pi pi-home' }
+    ]
+  },
+  {
+    title: 'Accounts',
+    items: [
+      { label: 'All Accounts', route: '/accounts', icon: 'pi pi-wallet' },
       {
-        label: 'Dashboard',
-        icon: 'pi pi-fw pi-home',
-        routerLink: '/dashboard'
+        label: 'Checking Accounts',
+        route: '/accounts',
+        icon: 'pi pi-credit-card',
+        queryParams: { type: 'Checking' }
       },
       {
-        label: 'Accounts',
-        icon: 'pi pi-fw pi-wallet',
-        routerLink: '/accounts'
-      },
-      {
-        label: 'Transactions',
-        icon: 'pi pi-fw pi-chart-bar',
-        routerLink: '/transactions'
-      },
-      {
-        label: 'Account Operations',
-        icon: 'pi pi-fw pi-cog',
-        routerLink: '/account-operations'
+        label: 'Savings Accounts',
+        route: '/accounts',
+        icon: 'pi pi-dollar',
+        queryParams: { type: 'Savings' }
       }
-    ];
+    ]
+  },
+  {
+    title: 'Transactions',
+    items: [
+      { label: 'All Transactions', route: '/transactions', icon: 'pi pi-chart-bar' }
+    ]
+  },
+  {
+    title: 'Account Operations',
+    items: [
+      { label: 'All Account Operations', route: '/account-operations', icon: 'pi pi-cog' },
+      { label: 'Deposit Funds', route: '/account-operations/deposit', icon: 'pi pi-arrow-down' },
+      { label: 'Withdraw Funds', route: '/account-operations/withdraw', icon: 'pi pi-arrow-up' }
+    ]
   }
+];
+
 }
+

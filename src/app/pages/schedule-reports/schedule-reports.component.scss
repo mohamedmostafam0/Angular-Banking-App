@@ -1,0 +1,38 @@
+.reports-page {
+  padding: 2rem;
+  background-color: var(--surface-ground);
+  min-height: 100%;
+
+  .header {
+    margin-bottom: 2rem;
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+    p {
+      color: var(--text-color-secondary);
+      font-size: 1.1rem;
+    }
+  }
+
+  .reports-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .centered-container {
+    width: 100%;
+    max-width: 500px; /* Or any width you prefer */
+  }
+
+  .schedule-card {
+    width: 100%;
+  }
+
+  .field {
+    margin-bottom: 1.5rem;
+  }
+}

@@ -1,73 +1,57 @@
 :host {
   display: block;
   padding: 1.5rem;
-  background-color: #f8f9fa;
+  background-color: #fff;
 }
 
 .dashboard-page {
-  .welcome-header {
+  .dashboard-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 2rem;
-    h1 {
-      font-size: 2rem;
-      font-weight: 600;
-      color: #2c3e50;
-    }
-    p {
-      font-size: 1.1rem;
-      color: #7f8c8d;
-    }
-  }
 
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2rem;
-  }
-
-  .card {
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    padding: 1.5rem;
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-
-      h2 {
-        font-size: 1.25rem;
+    .welcome-header {
+      margin-bottom: 0; /* Remove margin-bottom as it's now part of the toolbar */
+      h1 {
+        font-size: 2rem;
         font-weight: 600;
-        color: #34495e;
+        color: #2c3e50;
       }
-
-      .view-all-link {
-        color: #3498db;
-        text-decoration: none;
-        font-weight: 500;
-
-        &:hover {
-          text-decoration: underline;
-        }
+      p {
+        font-size: 1.1rem;
+        color: #7f8c8d;
       }
     }
 
-    .card-content {
-      .p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
-        background-color: #f8f9fa;
-      }
-
-      .text-right {
-        text-align: right;
-      }
-
-      .text-success {
-        color: #28a745;
-      }
-
-      .text-danger {
-        color: #dc3545;
-      }
+    .p-field {
+      margin-bottom: 0; /* Remove margin-bottom from the dropdown field */
     }
   }
+
+  .dashboard-analytics-reporting {
+    margin-top: 2rem;
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(550px, 1fr)); /* Two columns, min width 550px */
+      gap: 2rem; /* Space between cards */
+    }
+
+    
+
+    .p-card {
+      height: 100%;
+    }
+
+    .p-fluid .p-field {
+      margin-bottom: 1rem;
+    }
+
+    .p-button {
+      width: 100%;
+    }
+  }
+
+  
 }

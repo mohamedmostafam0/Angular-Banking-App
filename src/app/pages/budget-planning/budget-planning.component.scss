@@ -1,0 +1,65 @@
+.budget-planning-page {
+  padding: 2rem;
+  background-color: var(--surface-ground);
+  min-height: 100%;
+
+  .header {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: var(--text-color-secondary);
+      font-size: 1.1rem;
+    }
+  }
+
+  .form-container {
+    margin-bottom: 2rem;
+  }
+
+  .field {
+    margin-bottom: 1rem;
+  }
+
+  .usage-bar {
+    display: inline-block;
+    width: 80px;
+    height: 8px;
+    background-color: var(--surface-border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-right: 8px;
+    vertical-align: middle;
+
+    .usage-fill {
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 4px;
+      transition: width 0.3s ease-in-out;
+
+      &.over-budget {
+        background-color: var(--red-500);
+      }
+    }
+  }
+
+  .usage-text {
+    vertical-align: middle;
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  ::ng-deep .p-card .p-card-content {
+    padding-top: 0;
+  }
+
+  ::ng-deep .p-datatable-sm .p-datatable-tbody > tr > td {
+    padding: 0.75rem 0.5rem;
+  }
+}

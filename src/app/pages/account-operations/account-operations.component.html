@@ -56,6 +56,17 @@
     <form [formGroup]="transactionForm" (ngSubmit)="submitTransaction()">
       <div class="p-fluid">
         <div class="p-field">
+          <label for="currency">Currency</label>
+          <p-dropdown
+            id="currency"
+            formControlName="currency"
+            [options]="supportedCurrencies"
+            placeholder="Select transaction currency"
+            [disabled]="processing"
+          ></p-dropdown>
+        </div>
+
+        <div class="p-field">
           <label for="account">Account</label>
           <p-dropdown
             id="account"
@@ -69,7 +80,7 @@
             filterBy="label"
             [autoDisplayFirst]="false"
             (onChange)="onAccountSelect($event.value)"
-            [disabled]="processing"
+            [disabled]="!transactionForm.get('currency')?.value || processing"
           >
             <ng-template let-account pTemplate="selectedItem">
               <div class="selected-account">
@@ -86,38 +97,29 @@
                       class="account-balance"
                       *ngIf="getAccountDetails(account.value) as acc"
                     >
-                      Balance: {{ formatCurrency(acc.balance) }}
+                      Balance: {{ formatCurrency(acc.balance, acc.currency) }}
                     </div>
                   </div>
                 </div>
               </div>
             </ng-template>
           </p-dropdown>
-          <small
-            class="p-error"
-            *ngIf="
-              formSubmitted &&
-              transactionForm.get('account')?.hasError('required')
-            "
-          >
-          </small>
         </div>
 
-        <div class="p-field">
+        <div class="p-field" *ngIf="transactionForm.get('currency')?.value">
           <div class="flex justify-content-between">
             <label for="amount">
               {{ operationType === "deposit" ? "Deposit" : "Withdraw" }} Amount
-              <span class="text-sm">(min $10)</span>
             </label>
             <span class="text-500 text-sm" *ngIf="selectedAccountDetails">
-              Available: {{ formatCurrency(selectedAccountDetails.balance) }}
+              Available: {{ formatCurrency(selectedAccountDetails.balance, selectedAccountDetails.currency) }}
             </span>
           </div>
           <p-inputNumber
             id="amount"
             formControlName="amount"
             mode="currency"
-            currency="USD"
+            [currency]="transactionForm.get('currency')?.value"
             locale="en-US"
             [min]="10"
             [minFractionDigits]="2"
@@ -142,15 +144,7 @@
               formSubmitted && transactionForm.get('amount')?.hasError('min')
             "
           >
-            Minimum amount is $10
-          </small>
-          <small
-            class="p-error"
-            *ngIf="
-              formSubmitted && transactionForm.get('amount')?.hasError('max')
-            "
-          >
-            Amount exceeds available balance
+            Minimum amount is 10
           </small>
         </div>
 

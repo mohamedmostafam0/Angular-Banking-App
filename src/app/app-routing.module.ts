@@ -7,6 +7,7 @@ import { TransactionsComponent } from './pages/transactions/transactions.compone
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AccountOperationsComponent } from './pages/account-operations/account-operations.component';
+import { CurrencyConverterComponent } from './components/currency-converter/currency-converter.component';
 
 const routes: Routes = [
   // Public routes
@@ -32,6 +33,10 @@ const routes: Routes = [
       { 
         path: 'accounts', 
         component: AccountsComponent
+      },
+      {
+        path: 'currency-converter',
+        component: CurrencyConverterComponent
       },
       { 
         path: 'transactions', 

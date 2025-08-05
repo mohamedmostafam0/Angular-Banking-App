@@ -6,6 +6,9 @@ import { TransactionsComponent } from './pages/transactions/transactions.compone
 import { AccountOperationsComponent } from './pages/account-operations/account-operations.component';
 import { AuthGuard } from './guards/auth.guard';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { CurrencyConverterComponent } from './components/currency-converter/currency-converter.component';
+import { BudgetPlanningComponent } from './pages/budget-planning/budget-planning.component';
+import { ScheduleReportsComponent } from './pages/schedule-reports/schedule-reports.component';
 
 export const routes: Routes = [
   // Public routes
@@ -25,6 +28,9 @@ export const routes: Routes = [
       { path: 'transactions', component: TransactionsComponent, title: 'Transactions' },
       { path: 'account-operations', component: AccountOperationsComponent, title: 'Account Operations' },
       { path: 'settings', component: SettingsComponent, title: 'Settings' },
+      { path: 'currency-converter', component: CurrencyConverterComponent, title: 'Currency Converter' },
+      { path: 'budget-planning', component: BudgetPlanningComponent, title: 'Budget Planning' },
+      { path: 'schedule-reports', component: ScheduleReportsComponent, title: 'Schedule Reports' },
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
     ]
   },

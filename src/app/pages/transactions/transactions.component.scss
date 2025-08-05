@@ -1,5 +1,24 @@
 :host {
   display: block;
   padding: 1.5rem;
-  background-color: #f8f9fa;
+  background-color: #fff;
+}
+
+.email-preview {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 1rem;
+  background-color: #fff;
+
+  .email-header {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .email-body {
+    p {
+      margin: 0 0 0.5rem;
+    }
+  }
 }

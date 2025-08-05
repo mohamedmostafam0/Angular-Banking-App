@@ -48,6 +48,7 @@ export class AccountOperationsComponent implements OnInit, OnDestroy {
   formMessage = '';
   formMessageType: 'success' | 'error' | '' = '';
   selectedAccountDetails: Account | null = null;
+  supportedCurrencies: string[] = [];
   
   // Account data
   accounts: Account[] = [];
@@ -67,7 +68,8 @@ export class AccountOperationsComponent implements OnInit, OnDestroy {
   private initForm() {
     this.transactionForm = this.fb.group({
       account: ['', Validators.required],
-      amount: [null, [Validators.required, Validators.min(10)]]
+      amount: [null, [Validators.required, Validators.min(10)]],
+      currency: ['', Validators.required]
     });
   }
   
@@ -81,6 +83,7 @@ export class AccountOperationsComponent implements OnInit, OnDestroy {
         }));
       })
     );
+    this.supportedCurrencies = this.bankingData.getSupportedCurrencies();
   }
 
   ngOnDestroy() {
@@ -108,23 +111,12 @@ export class AccountOperationsComponent implements OnInit, OnDestroy {
 
   onAccountSelect(accountNumber: string) {
     this.selectedAccountDetails = this.accounts.find(acc => acc.number === accountNumber) || null;
-    
-    if (this.selectedAccountDetails) {
-      const amountControl = this.transactionForm.get('amount');
-      if (amountControl) {
-        amountControl.setValidators([
-          Validators.required,
-          Validators.min(0.01)
-        ]);
-        amountControl.updateValueAndValidity();
-      }
-    }
   }
 
-  formatCurrency(amount: number): string {
+  formatCurrency(amount: number, currency: string): string {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: currency,
       minimumFractionDigits: 2
     }).format(amount);
   }
@@ -146,22 +138,41 @@ export class AccountOperationsComponent implements OnInit, OnDestroy {
     this.processing = true;
     const amount = this.transactionForm.get('amount')?.value;
     const accountNumber = this.transactionForm.get('account')?.value;
+    const currency = this.transactionForm.get('currency')?.value;
     let success = false;
-    
-    if (this.operationType === 'deposit') {
-      this.bankingData.deposit(accountNumber, amount);
-      success = true;
-    } else {
-      success = this.bankingData.withdraw(accountNumber, amount);
-    }
-    
-    this.processing = false;
-    this.closeDialog();
 
-    if (success) {
-      this.messageService.add({severity:'success', summary: 'Success', detail: 'Transaction processed successfully.'});
+    if (currency === this.selectedAccountDetails.currency) {
+      if (this.operationType === 'deposit') {
+        this.bankingData.deposit(accountNumber, amount);
+        success = true;
+      } else {
+        success = this.bankingData.withdraw(accountNumber, amount);
+      }
+      this.processing = false;
+      this.closeDialog();
+
+      if (success) {
+        this.messageService.add({severity:'success', summary: 'Success', detail: 'Transaction processed successfully.'});
+      } else {
+        this.messageService.add({severity:'error', summary: 'Error', detail: 'Transaction failed. Insufficient funds or invalid account.'});
+      }
     } else {
-      this.messageService.add({severity:'error', summary: 'Error', detail: 'Transaction failed. Insufficient funds or invalid account.'});
+      this.bankingData.convert(amount, currency, this.selectedAccountDetails.currency).subscribe(convertedAmount => {
+        if (this.operationType === 'deposit') {
+          this.bankingData.deposit(accountNumber, convertedAmount);
+          success = true;
+        } else {
+          success = this.bankingData.withdraw(accountNumber, convertedAmount);
+        }
+        this.processing = false;
+        this.closeDialog();
+
+        if (success) {
+          this.messageService.add({severity:'success', summary: 'Success', detail: 'Transaction processed successfully.'});
+        } else {
+          this.messageService.add({severity:'error', summary: 'Error', detail: 'Transaction failed. Insufficient funds or invalid account.'});
+        }
+      });
     }
   }
 }

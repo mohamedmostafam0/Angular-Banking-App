@@ -1,0 +1,88 @@
+<p-toast></p-toast>
+<div class="budget-planning-page">
+  <div class="header">
+    <h1>Budget Planner</h1>
+    <p>Set monthly budgets for spending categories and track your progress.</p>
+  </div>
+
+  <div class="grid">
+    <div class="col-12 lg:col-5">
+      <p-card header="Manage Budgets" styleClass="h-full">
+        <form [formGroup]="budgetForm" (ngSubmit)="saveBudget()" class="form-container">
+          <div class="p-fluid grid">
+            <div class="field col-12 md:col-6">
+              <label for="category">Category</label>
+              <p-dropdown 
+                inputId="category" 
+                [options]="categories" 
+                formControlName="category" 
+                placeholder="Select a category"
+                [filter]="true"
+                filterBy="label">
+              </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+              <label for="limit">Monthly Limit</label>
+              <p-inputNumber 
+                inputId="limit" 
+                formControlName="limit" 
+                mode="currency" 
+                currency="USD" 
+                locale="en-US">
+              </p-inputNumber>
+            </div>
+          </div>
+          <p-button 
+            label="Set/Update Budget" 
+            type="submit" 
+            icon="pi pi-check" 
+            [disabled]="budgetForm.invalid">
+          </p-button>
+        </form>
+
+        <p-table [value]="budgets" styleClass="p-datatable-sm mt-4" [tableStyle]="{'min-width': '50rem'}">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Category</th>
+              <th>Limit</th>
+              <th>Spent</th>
+              <th>Usage</th>
+              <th>Action</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-budget>
+            <tr>
+              <td>{{ budget.category }}</td>
+              <td>{{ budget.limit | currency:'USD' }}</td>
+              <td>{{ budget.spent | currency:'USD' }}</td>
+              <td>
+                <div class="usage-bar">
+                  <div class="usage-fill" [style.width.%]="getUsage(budget)" [ngClass]="{'over-budget': getUsage(budget) > 100}"></div>
+                </div>
+                <span class="usage-text">{{ getUsage(budget) | number:'1.0-0' }}%</span>
+              </td>
+              <td>
+                <p-button 
+                  icon="pi pi-trash" 
+                  styleClass="p-button-danger p-button-text" 
+                  (onClick)="removeBudget(budget.category)">
+                </p-button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+              <tr>
+                  <td colspan="5">No budgets set. Add one using the form above.</td>
+              </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+
+    <div class="col-12 lg:col-7">
+      <p-card header="Budget vs. Spending" styleClass="h-full">
+        <p-chart type="bar" [data]="budgetChartData" [options]="chartOptions"></p-chart>
+      </p-card>
+    </div>
+  </div>
+</div>

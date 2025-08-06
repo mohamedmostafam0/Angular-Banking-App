@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 export class AuthService implements OnDestroy {
   private readonly TOKEN_KEY = 'auth_token';
   private readonly TOKEN_EXPIRY_KEY = 'token_expiry';
-  private readonly SIDEBAR_STATE_KEY = 'sidebar_expanded';
   private readonly INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
   
   private authState = new BehaviorSubject<boolean>(false);
@@ -19,10 +18,6 @@ export class AuthService implements OnDestroy {
   // Store the URL so we can redirect after logging in
   public redirectUrl: string | null = null;
   
-  // Track sidebar state
-  private _sidebarExpanded = new BehaviorSubject<boolean>(false);
-  sidebarExpanded$ = this._sidebarExpanded.asObservable();
-  
   // Events that will reset the inactivity timer
   private activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
   
@@ -32,13 +27,6 @@ export class AuthService implements OnDestroy {
     this.setupInactivityTimer();
   }
   
-  // This method is called by APP_INITIALIZER
-  initializeApp(): Promise<boolean> {
-    return new Promise((resolve) => {
-      this.checkExistingSession();
-      resolve(true);
-    });
-  }
   
   login(username: string, password: string): boolean {
     // In a real app, this would be an HTTP call to your backend
@@ -53,9 +41,9 @@ export class AuthService implements OnDestroy {
       const redirectUrl = this.redirectUrl || '/dashboard';
       this.router.navigateByUrl(redirectUrl);
       this.redirectUrl = null; // Clear the redirect URL after using it
-      
       return true;
     }
+    // If login fails, clear any existing session
     this.authState.next(false);
     this.username = '';
     return false;
@@ -64,7 +52,7 @@ export class AuthService implements OnDestroy {
   checkExistingSession() {
     const token = this.getToken();
     const expiry = localStorage.getItem(this.TOKEN_EXPIRY_KEY);
-    
+
     if (token && expiry) {
       const now = new Date().getTime();
       if (now < Number(expiry)) {
@@ -98,22 +86,6 @@ export class AuthService implements OnDestroy {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  // Sidebar state management
-  toggleSidebar(): void {
-    const newState = !this._sidebarExpanded.value;
-    this._sidebarExpanded.next(newState);
-    localStorage.setItem(this.SIDEBAR_STATE_KEY, JSON.stringify(newState));
-  }
-
-  setSidebarExpanded(expanded: boolean): void {
-    this._sidebarExpanded.next(expanded);
-    localStorage.setItem(this.SIDEBAR_STATE_KEY, JSON.stringify(expanded));
-  }
-
-  getSidebarState(): boolean {
-    const savedState = localStorage.getItem(this.SIDEBAR_STATE_KEY);
-    return savedState ? JSON.parse(savedState) : false;
-  }
   
   /**
    * Get the current user information
@@ -128,12 +100,6 @@ export class AuthService implements OnDestroy {
     };
   }
   
-  /**
-   * Alias for getUser() for backward compatibility
-   */
-  getCurrentUser() {
-    return this.getUser();
-  }
 
   logout() {
     this.clearSession();

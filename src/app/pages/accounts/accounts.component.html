@@ -1,293 +1,295 @@
-<div class="accounts-container">
-  <!-- Header with title and filters -->
-  <p-toolbar styleClass="accounts-header">
-    <div class="p-toolbar-group-left">
-      <h2 class="card-title">My Accounts</h2>
-    </div>
-    <div class="p-toolbar-group-right">
-      <div class="account-filters">
-        <p-dropdown
-          [options]="accountTypes"
-          [(ngModel)]="selectedType"
-          optionLabel="label"
-          optionValue="value"
-          placeholder="All Account Types"
-          (onChange)="filterAccounts()"
-          [showClear]="!!selectedType"
-          appendTo="body"
-        ></p-dropdown>
-
-        <p-dropdown
-          [options]="accountStatuses"
-          [(ngModel)]="selectedStatus"
-          optionLabel="label"
-          optionValue="value"
-          placeholder="All Statuses"
-          (onChange)="filterAccounts()"
-          [showClear]="!!selectedStatus"
-          appendTo="body"
-        ></p-dropdown>
-
-        <p-button
-          icon="pi pi-filter-slash"
-          label="Clear Filters"
-          styleClass="p-button-outlined "
-          (onClick)="clearFilters()"
-          [disabled]="!selectedType && !selectedStatus"
-        ></p-button>
+<div class="accounts-page">
+  <div class="accounts-container">
+    <!-- Header with title and filters -->
+    <p-toolbar styleClass="accounts-header">
+      <div class="p-toolbar-group-left">
+        <h2 class="card-title">My Accounts</h2>
       </div>
-    </div>
-  </p-toolbar>
-
-  <p-dialog
-    header="Create Alert"
-    [(visible)]="showAlertDialog"
-    [modal]="true"
-    [style]="{ width: '450px' }"
-    (onHide)="selectedAccount = null"
-    styleClass="dialog-responsive"
-  >
-    <div *ngIf="selectedAccount" class="dialog-content">
-      <p class="mb-3">
-        Set an alert for account:
-        <strong>{{ selectedAccount.number }}</strong>
-      </p>
-      <form [formGroup]="alertForm" (ngSubmit)="saveAlert()">
-        <div class="p-field">
-          <label for="alertType">Alert Type</label>
+      <div class="p-toolbar-group-right">
+        <div class="account-filters">
           <p-dropdown
-            id="alertType"
-            formControlName="alertType"
-            [options]="[
-              { label: 'Low Balance', value: 'lowBalance' },
-              { label: 'Large Transaction', value: 'largeTransaction' }
-            ]"
-            placeholder="Select an alert type"
-          ></p-dropdown>
-        </div>
-        <div class="p-field">
-          <label for="threshold">Threshold</label>
-          <p-inputNumber
-            id="threshold"
-            formControlName="threshold"
-            mode="currency"
-            [currency]="selectedAccount.currency"
-            locale="en-US"
-            [min]="0"
-          ></p-inputNumber>
-        </div>
-        <div class="p-dialog-footer">
-          <button
-            pButton
-            type="button"
-            label="Cancel"
-            icon="pi pi-times"
-            class="p-button-text"
-            (click)="showAlertDialog = false"
-          ></button>
-          <button
-            pButton
-            type="submit"
-            label="Save Alert"
-            icon="pi pi-check"
-            [disabled]="alertForm.invalid"
-          ></button>
-        </div>
-      </form>
-    </div>
-  </p-dialog>
-
-  <p-dialog
-    header="Generate Account Statement"
-    [(visible)]="showStatementDialog"
-    [modal]="true"
-    [style]="{ width: '450px' }"
-    (onHide)="selectedAccount = null"
-    styleClass="dialog-responsive"
-  >
-    <div *ngIf="selectedAccount" class="dialog-content">
-      <p class="mb-3">
-        Generate a statement for account:
-        <strong>{{ selectedAccount.number }}</strong>
-      </p>
-      <form
-        [formGroup]="statementForm"
-        (ngSubmit)="exportStatement('pdf')"
-        class="p-fluid"
-      >
-        <div class="p-field">
-          <label for="months">Date Range</label>
-          <p-dropdown
-            id="months"
-            formControlName="months"
-            [options]="[
-              { label: 'Last 3 months', value: 3 },
-              { label: 'Last 6 months', value: 6 },
-              { label: 'Last 12 months', value: 12 }
-            ]"
-            placeholder="Select date range"
-          ></p-dropdown>
-        </div>
-        <div class="p-dialog-footer">
-          <button
-            pButton
-            type="button"
-            label="Cancel"
-            icon="pi pi-times"
-            class="p-button-text"
-            (click)="showStatementDialog = false"
-          ></button>
-          <button
-            pButton
-            type="submit"
-            label="Export PDF"
-            icon="pi pi-file-pdf"
-          ></button>
-          <button
-            pButton
-            type="button"
-            label="Export CSV"
-            icon="pi pi-file-excel"
-            class="p-button-success"
-            (click)="exportStatement('csv')"
-          ></button>
-        </div>
-      </form>
-    </div>
-  </p-dialog>
-
-  <!-- Accounts Grid -->
-  <div class="accounts-grid">
-    <div
-      *ngFor="let account of filteredAccounts"
-      class="account-card-wrapper"
-      [ngClass]="account.status === 'Active' ? 'active' : 'inactive'"
-    >
-    <p-card styleClass="account-card">
-      <ng-template pTemplate="header">
-        <div class="account-header">
-          <div class="account-type">
-            <i [class]="getAccountIcon(account.type)"></i>
-            <span>{{ account.type }}</span>
-          </div>
-          <p-tag
-            [value]="account.status"
-            [severity]="getStatusSeverity(account.status)"
-          ></p-tag>
-        </div>
-      </ng-template>
-
-      <div class="account-card-content">
-        <!-- Account Number -->
-        <div class="account-number">
-          {{ account.number }}
-        </div>
-
-        <!-- Account Balance -->
-        <div class="account-balance">
-          <p-badge
-            *ngIf="checkAlertHit(account)"
-            value="!"
-            severity="danger"
-            [pTooltip]="getAlertMessage(account)"
-            tooltipPosition="top"
-            class="alert-badge"
-          ></p-badge>
-          <span class="balance-label">Available Balance</span>
-          <span class="balance-amount">
-            {{
-              account.balance | currency : account.currency : "symbol" : "1.2-2"
-            }}
-          </span>
-        </div>
-
-        <!-- Account Nickname -->
-        <div class="account-nickname">
-          <div
-            *ngIf="!isEditing(account); else editNickname"
-            class="nickname-display"
-            (click)="startEditing(account, $event)"
-          >
-            <span>{{ account.nickname || "Add nickname" }}</span>
-            <i class="pi pi-pencil"></i>
-          </div>
-
-          <ng-template #editNickname>
-            <div class="nickname-edit-controls">
-              <input
-                type="text"
-                pInputText
-                [(ngModel)]="editedNickname"
-                (keyup.enter)="saveNickname(account)"
-                (keyup.esc)="cancelEditing()"
-                (click)="$event.stopPropagation()"
-                placeholder="Enter nickname"
-                autofocus
-              />
-              <div class="nickname-buttons">
-                <button
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-check"
-                  class="p-button-sm p-button-success p-button-text"
-                  (click)="saveNickname(account)"
-                  pTooltip="Save"
-                  tooltipPosition="top"
-                ></button>
-
-                <button
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-times"
-                  class="p-button-sm p-button-danger p-button-text"
-                  (click)="cancelEditing()"
-                  pTooltip="Cancel"
-                  tooltipPosition="top"
-                ></button>
-              </div>
-            </div>
-          </ng-template>
-        </div>
-        <!-- Account Actions -->
-        <div class="account-actions">
-          <p-button
-            icon="pi pi-arrow-right-arrow-left"
-            label="Transfer"
-            styleClass="p-button-sm p-button-outlined"
-            (onClick)="onTransfer(account)"
-          >
-          </p-button>
-
-          <p-button
-            icon="pi pi-list"
-            label="Transactions"
-            styleClass="p-button-sm p-button-outlined"
-            (onClick)="viewTransactions(account.number)"
-          >
-          </p-button>
-
-          <p-button
-            class="three-dots-button"
-            type="button"
-            icon="pi pi-ellipsis-v"
-            (click)="openMenu($event, menu, account)"
-            styleClass="p-button-sm p-button-text p-button-icon-only three-dots-override"
-          ></p-button>
-          <p-menu
-            #menu
-            [model]="accountMenuItems"
-            [popup]="true"
+            [options]="accountTypes"
+            [(ngModel)]="selectedType"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="All Account Types"
+            (onChange)="filterAccounts()"
+            [showClear]="!!selectedType"
             appendTo="body"
-          ></p-menu>
+          ></p-dropdown>
 
-          <!-- Accounts Grid -->
+          <p-dropdown
+            [options]="accountStatuses"
+            [(ngModel)]="selectedStatus"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="All Statuses"
+            (onChange)="filterAccounts()"
+            [showClear]="!!selectedStatus"
+            appendTo="body"
+          ></p-dropdown>
+
+          <p-button
+            icon="pi pi-filter-slash"
+            label="Clear Filters"
+            styleClass="p-button-outlined "
+            (onClick)="clearFilters()"
+            [disabled]="!selectedType && !selectedStatus"
+          ></p-button>
         </div>
       </div>
-    </p-card>
-    </div>
-  </div>
+    </p-toolbar>
 
-  <p-toast position="top-right"></p-toast>
+    <p-dialog
+      header="Create Alert"
+      [(visible)]="showAlertDialog"
+      [modal]="true"
+      [style]="{ width: '450px' }"
+      (onHide)="selectedAccount = null"
+      styleClass="dialog-responsive"
+    >
+      <div *ngIf="selectedAccount" class="dialog-content">
+        <p class="mb-3">
+          Set an alert for account:
+          <strong>{{ selectedAccount.number }}</strong>
+        </p>
+        <form [formGroup]="alertForm" (ngSubmit)="saveAlert()">
+          <div class="p-field">
+            <label for="alertType">Alert Type</label>
+            <p-dropdown
+              id="alertType"
+              formControlName="alertType"
+              [options]="[
+                { label: 'Low Balance', value: 'lowBalance' },
+                { label: 'Large Transaction', value: 'largeTransaction' }
+              ]"
+              placeholder="Select an alert type"
+            ></p-dropdown>
+          </div>
+          <div class="p-field">
+            <label for="threshold">Threshold</label>
+            <p-inputNumber
+              id="threshold"
+              formControlName="threshold"
+              mode="currency"
+              [currency]="selectedAccount.currency"
+              locale="en-US"
+              [min]="0"
+            ></p-inputNumber>
+          </div>
+          <div class="p-dialog-footer">
+            <button
+              pButton
+              type="button"
+              label="Cancel"
+              icon="pi pi-times"
+              class="p-button-text"
+              (click)="showAlertDialog = false"
+            ></button>
+            <button
+              pButton
+              type="submit"
+              label="Save Alert"
+              icon="pi pi-check"
+              [disabled]="alertForm.invalid"
+            ></button>
+          </div>
+        </form>
+      </div>
+    </p-dialog>
+
+    <p-dialog
+      header="Generate Account Statement"
+      [(visible)]="showStatementDialog"
+      [modal]="true"
+      [style]="{ width: '450px' }"
+      (onHide)="selectedAccount = null"
+      styleClass="dialog-responsive"
+    >
+      <div *ngIf="selectedAccount" class="dialog-content">
+        <p class="mb-3">
+          Generate a statement for account:
+          <strong>{{ selectedAccount.number }}</strong>
+        </p>
+        <form
+          [formGroup]="statementForm"
+          (ngSubmit)="exportStatement('pdf')"
+          class="p-fluid"
+        >
+          <div class="p-field">
+            <label for="months">Date Range</label>
+            <p-dropdown
+              id="months"
+              formControlName="months"
+              [options]="[
+                { label: 'Last 3 months', value: 3 },
+                { label: 'Last 6 months', value: 6 },
+                { label: 'Last 12 months', value: 12 }
+              ]"
+              placeholder="Select date range"
+            ></p-dropdown>
+          </div>
+          <div class="p-dialog-footer">
+            <button
+              pButton
+              type="button"
+              label="Cancel"
+              icon="pi pi-times"
+              class="p-button-text"
+              (click)="showStatementDialog = false"
+            ></button>
+            <button
+              pButton
+              type="submit"
+              label="Export PDF"
+              icon="pi pi-file-pdf"
+            ></button>
+            <button
+              pButton
+              type="button"
+              label="Export CSV"
+              icon="pi pi-file-excel"
+              class="p-button-success"
+              (click)="exportStatement('csv')"
+            ></button>
+          </div>
+        </form>
+      </div>
+    </p-dialog>
+
+    <!-- Accounts Grid -->
+    <div class="accounts-grid">
+      <div
+        *ngFor="let account of filteredAccounts"
+        class="account-card-wrapper"
+        [ngClass]="account.status === 'Active' ? 'active' : 'inactive'"
+      >
+      <p-card styleClass="account-card">
+        <ng-template pTemplate="header">
+          <div class="account-header">
+            <div class="account-type">
+              <i [class]="getAccountIcon(account.type)"></i>
+              <span>{{ account.type }}</span>
+            </div>
+            <p-tag
+              [value]="account.status"
+              [severity]="getStatusSeverity(account.status)"
+            ></p-tag>
+          </div>
+        </ng-template>
+
+        <div class="account-card-content">
+          <!-- Account Number -->
+          <div class="account-number">
+            {{ account.number }}
+          </div>
+
+          <!-- Account Balance -->
+          <div class="account-balance">
+            <p-badge
+              *ngIf="checkAlertHit(account)"
+              value="!"
+              severity="danger"
+              [pTooltip]="getAlertMessage(account)"
+              tooltipPosition="top"
+              class="alert-badge"
+            ></p-badge>
+            <span class="balance-label">Available Balance</span>
+            <span class="balance-amount">
+              {{
+                account.balance | currency : account.currency : "symbol" : "1.2-2"
+              }}
+            </span>
+          </div>
+
+          <!-- Account Nickname -->
+          <div class="account-nickname">
+            <div
+              *ngIf="!isEditing(account); else editNickname"
+              class="nickname-display"
+              (click)="startEditing(account, $event)"
+            >
+              <span>{{ account.nickname || "Add nickname" }}</span>
+              <i class="pi pi-pencil"></i>
+            </div>
+
+            <ng-template #editNickname>
+              <div class="nickname-edit-controls">
+                <input
+                  type="text"
+                  pInputText
+                  [(ngModel)]="editedNickname"
+                  (keyup.enter)="saveNickname(account)"
+                  (keyup.esc)="cancelEditing()"
+                  (click)="$event.stopPropagation()"
+                  placeholder="Enter nickname"
+                  autofocus
+                />
+                <div class="nickname-buttons">
+                  <button
+                    pButton
+                    pRipple
+                    type="button"
+                    icon="pi pi-check"
+                    class="p-button-sm p-button-success p-button-text"
+                    (click)="saveNickname(account)"
+                    pTooltip="Save"
+                    tooltipPosition="top"
+                  ></button>
+
+                  <button
+                    pButton
+                    pRipple
+                    type="button"
+                    icon="pi pi-times"
+                    class="p-button-sm p-button-danger p-button-text"
+                    (click)="cancelEditing()"
+                    pTooltip="Cancel"
+                    tooltipPosition="top"
+                  ></button>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+          <!-- Account Actions -->
+          <div class="account-actions">
+            <p-button
+              icon="pi pi-arrow-right-arrow-left"
+              label="Transfer"
+              styleClass="p-button-sm p-button-outlined"
+              (onClick)="onTransfer(account)"
+            >
+            </p-button>
+
+            <p-button
+              icon="pi pi-list"
+              label="Transactions"
+              styleClass="p-button-sm p-button-outlined"
+              (onClick)="viewTransactions(account.number)"
+            >
+            </p-button>
+
+            <p-button
+              class="three-dots-button"
+              type="button"
+              icon="pi pi-ellipsis-v"
+              (click)="openMenu($event, menu, account)"
+              styleClass="p-button-sm p-button-text p-button-icon-only three-dots-override"
+            ></p-button>
+            <p-menu
+              #menu
+              [model]="accountMenuItems"
+              [popup]="true"
+              appendTo="body"
+            ></p-menu>
+
+            <!-- Accounts Grid -->
+          </div>
+        </div>
+      </p-card>
+      </div>
+    </div>
+
+    <p-toast position="top-right"></p-toast>
+  </div>
 </div>

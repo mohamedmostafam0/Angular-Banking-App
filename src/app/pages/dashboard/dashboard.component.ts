@@ -19,9 +19,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -71,7 +68,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.accountsSubscription = this.bankingDataService.accounts$.subscribe(data => {
+      this.accountsSubscription = this.bankingDataService.accounts$.subscribe(data => {
       this.accounts$ = of(data);
       this.accountOptions = [
         { label: 'All Accounts', value: null },
@@ -80,7 +77,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
 
     this.transactionsSubscription = this.bankingDataService.transactions$.subscribe(data => {
-      this.transactions$ = of(data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5));
+      // this.transactions$ = of(data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5));
       this.prepareChartData(data);
     });
 
@@ -155,7 +152,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.prepareChartData(data);
     });
   }
-
 
 
   ngOnDestroy(): void {

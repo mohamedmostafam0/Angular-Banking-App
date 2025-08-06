@@ -21,6 +21,11 @@
 
   .form-container {
     margin-bottom: 2rem;
+
+    .p-dropdown, .p-inputnumber {
+      width: 100%; /* Ensure they take full width of their parent */
+      max-width: 300px; /* Set a max-width for consistent alignment */
+    }
   }
 
   .field {

@@ -1,6 +1,10 @@
 <div class="account-operations">
+  <div class="header">
+    <h1>Account Operations</h1>
+    <p>Deposit or withdraw funds from your accounts.</p>
+  </div>
   <p-toast></p-toast>
-  <p-card header="Account Operations" [style]="{ 'margin-bottom': '2rem' }">
+  <p-card>
     <div class="card-content">
       <div class="operation-description">
         <i
@@ -109,10 +113,17 @@
         <div class="p-field" *ngIf="transactionForm.get('currency')?.value">
           <div class="flex justify-content-between">
             <label for="amount">
-              {{ operationType === "deposit" ? "Deposit" : "Withdraw" }} Amount
+              {{ operationType === "deposit" ? "Deposit" : "Withdraw" }}
+              Amount
             </label>
             <span class="text-500 text-sm" *ngIf="selectedAccountDetails">
-              Available: {{ formatCurrency(selectedAccountDetails.balance, selectedAccountDetails.currency) }}
+              Available:
+              {{
+                formatCurrency(
+                  selectedAccountDetails.balance,
+                  selectedAccountDetails.currency
+                )
+              }}
             </span>
           </div>
           <p-inputNumber

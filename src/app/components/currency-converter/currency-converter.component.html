@@ -1,137 +1,139 @@
-<p-toast position="top-center"></p-toast>
+<div class="currency-converter-page">
+  <p-toast position="top-center"></p-toast>
 
-<div class="currency-converter">
-  <p-card styleClass="currency-converter-card">
-    <div class="converter-content-wrapper">
-        <div class="converter-info">
-          <h2 class="title">Currency Converter</h2>
-          <p class="subtitle">Quickly convert between all major currencies.</p>
-          <p class="last-updated" *ngIf="lastUpdated">
-            <i class="pi pi-clock"></i>
-            Last updated: {{ lastUpdated | date:"medium" }}
-          </p>
-        </div>
-  
-        <div class="conversion-area">
-          <form [formGroup]="converterForm" class="converter-form">
-            <div class="form-group amount-group">
-              <label for="amount">Amount to convert</label>
-              <p-inputNumber
-                id="amount"
-                formControlName="amount"
-                mode="decimal"
-                [min]="0.01"
-                [minFractionDigits]="2"
-                [maxFractionDigits]="4"
-                (onInput)="convert()"
-                inputId="amount"
-                placeholder="Enter amount"
-              ></p-inputNumber>
-            </div>
-  
-            <div class="conversion-fields">
-              <!-- From Currency -->
-              <div class="form-group currency-group">
-                <label for="fromCurrency">From</label>
-                <p-dropdown
-                  id="fromCurrency"
-                  formControlName="fromCurrency"
-                  [options]="currencies"
-                  optionLabel="label"
-                  optionValue="value"
-                  (onChange)="convert()"
-                  [showClear]="false"
-                  [filter]="true"
-                  filterBy="label,value"
-                  placeholder="Select currency"
-                >
-                  <ng-template let-currency pTemplate="item">
-                    <div class="currency-option">
-                      <span class="fi fi-{{ currency.value.toLowerCase() === 'usd' ? 'us' : currency.value.toLowerCase() === 'eur' ? 'eu' : currency.value.toLowerCase() }} fis"></span>
-                      <span>{{ currency.value | uppercase }}</span>
-                    </div>
-                  </ng-template>
-                </p-dropdown>
+  <div class="currency-converter">
+    <p-card styleClass="currency-converter-card">
+      <div class="converter-content-wrapper">
+          <div class="converter-info">
+            <h2 class="title">Currency Converter</h2>
+            <p class="subtitle">Quickly convert between all major currencies.</p>
+            <p class="last-updated" *ngIf="lastUpdated">
+              <i class="pi pi-clock"></i>
+              Last updated: {{ lastUpdated | date:"medium" }}
+            </p>
+          </div>
+    
+          <div class="conversion-area">
+            <form [formGroup]="converterForm" class="converter-form">
+              <div class="form-group amount-group">
+                <label for="amount">Amount to convert</label>
+                <p-inputNumber
+                  id="amount"
+                  formControlName="amount"
+                  mode="decimal"
+                  [min]="0.01"
+                  [minFractionDigits]="2"
+                  [maxFractionDigits]="4"
+                  (onInput)="convert()"
+                  inputId="amount"
+                  placeholder="Enter amount"
+                ></p-inputNumber>
               </div>
-  
-              <!-- Swap Button -->
-              <div class="swap-button-wrapper">
-                <button pButton type="button" icon="pi pi-sync" class="p-button-secondary p-button-outlined swap-button" (click)="swapCurrencies()"></button>
+    
+              <div class="conversion-fields">
+                <!-- From Currency -->
+                <div class="form-group currency-group">
+                  <label for="fromCurrency">From</label>
+                  <p-dropdown
+                    id="fromCurrency"
+                    formControlName="fromCurrency"
+                    [options]="currencies"
+                    optionLabel="label"
+                    optionValue="value"
+                    (onChange)="convert()"
+                    [showClear]="false"
+                    [filter]="true"
+                    filterBy="label,value"
+                    placeholder="Select currency"
+                  >
+                    <ng-template let-currency pTemplate="item">
+                      <div class="currency-option">
+                        <span class="fi fi-{{ currency.value.toLowerCase() === 'usd' ? 'us' : currency.value.toLowerCase() === 'eur' ? 'eu' : currency.value.toLowerCase() }} fis"></span>
+                        <span>{{ currency.value | uppercase }}</span>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+    
+                <!-- Swap Button -->
+                <div class="swap-button-wrapper">
+                  <button pButton type="button" icon="pi pi-sync" class="p-button-secondary p-button-outlined swap-button" (click)="swapCurrencies()"></button>
+                </div>
+    
+                <!-- To Currency -->
+                <div class="form-group currency-group">
+                  <label for="toCurrency">To</label>
+                  <p-dropdown
+                    id="toCurrency"
+                    formControlName="toCurrency"
+                    [options]="currencies"
+                    optionLabel="label"
+                    optionValue="value"
+                    (onChange)="convert()"
+                    [showClear]="false"
+                    [filter]="true"
+                    filterBy="label,value"
+                    placeholder="Select currency"
+                  >
+                    <ng-template let-currency pTemplate="item">
+                      <div class="currency-option">
+                        <span class="fi fi-{{ currency.value.toLowerCase() === 'usd' ? 'us' : currency.value.toLowerCase() === 'eur' ? 'eu' : currency.value.toLowerCase() }} fis"></span>
+                        <span>{{ currency.value | uppercase }}</span>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
               </div>
-  
-              <!-- To Currency -->
-              <div class="form-group currency-group">
-                <label for="toCurrency">To</label>
-                <p-dropdown
-                  id="toCurrency"
-                  formControlName="toCurrency"
-                  [options]="currencies"
-                  optionLabel="label"
-                  optionValue="value"
-                  (onChange)="convert()"
-                  [showClear]="false"
-                  [filter]="true"
-                  filterBy="label,value"
-                  placeholder="Select currency"
-                >
-                  <ng-template let-currency pTemplate="item">
-                    <div class="currency-option">
-                      <span class="fi fi-{{ currency.value.toLowerCase() === 'usd' ? 'us' : currency.value.toLowerCase() === 'eur' ? 'eu' : currency.value.toLowerCase() }} fis"></span>
-                      <span>{{ currency.value | uppercase }}</span>
-                    </div>
-                  </ng-template>
-                </p-dropdown>
+            </form>
+    
+            <!-- Result Display -->
+            <div *ngIf="result !== null && !error" class="result-display">
+              <div class="result-from">
+                <span class="amount">{{ converterForm.get("amount")?.value | number : "1.2-2" }}</span>
+                <span class="currency">{{ converterForm.get("fromCurrency")?.value | uppercase }} =</span>
+              </div>
+              <div class="result-to">
+                <span class="converted-amount">{{ result | number : "1.2-4" }}</span>
+                <span class="currency">{{ converterForm.get("toCurrency")?.value | uppercase }}</span>
+              </div>
+              <div class="exchange-rate">
+                              1 {{ converterForm.get("fromCurrency")?.value | uppercase }} = {{ exchangeRate | number : "1.2-6" }} {{ converterForm.get("toCurrency")?.value | uppercase }}
               </div>
             </div>
-          </form>
-  
-          <!-- Result Display -->
-          <div *ngIf="result !== null && !error" class="result-display">
-            <div class="result-from">
-              <span class="amount">{{ converterForm.get("amount")?.value | number : "1.2-2" }}</span>
-              <span class="currency">{{ converterForm.get("fromCurrency")?.value | uppercase }} =</span>
-            </div>
-            <div class="result-to">
+    
+            <!-- Error Display -->
+            <div *ngIf="error" class="error-display">
+              <i class="pi pi-exclamation-triangle"></i>
+              <span>{{ error }}</span>
+              <span class="currency">{{ converterForm.get("fromCurrency")?.value | uppercase }}</span>
+              <span class="equals">=</span>
               <span class="converted-amount">{{ result | number : "1.2-4" }}</span>
               <span class="currency">{{ converterForm.get("toCurrency")?.value | uppercase }}</span>
             </div>
-            <div class="exchange-rate">
-                            1 {{ converterForm.get("fromCurrency")?.value | uppercase }} = {{ exchangeRate | number : "1.2-6" }} {{ converterForm.get("toCurrency")?.value | uppercase }}
+            
+            <div class="exchange-rate" *ngIf="converterForm.get('fromCurrency')?.value && converterForm.get('toCurrency')?.value">
+              <div class="rate">
+                <span>1 {{ converterForm.get("fromCurrency")?.value | uppercase }} =</span>
+                <span class="rate-value">
+                  {{ exchangeRate | number : "1.4-4" }}
+                  {{ converterForm.get("toCurrency")?.value | uppercase }}
+                </span>
+              </div>
+              <div class="inverse-rate">
+                <span>1 {{ converterForm.get("toCurrency")?.value | uppercase }} =</span>
+                <span class="rate-value">
+                  {{ (1 / exchangeRate) | number : "1.4-4" }}
+                  {{ converterForm.get("fromCurrency")?.value | uppercase }}
+                </span>
+              </div>
             </div>
           </div>
-  
-          <!-- Error Display -->
-          <div *ngIf="error" class="error-display">
-            <i class="pi pi-exclamation-triangle"></i>
-            <span>{{ error }}</span>
-            <span class="currency">{{ converterForm.get("fromCurrency")?.value | uppercase }}</span>
-            <span class="equals">=</span>
-            <span class="converted-amount">{{ result | number : "1.2-4" }}</span>
-            <span class="currency">{{ converterForm.get("toCurrency")?.value | uppercase }}</span>
-          </div>
-          
-          <div class="exchange-rate" *ngIf="converterForm.get('fromCurrency')?.value && converterForm.get('toCurrency')?.value">
-            <div class="rate">
-              <span>1 {{ converterForm.get("fromCurrency")?.value | uppercase }} =</span>
-              <span class="rate-value">
-                {{ exchangeRate | number : "1.4-4" }}
-                {{ converterForm.get("toCurrency")?.value | uppercase }}
-              </span>
-            </div>
-            <div class="inverse-rate">
-              <span>1 {{ converterForm.get("toCurrency")?.value | uppercase }} =</span>
-              <span class="rate-value">
-                {{ (1 / exchangeRate) | number : "1.4-4" }}
-                {{ converterForm.get("fromCurrency")?.value | uppercase }}
-              </span>
-            </div>
-          </div>
-        </div>
 
-        <!-- Error Message -->
-        <div *ngIf="error" class="error-message">
-          <p-message severity="error" [text]="error"></p-message>
+          <!-- Error Message -->
+          <div *ngIf="error" class="error-message">
+            <p-message severity="error" [text]="error"></p-message>
+          </div>
         </div>
-      </div>
-  </p-card>
+    </p-card>
+  </div>
 </div>

@@ -32,9 +32,7 @@ sections = [
           route: '/accounts',
           icon: 'pi pi-dollar',
           queryParams: { type: 'Savings' }
-        },
-        { label: 'Budget Planning', route: '/budget-planning', icon: 'pi pi-chart-pie' },
-        { label: 'Schedule Reports', route: '/schedule-reports', icon: 'pi pi-calendar' }
+        }
       ]
     },
     {
@@ -46,6 +44,8 @@ sections = [
     {
       title: 'Tools',
       items: [
+        { label: 'Budget Planning', route: '/budget-planning', icon: 'pi pi-chart-pie' },
+        { label: 'Schedule Reports', route: '/schedule-reports', icon: 'pi pi-calendar' },
         { label: 'Currency Converter', route: '/currency-converter', icon: 'pi pi-money-bill' }
       ]
     },
@@ -53,8 +53,8 @@ sections = [
       title: 'Account Operations',
       items: [
         { label: 'All Account Operations', route: '/account-operations', icon: 'pi pi-cog' },
-        { label: 'Deposit Funds', route: '/account-operations/deposit', icon: 'pi pi-arrow-down' },
-        { label: 'Withdraw Funds', route: '/account-operations/withdraw', icon: 'pi pi-arrow-up' }
+        { label: 'Transfer Funds', route: '/account-operations/transfer', icon: 'pi pi-exchange' },
+        {label: 'QR code payment', route: '/account-operations/qr-payment', icon: 'pi pi-qrcode' }
       ]
     }
   ];

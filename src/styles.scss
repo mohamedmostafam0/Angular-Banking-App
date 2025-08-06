@@ -7,7 +7,7 @@
   --primary-color: #004785;
   --primary-dark: #003a6e;
   --border-color: #dee2e6;
-  --bg-color: #f8f9fa;
+  --bg-color: #fff;
   --surface-card: #ededf1;
   --text-color: #212529;
   --text-color-secondary: #6c757d;
@@ -60,7 +60,7 @@ body .p-button {
   transition: var(--transition);
   background-color: var(--primary-color);
   border-color: var(--primary-color);
-  color: var(--text-color);
+  color: #fff;
 
   &:hover {
     background-color: var(--primary-dark);
@@ -71,8 +71,8 @@ body .p-button {
 }
 
 body .p-button.p-button-outlined {
-  background-color: transparent;
-  color: var(--primary-color);
+  background-color: var(--primary-color);
+  color: var(--white);
   border-color: var(--primary-color);
   &:hover {
     background-color: var(--primary-color);
@@ -89,7 +89,7 @@ body .p-datatable {
   }
 
   .p-datatable-thead > tr > th {
-    background-color: var(--bg-color);
+    background-color: var(--surface-card);
     color: var(--text-color-secondary);
     font-weight: 600;
     border: none;
@@ -127,7 +127,7 @@ body .p-datatable {
   }
 
   .p-datatable-thead > tr > th {
-    background-color: var(--bg-color);
+    background-color: var(--surface-card);
     color: var(--text-color-secondary);
     font-weight: 600;
     border: none;

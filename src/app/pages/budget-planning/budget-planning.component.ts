@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { BankingDataService } from '../../services/banking-data.service';
 import { Transaction } from '../../interfaces/Transaction.interface';
 import { MessageService } from 'primeng/api';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 // PrimeNG Modules
 import { CardModule } from 'primeng/card';
@@ -18,6 +19,7 @@ interface Budget {
   category: string;
   limit: number;
   spent: number;
+  currency: string;
 }
 
 interface CategoryOption {
@@ -41,7 +43,21 @@ interface CategoryOption {
   ],
   templateUrl: './budget-planning.component.html',
   styleUrls: ['./budget-planning.component.scss'],
-  providers: [MessageService]
+  providers: [MessageService],
+  animations: [
+    trigger('formAnimation', [
+      state('void', style({ height: '0', opacity: '0', overflow: 'hidden' })),
+      state('visible', style({ height: '*', opacity: '1' })),
+      transition('void => visible', [
+        style({ height: '0', opacity: '0' }),
+        animate('300ms ease-out', style({ height: '*', opacity: '1' }))
+      ]),
+      transition('visible => void', [
+        style({ height: '*', opacity: '1' }),
+        animate('300ms ease-in', style({ height: '0', opacity: '0' }))
+      ])
+    ])
+  ]
 })
 export class BudgetPlanningComponent implements OnInit {
   budgetForm!: FormGroup;
@@ -49,6 +65,8 @@ export class BudgetPlanningComponent implements OnInit {
   categories: CategoryOption[] = [];
   budgetChartData: any;
   chartOptions: any;
+  supportedCurrencies: string[] = [];
+  showBudgetForm: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -59,9 +77,11 @@ export class BudgetPlanningComponent implements OnInit {
   ngOnInit(): void {
     this.budgetForm = this.fb.group({
       category: ['', Validators.required],
-      limit: [null, [Validators.required, Validators.min(1)]]
+      limit: [null, [Validators.required, Validators.min(1)]],
+      currency: ['USD', Validators.required]
     });
 
+    this.supportedCurrencies = this.bankingDataService.getSupportedCurrencies();
     this.loadBudgets();
     this.bankingDataService.transactions$.subscribe(transactions => {
       this.extractCategories(transactions);
@@ -88,12 +108,14 @@ export class BudgetPlanningComponent implements OnInit {
     const newBudget: Budget = {
       category: this.budgetForm.value.category,
       limit: this.budgetForm.value.limit,
-      spent: 0 // Will be recalculated
+      spent: 0, // Will be recalculated
+      currency: this.budgetForm.value.currency
     };
 
     const existingIndex = this.budgets.findIndex(b => b.category === newBudget.category);
     if (existingIndex > -1) {
       this.budgets[existingIndex].limit = newBudget.limit;
+      this.budgets[existingIndex].currency = newBudget.currency;
       this.messageService.add({ severity: 'success', summary: 'Budget Updated', detail: `Budget for ${newBudget.category} updated.` });
     } else {
       this.budgets.push(newBudget);
@@ -105,7 +127,7 @@ export class BudgetPlanningComponent implements OnInit {
         this.calculateSpending(transactions);
         this.prepareChartData();
     }).unsubscribe();
-    this.budgetForm.reset();
+    this.budgetForm.reset({ currency: 'USD' });
   }
 
   removeBudget(category: string): void {
@@ -201,6 +223,10 @@ export class BudgetPlanningComponent implements OnInit {
 
           }
       };
+  }
+
+  toggleBudgetForm() {
+    this.showBudgetForm = !this.showBudgetForm;
   }
 
   getUsage(budget: Budget): number {

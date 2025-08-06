@@ -1,15 +1,16 @@
-:host {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.currency-converter-page {
   padding: 2rem;
-  background-color: #f4f7fc;
-  min-height: calc(100vh - 120px);
+  background-color: var(--surface-ground);
+  min-height: 100%;
+}
+
+:host {
+  display: block;
+  width: 100%;
 }
 
 ::ng-deep .currency-converter-card {
   width: 100%;
-  max-width: 1200px;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   background: #ffffff;

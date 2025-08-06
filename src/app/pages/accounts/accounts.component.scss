@@ -1,8 +1,13 @@
+.accounts-page {
+  padding: 2rem;
+  background-color: var(--surface-ground);
+  min-height: 100%;
+}
+
 /* Main Container */
 :host {
   display: block;
-  padding: 1.5rem;
-  background-color: #fff;
+  width: 100%;
 }
 
 .accounts-container {
@@ -214,14 +219,9 @@
 
     .p-button-outlined {
       background-color: #004785;
-      color: #495057;
+      color: #fff;
       border-color: #ced4da;
 
-      &:hover {
-        background-color: #dee2e6;
-        border-color: #adb5bd;
-        color: #495057;
-      }
     }
 
     button {
@@ -241,6 +241,7 @@
     .p-button-icon-only {
       flex: 0 0 auto;
       width: auto;
+      color: #000;
     }
 
     ::ng-deep .p-button.p-button-icon-only {

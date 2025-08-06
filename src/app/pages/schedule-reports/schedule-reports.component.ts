@@ -38,6 +38,7 @@ export class ScheduleReportsComponent implements OnInit, OnDestroy {
   @ViewChild('spendingByCategoryChart') spendingByCategoryChartRef!: ElementRef;
   @ViewChild('balanceTrendChart') balanceTrendChartRef!: ElementRef;
   @ViewChild('cashflowChart') cashflowChartRef!: ElementRef;
+  
 
   // Chart data
   spendingByCategoryData: any;
@@ -147,11 +148,25 @@ export class ScheduleReportsComponent implements OnInit, OnDestroy {
 
     this.messageService.add({ severity: 'info', summary: 'Generating Report', detail: 'Please wait while your PDF report is being generated...' });
 
-    // Wait for the charts to re-render before generating the PDF
+    // Ensure charts have rendered before capturing
     setTimeout(async () => {
       const doc = new jsPDF();
       let yOffset = 10;
 
+      // Helper to add text section
+      const addTextSection = (title: string, content: string[]) => {
+        doc.setFontSize(14);
+        doc.text(title, 10, yOffset);
+        yOffset += 8;
+        doc.setFontSize(10);
+        content.forEach(line => {
+          doc.text(line, 15, yOffset);
+          yOffset += 6;
+        });
+        yOffset += 10;
+      };
+
+      // Helper to add chart image
       const addChartToPdf = async (chartElement: ElementRef, title: string) => {
         if (chartElement && chartElement.nativeElement) {
           const canvas = await html2canvas(chartElement.nativeElement);
@@ -160,28 +175,68 @@ export class ScheduleReportsComponent implements OnInit, OnDestroy {
           const pageHeight = doc.internal.pageSize.height;
           const imgHeight = canvas.height * imgWidth / canvas.width;
 
-          if (yOffset + imgHeight > pageHeight - 10) {
+          // Check if new page is needed
+          if (yOffset + imgHeight > pageHeight - 20) {
             doc.addPage();
             yOffset = 10;
           }
 
+          doc.setFontSize(14);
           doc.text(title, 10, yOffset);
-          yOffset += 10;
+          yOffset += 8;
           doc.addImage(imgData, 'PNG', 10, yOffset, imgWidth, imgHeight);
-          yOffset += imgHeight + 20;
+          yOffset += imgHeight + 10;
         }
       };
 
+      // Report Header
       doc.setFontSize(18);
-      doc.text(`Banking Dashboard Report for Account: ${this.selectedReportAccount}`, 10, yOffset);
-      yOffset += 15;
+      doc.text(`Banking Report for Account: ${this.selectedReportAccount}`, 10, yOffset);
+      yOffset += 10;
       doc.setFontSize(12);
-      doc.text(`Report Date: ${new Date().toLocaleDateString()}`, 10, yOffset);
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, 10, yOffset);
       yOffset += 20;
 
-      await addChartToPdf(this.spendingByCategoryChartRef, 'Spending by Category');
-      await addChartToPdf(this.balanceTrendChartRef, 'Balance Trend');
-      await addChartToPdf(this.cashflowChartRef, 'Cash-flow Waterfall');
+      // Add Spending by Category (Textual)
+      if (this.spendingByCategoryData && this.spendingByCategoryData.labels.length > 0) {
+        const categoryLines = this.spendingByCategoryData.labels.map((label: string, index: number) => {
+          return `${label}: ${this.spendingByCategoryData.datasets[0].data[index]}`;
+        });
+        addTextSection('Spending by Category (Summary)', categoryLines);
+      }
+
+      // Add Spending by Category (Chart)
+      if (this.spendingByCategoryChartRef) {
+        await addChartToPdf(this.spendingByCategoryChartRef, 'Spending by Category (Chart)');
+      }
+
+      // Add Balance Trend (Textual - simplified)
+      if (this.balanceTrendData && this.balanceTrendData.labels.length > 0) {
+        const balanceLines: string[] = [];
+        const displayCount = Math.min(5, this.balanceTrendData.labels.length);
+        for (let i = 0; i < displayCount; i++) {
+          balanceLines.push(`${this.balanceTrendData.labels[i]}: ${this.balanceTrendData.datasets[0].data[i]}`);
+        }
+        addTextSection('Balance Trend (Summary - Last 5 Entries)', balanceLines);
+      }
+
+      // Add Balance Trend (Chart)
+      if (this.balanceTrendChartRef) {
+        await addChartToPdf(this.balanceTrendChartRef, 'Balance Trend (Chart)');
+      }
+
+      // Add Cashflow Waterfall (Textual)
+      if (this.cashflowData && this.cashflowData.labels.length > 0) {
+        const cashflowLines = this.cashflowData.labels.map((label: string, index: number) => {
+          return `${label}: ${this.cashflowData.datasets[0].data[index]}`;
+        });
+        addTextSection('Cash-flow Summary', cashflowLines);
+      }
+
+      // Add Cashflow Waterfall (Chart)
+      if (this.cashflowChartRef) {
+        await addChartToPdf(this.cashflowChartRef, 'Cash-flow Waterfall (Chart)');
+      }
 
       doc.save(`Banking_Report_${this.selectedReportAccount}_${new Date().toISOString().slice(0, 10)}.pdf`);
       this.messageService.add({ severity: 'success', summary: 'Report Generated', detail: 'Your PDF report has been successfully generated.' });

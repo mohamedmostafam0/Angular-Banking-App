@@ -25,7 +25,7 @@
 
   .centered-container {
     width: 100%;
-    max-width: 500px; /* Or any width you prefer */
+    max-width: 1000px; /* Or any width you prefer */
   }
 
   .schedule-card {
@@ -35,4 +35,19 @@
   .field {
     margin-bottom: 1.5rem;
   }
+
+  .instructions {
+    padding-right: 2rem;
+    border-right: 1px solid #dee2e6;
+  }
+}
+
+.hidden-charts {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  width: 800px; /* Give them a reasonable size for rendering */
+  height: 400px;
+  overflow: hidden;
+  z-index: -1;
 }

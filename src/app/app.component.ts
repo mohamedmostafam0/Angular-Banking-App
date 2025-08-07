@@ -7,6 +7,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Title } from '@angular/platform-browser';
 import { filter, map } from 'rxjs/operators';
 import { CurrencyConverterComponent } from './components/currency-converter/currency-converter.component';
@@ -30,6 +31,7 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  providers: [ConfirmationService, MessageService]
 })
 export class AppComponent implements OnInit {
 

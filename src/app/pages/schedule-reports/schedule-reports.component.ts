@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { BankingDataService } from '../../services/banking-data.service';
-import { Observable, of, Subscription } from 'rxjs';
-import { Account } from '../../interfaces/Account.interface';
+import { Subscription } from 'rxjs';
 import { Transaction } from '../../interfaces/Transaction.interface';
+
+
+
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ChartModule } from 'primeng/chart';
@@ -13,6 +15,8 @@ import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { SplitterModule } from 'primeng/splitter';
+
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -28,7 +32,8 @@ import html2canvas from 'html2canvas';
     ChartModule,
     DropdownModule,
     InputNumberModule,
-    ToastModule
+    ToastModule,
+    SplitterModule
   ],
   templateUrl: './schedule-reports.component.html',
   styleUrls: ['./schedule-reports.component.scss'],

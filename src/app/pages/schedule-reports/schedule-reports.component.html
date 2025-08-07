@@ -2,46 +2,81 @@
   <div class="reports-toolbar">
     <div class="header">
       <h1>Schedule Reports</h1>
-      <p>Select an account to view its data and schedule a recurring monthly report.</p>
+      <p>
+        Select an account to view its data and schedule a recurring monthly
+        report.
+      </p>
     </div>
   </div>
 
   <div class="reports-content">
     <div class="centered-container">
       <p-card header="Schedule Your Report" styleClass="schedule-card">
-        <div class="grid">
-          <div class="col-12 md:col-6">
-            <div class="instructions">
-              <h3>How to Schedule a Report</h3>
-              <p>1. Select the account you want to receive a report for from the dropdown menu.</p>
-              <p>2. Choose a day of the month (1-28) on which you want the report to be generated.</p>
-              <p>3. Click the "Schedule Report" button to confirm.</p>
-              <p>You will receive a monthly email with the report attached.</p>
-            </div>
-          </div>
-          <div class="col-12 md:col-6">
-            <div class="p-fluid grid">
-              <div class="field col-12">
-                <label for="reportAccount">Account</label>
-                <p-dropdown inputId="reportAccount" [options]="accountOptions" [(ngModel)]="selectedReportAccount" placeholder="Select an Account" (onChange)="onAccountChange($event)"></p-dropdown>
-              </div>
-              <div class="field col-12">
-                <label for="reportDay">Day of Month</label>
-                <p-inputNumber inputId="reportDay" [(ngModel)]="reportDay" [min]="1" [max]="28"></p-inputNumber>
-              </div>
-              <div class="col-12">
-                <p-button label="Schedule Report" icon="pi pi-calendar-plus" (onClick)="scheduleReport()"></p-button>
+        <p-splitter styleClass="mb-5" [panelSizes]="[40, 60]">
+          <ng-template pTemplate>
+            <div class="flex align-items-center justify-content-center h-full">
+              <div class="instructions">
+                <p>
+                  1. Select the account you want to receive a report for from
+                  the dropdown menu.
+                </p>
+                <p>
+                  2. Choose a day of the month (1-28) on which you want the
+                  report to be generated.
+                </p>
+                <p>3. Click the "Schedule Report" button to confirm.</p>
+                <p>
+                  You will receive a monthly email with the report attached.
+                </p>
               </div>
             </div>
-          </div>
-        </div>
+          </ng-template>
+          <ng-template pTemplate>
+            <div class="flex align-items-center justify-content-center h-full">
+              <div class="col-12 flex justify-content-center">
+                <div class="p-fluid grid">
+                  <div class="field col-12">
+                    <label for="reportAccount">Account</label>
+                    <p-dropdown
+                      inputId="reportAccount"
+                      [options]="accountOptions"
+                      [(ngModel)]="selectedReportAccount"
+                      placeholder="Select an Account"
+                      (onChange)="onAccountChange($event)"
+                    ></p-dropdown>
+                  </div>
+                  <div class="field col-12">
+                    <label for="reportDay">Day of Month</label>
+                    <p-inputNumber
+                      inputId="reportDay"
+                      [(ngModel)]="reportDay"
+                      [min]="1"
+                      [max]="28"
+                    ></p-inputNumber>
+                  </div>
+                  <div class="col-12">
+                    <p-button
+                      label="Schedule Report"
+                      icon="pi pi-calendar-plus"
+                      (onClick)="scheduleReport()"
+                    ></p-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-splitter>
       </p-card>
     </div>
   </div>
 
   <!-- Hidden chart elements for PDF generation -->
   <div class="hidden-charts">
-    <p-chart #spendingByCategoryChart type="pie" [data]="spendingByCategoryData"></p-chart>
+    <p-chart
+      #spendingByCategoryChart
+      type="pie"
+      [data]="spendingByCategoryData"
+    ></p-chart>
     <p-chart #balanceTrendChart type="line" [data]="balanceTrendData"></p-chart>
     <p-chart #cashflowChart type="bar" [data]="cashflowData"></p-chart>
   </div>

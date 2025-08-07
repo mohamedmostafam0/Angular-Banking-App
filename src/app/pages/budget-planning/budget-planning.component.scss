@@ -1,9 +1,39 @@
-.budget-planning-page {
-  padding: 2rem;
-  background-color: var(--surface-ground);
-  min-height: 100%;
+  
 
-  .header {
+  :host {
+
+  ::ng-deep .p-splitter {
+    background: transparent;
+    border: none;
+  }
+  ::ng-deep .p-splitter-gutter {
+    background-color: var(--surface-card);
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .p-inputtext, ::ng-deep .p-inputnumber-input, .p-dropdown {
+    background-color: var(white) !important;
+    width: 100%;
+  }
+
+  ::ng-deep .p-datatable .p-datatable-tbody > tr {
+    background: var(--surface-card);
+  }
+}
+
+.budget-planning-page {
+    padding: 2rem;
+    background-color: var(white);
+    min-height: 100%;
+    
+    .form{
+      background-color: var(--surface-card);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .header {
     margin-bottom: 2rem;
 
     h1 {
@@ -21,22 +51,27 @@
 
   .form-container {
     margin-bottom: 2rem;
-
-    .p-dropdown, .p-inputnumber {
-      width: 100%; /* Ensure they take full width of their parent */
-      max-width: 300px; /* Set a max-width for consistent alignment */
-    }
   }
 
   .field {
-    margin-bottom: 1rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+  }
+
+  .budget-form .p-button {
+    width: 100%;
   }
 
   .usage-bar {
     display: inline-block;
     width: 80px;
     height: 8px;
-    background-color: var(--surface-border);
+    background-color: var(--surface-card);
     border-radius: 4px;
     overflow: hidden;
     margin-right: 8px;
@@ -66,5 +101,52 @@
 
   ::ng-deep .p-datatable-sm .p-datatable-tbody > tr > td {
     padding: 0.75rem 0.5rem;
+  }
+
+  .budget-form-section {
+    border-top: 1px solid var(--surface-border);
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .instructions {
+    background-color: var(--surface-card);
+    padding-right: 2rem;
+    border-color: var(--surface-card);
+    
+    h4 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--text-color-secondary);
+    }
+
+    p {
+      color: var(--text-color-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style-position: inside;
+      padding-left: 0;
+      color: var(--text-color-secondary);
+
+      li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+
+        strong {
+          color: var(--text-color-secondary);
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .vertical-separator {
+    width: 1px;
+    background-color: var(--surface-border);
+    height: 70%;
+    margin: auto 0;
   }
 }

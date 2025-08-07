@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { BankingDataService } from '../../services/banking-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -14,8 +14,6 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { Table } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
-import { TabViewModule } from 'primeng/tabview';
 
 @Component({
   selector: 'app-transactions',
@@ -30,9 +28,7 @@ import { TabViewModule } from 'primeng/tabview';
     DropdownModule,
     CalendarModule,
     InputTextModule,
-    TagModule,
-    ToastModule,
-    TabViewModule
+    TagModule
   ],
   templateUrl: './transactions.component.html',
   styleUrls: ['./transactions.component.scss']
@@ -49,8 +45,7 @@ export class TransactionsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private bankingDataService: BankingDataService,
-    private route: ActivatedRoute,
-    private cd: ChangeDetectorRef
+    private route: ActivatedRoute
   ){}
 
   ngOnInit(): void {
@@ -67,12 +62,15 @@ export class TransactionsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.queryParamSubscription = this.route.queryParams.subscribe(params => {
       this.accountFilterValue = params['account'] || null;
+      // Apply filter if table is ready, with a small delay to ensure view is rendered
       if (this.dt) {
+        setTimeout(() => {
           if (this.accountFilterValue) {
             this.dt?.filter(this.accountFilterValue, 'accountNumber', 'equals');
           } else {
             this.dt?.filter(null, 'accountNumber', 'equals');
           }
+        }, 0);
       }
     });
   }
@@ -80,15 +78,15 @@ export class TransactionsComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     // Apply filter if component is initialized with a query param, with a small delay
     if (this.dt && this.accountFilterValue) {
-      this.dt?.filter(this.accountFilterValue, 'accountNumber', 'equals');
-      this.cd.detectChanges();
+      setTimeout(() => {
+        this.dt?.filter(this.accountFilterValue, 'accountNumber', 'equals');
+      }, 0);
     }
   }
 
   onAccountFilterChange(value: any) {
     if (this.dt) {
       this.dt.filter(value, 'accountNumber', 'equals');
-      this.cd.detectChanges();
     }
   }
 
@@ -106,6 +104,5 @@ export class TransactionsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.accountFilterValue = null; // Also clear the bound property
   }
 }
-
 
 

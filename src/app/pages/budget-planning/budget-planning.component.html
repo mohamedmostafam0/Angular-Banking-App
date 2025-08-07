@@ -1,65 +1,137 @@
 <p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
 <div class="budget-planning-page">
   <div class="header">
     <h1>Budget Planner</h1>
     <p>Set monthly budgets for spending categories and track your progress.</p>
   </div>
 
+  <div class="field col-12 md:col-4">
+    <label for="account">Account</label>
+    <p-dropdown
+      inputId="account"
+      [options]="accounts"
+      [(ngModel)]="selectedAccount"
+      placeholder="Select an account"
+      optionLabel="number"
+      (onChange)="onAccountChange($event)"
+    >
+    </p-dropdown>
+  </div>
+
   <!-- New section for the form and button -->
-  <p-card header="Set/Update Budget" styleClass="mb-4">
-    <div class="grid">
-      <div class="col-12 md:col-4 flex align-items-center">
-        <p-button [label]="showBudgetForm ? 'Hide Budget Form' : 'Show Budget Form'" [icon]="showBudgetForm ? 'pi pi-angle-up' : 'pi pi-angle-down'" (onClick)="toggleBudgetForm()"></p-button>
-      </div>
-      <div class="col-12 md:col-8" [@formAnimation]="showBudgetForm ? 'visible' : 'void'">
-        <form [formGroup]="budgetForm" (ngSubmit)="saveBudget()" class="form-container">
-          <div class="p-fluid grid">
-            <div class="field col-12">
-              <label for="category">Category</label>
-              <p-dropdown 
-                inputId="category" 
-                [options]="categories" 
-                formControlName="category" 
-                placeholder="Select a category"
-                [filter]="true"
-                filterBy="label">
-              </p-dropdown>
-            </div>
-            <div class="field col-12">
-              <label for="limit">Monthly Limit</label>
-              <p-inputNumber 
-                inputId="limit" 
-                formControlName="limit" 
-                mode="currency" 
-                [currency]="budgetForm.get('currency')?.value" 
-                locale="en-US">
-              </p-inputNumber>
-            </div>
-            <div class="field col-12">
-              <label for="currency">Currency</label>
-              <p-dropdown 
-                inputId="currency" 
-                [options]="supportedCurrencies" 
-                formControlName="currency" 
-                placeholder="Select a currency">
-              </p-dropdown>
-            </div>
-          </div>
-          <p-button 
-            label="Save Budget" 
-            type="submit" 
-            icon="pi pi-check" 
-            [disabled]="budgetForm.invalid">
-          </p-button>
-        </form>
-      </div>
-    </div>
-  </p-card>
 
   <div class="grid">
     <div class="col-12 lg:col-5">
       <p-card header="Manage Budgets" styleClass="h-full">
-        <p-table [value]="budgets" styleClass="p-datatable-sm mt-4" [tableStyle]="{'min-width': '50rem'}">
+        <div class="flex justify-content-between align-items-center mb-3">
+          <p-button
+            [label]="showBudgetForm ? 'Hide Budget Form' : 'Set/Update Budget'"
+            [icon]="showBudgetForm ? 'pi pi-angle-up' : 'pi pi-plus'"
+            (onClick)="toggleBudgetForm()"
+          ></p-button>
+        </div>
+
+        <div
+          class="budget-form-section"
+          [@formAnimation]="showBudgetForm ? 'visible' : 'void'"
+        >
+          <h1>Set/Update Budgets</h1>
+          <br />
+          <p-splitter styleClass="mb-5">
+            <ng-template pTemplate="form">
+              <div
+                class="flex align-items-center justify-content-center h-full"
+              >
+                <div class="instructions">
+                  <h4>How to Set Your Budget</h4>
+                  <p>
+                    Follow these steps to create or update a budget for a
+                    specific spending category:
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Select a Category:</strong> Choose a spending
+                      category from the dropdown menu.
+                    </li>
+                    <li>
+                      <strong>Set a Monthly Limit:</strong> Enter the maximum
+                      amount you want to spend in this category each month.
+                    </li>
+                    <li>
+                      <strong>Choose a Currency:</strong> Select the currency
+                      for your budget.
+                    </li>
+                    <li>
+                      <strong>Save:</strong> Click the "Save Budget" button to
+                      confirm.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template pTemplate>
+              <div
+                class="flex align-items-center justify-content-center h-full"
+              >
+                <div class="col-12 flex justify-content-center">
+                  <form
+                    class="budget-form"
+                    [formGroup]="budgetForm"
+                    (ngSubmit)="saveBudget()"
+                  >
+                    <div class="p-fluid">
+                      <div class="field mb-3">
+                        <label for="category">Category</label>
+                        <p-dropdown
+                          inputId="category"
+                          [options]="categories"
+                          formControlName="category"
+                          placeholder="Select a category"
+                          [filter]="true"
+                          filterBy="label"
+                        ></p-dropdown>
+                      </div>
+                      <div class="field mb-3">
+                        <label for="limit">Monthly Limit</label>
+                        <p-inputNumber
+                          inputId="limit"
+                          formControlName="limit"
+                          mode="currency"
+                          [currency]="budgetForm.get('currency')?.value"
+                          locale="en-US"
+                        ></p-inputNumber>
+                      </div>
+                      <div class="field mb-3">
+                        <label for="currency">Currency</label>
+                        <p-dropdown
+                          inputId="currency"
+                          [options]="supportedCurrencies"
+                          formControlName="currency"
+                          placeholder="Select a currency"
+                        ></p-dropdown>
+                      </div>
+                    </div>
+                    <div class="flex justify-content-center mt-4">
+                      <p-button
+                        label="Save Budget"
+                        type="submit"
+                        icon="pi pi-check"
+                        [disabled]="budgetForm.invalid"
+                      ></p-button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </ng-template>
+          </p-splitter>
+        </div>
+
+        <p-table
+          [value]="budgets | filter : selectedAccount?.number : 'accountNumber'"
+          styleClass="p-datatable-sm mt-4"
+          [tableStyle]="{ 'min-width': '50rem' }"
+        >
           <ng-template pTemplate="header">
             <tr>
               <th>Category</th>
@@ -72,35 +144,51 @@
           <ng-template pTemplate="body" let-budget>
             <tr>
               <td>{{ budget.category }}</td>
-              <td>{{ budget.limit | currency:budget.currency }}</td>
-              <td>{{ budget.spent | currency:budget.currency }}</td>
+              <td>{{ budget.limit | currency : budget.currency }}</td>
+              <td>{{ budget.spent | currency : budget.currency }}</td>
               <td>
                 <div class="usage-bar">
-                  <div class="usage-fill" [style.width.%]="getUsage(budget)" [ngClass]="{'over-budget': getUsage(budget) > 100}"></div>
+                  <div
+                    class="usage-fill"
+                    [style.width.%]="getUsage(budget)"
+                    [ngClass]="{ 'over-budget': getUsage(budget) > 100 }"
+                  ></div>
                 </div>
-                <span class="usage-text">{{ getUsage(budget) | number:'1.0-0' }}%</span>
+                <span class="usage-text"
+                  >{{ getUsage(budget) | number : "1.0-0" }}%</span
+                >
               </td>
               <td>
-                <p-button 
-                  icon="pi pi-trash" 
-                  styleClass="p-button-danger p-button-text" 
-                  (onClick)="removeBudget(budget.category)">
+                <p-button
+                  icon="pi pi-trash"
+                  styleClass="p-button-danger p-button-text"
+                  (onClick)="deleteBudget(budget)"
+                >
                 </p-button>
               </td>
             </tr>
           </ng-template>
           <ng-template pTemplate="emptymessage">
-              <tr>
-                  <td colspan="5">No budgets set. Add one using the form above.</td>
-              </tr>
+            <tr>
+              <td colspan="5">
+                No budgets set for this account. Add one using the form above.
+              </td>
+            </tr>
           </ng-template>
         </p-table>
       </p-card>
     </div>
 
     <div class="col-12 lg:col-7">
-      <p-card header="Budget vs. Spending" styleClass="h-full">
-        <p-chart type="bar" [data]="budgetChartData" [options]="chartOptions"></p-chart>
+      <p-card
+        header="Budget vs. Spending for {{ selectedAccount?.number }}"
+        styleClass="h-full"
+      >
+        <p-chart
+          type="bar"
+          [data]="budgetChartData"
+          [options]="chartOptions"
+        ></p-chart>
       </p-card>
     </div>
   </div>

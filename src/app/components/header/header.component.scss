@@ -32,10 +32,6 @@
       cursor: pointer;
     }
 
-    .back-icon {
-      font-size: 1.2rem;
-      color: white;
-    }
   }
 
   .header-right {
@@ -48,8 +44,9 @@
       font-size: 1rem;
       white-space: nowrap;
     }
-
+    
     .lang-toggle {
+      cursor: pointer;
       font-size: 0.95rem;
     }
 

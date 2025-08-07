@@ -14,7 +14,7 @@ sections = [
     {
       title: 'Dashboard',
       items: [
-        { label: 'Overview', route: '/dashboard/overview', icon: 'pi pi-home' }
+        { label: 'Overview', route: '/dashboard', icon: 'pi pi-home' }
       ]
     },
     {
@@ -50,11 +50,18 @@ sections = [
       ]
     },
     {
+      title: 'Transfers',
+      items: [
+        { label: 'Domestic', route: '/transfer-funds/domestic', icon: 'pi pi-exchange' },
+        { label: 'International', route: '/transfer-funds/international', icon: 'pi pi-send' },
+        { label: 'Within Bank', route: '/transfer-funds/within-bank', icon: 'pi pi-sitemap' }
+      ]
+    },
+    {
       title: 'Account Operations',
       items: [
         { label: 'All Account Operations', route: '/account-operations', icon: 'pi pi-cog' },
-        { label: 'Transfer Funds', route: '/account-operations/transfer', icon: 'pi pi-exchange' },
-        {label: 'QR code payment', route: '/account-operations/qr-payment', icon: 'pi pi-qrcode' }
+        {label: 'QR code payment', route: '/qr-code-payment', icon: 'pi pi-qrcode' }
       ]
     }
   ];

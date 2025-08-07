@@ -103,8 +103,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       if (params['type']) {
         this.selectedType = params['type'];
-        this.filterAccounts();
+      } else {
+        this.selectedType = '';
       }
+      this.filterAccounts();
     });
 
     this.alertForm = this.fb.group({

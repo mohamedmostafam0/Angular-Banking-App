@@ -1,11 +1,4 @@
-<p-toast></p-toast>
-<p-card styleClass="transactions-card">
-  <ng-template pTemplate="header">
-    <div class="card-title-bar">
-      <h2 class="card-title">Transactions</h2>
-    </div>
-  </ng-template>
-
+<p-card header="Transactions" styleClass="transactions-card">
   <p-table
     #dt
     [value]="transactions"

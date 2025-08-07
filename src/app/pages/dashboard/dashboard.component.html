@@ -23,12 +23,20 @@
     <div class="grid">
       <div class="col-12 md:col-6">
         <p-card header="Spending by Category">
-          <p-chart type="doughnut" [data]="spendingByCategoryData" #spendingByCategoryChart></p-chart>
+          <p-chart
+            type="doughnut"
+            [data]="spendingByCategoryData"
+            #spendingByCategoryChart
+          ></p-chart>
         </p-card>
       </div>
       <div class="col-12 md:col-6">
         <p-card header="Balance Trend">
-          <p-chart type="line" [data]="balanceTrendData" #balanceTrendChart></p-chart>
+          <p-chart
+            type="line"
+            [data]="balanceTrendData"
+            #balanceTrendChart
+          ></p-chart>
         </p-card>
       </div>
       <div class="col-12 md:col-6">
@@ -36,7 +44,6 @@
           <p-chart type="bar" [data]="cashflowData" #cashflowChart></p-chart>
         </p-card>
       </div>
-
     </div>
   </div>
 </div>

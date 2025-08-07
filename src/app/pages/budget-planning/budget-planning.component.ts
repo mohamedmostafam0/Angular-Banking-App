@@ -3,8 +3,11 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { BankingDataService } from '../../services/banking-data.service';
 import { Transaction } from '../../interfaces/Transaction.interface';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Account } from '../../interfaces/Account.interface';
+import { FilterPipe } from '../../pipes/filter.pipe';
+import { FormsModule } from '@angular/forms';
 
 // PrimeNG Modules
 import { CardModule } from 'primeng/card';
@@ -14,8 +17,11 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
 import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { SplitterModule } from 'primeng/splitter';
 
 interface Budget {
+  accountNumber: string;
   category: string;
   limit: number;
   spent: number;
@@ -39,11 +45,15 @@ interface CategoryOption {
     InputNumberModule,
     TableModule,
     ChartModule,
-    ToastModule
+    ToastModule,
+    FilterPipe,
+    FormsModule,
+    ConfirmDialogModule,
+    SplitterModule
   ],
   templateUrl: './budget-planning.component.html',
   styleUrls: ['./budget-planning.component.scss'],
-  providers: [MessageService],
+  providers: [ConfirmationService],
   animations: [
     trigger('formAnimation', [
       state('void', style({ height: '0', opacity: '0', overflow: 'hidden' })),
@@ -67,11 +77,14 @@ export class BudgetPlanningComponent implements OnInit {
   chartOptions: any;
   supportedCurrencies: string[] = [];
   showBudgetForm: boolean = false;
+  accounts: Account[] = [];
+  selectedAccount: Account | null = null;
 
   constructor(
     private fb: FormBuilder,
     private bankingDataService: BankingDataService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -81,8 +94,16 @@ export class BudgetPlanningComponent implements OnInit {
       currency: ['USD', Validators.required]
     });
 
+    this.bankingDataService.accounts$.subscribe(accounts => {
+      this.accounts = accounts;
+      if (this.accounts.length > 0) {
+        this.selectedAccount = this.accounts[0];
+        this.loadBudgets();
+        this.prepareChartData();
+      }
+    });
+
     this.supportedCurrencies = this.bankingDataService.getSupportedCurrencies();
-    this.loadBudgets();
     this.bankingDataService.transactions$.subscribe(transactions => {
       this.extractCategories(transactions);
       this.calculateSpending(transactions);
@@ -90,6 +111,12 @@ export class BudgetPlanningComponent implements OnInit {
     });
     
     this.setChartOptions();
+  }
+
+  onAccountChange(event: any) {
+    this.selectedAccount = event.value;
+    this.loadBudgets();
+    this.prepareChartData();
   }
 
   loadBudgets(): void {
@@ -106,35 +133,60 @@ export class BudgetPlanningComponent implements OnInit {
     }
 
     const newBudget: Budget = {
+      accountNumber: this.selectedAccount!.number,
       category: this.budgetForm.value.category,
       limit: this.budgetForm.value.limit,
       spent: 0, // Will be recalculated
       currency: this.budgetForm.value.currency
     };
 
-    const existingIndex = this.budgets.findIndex(b => b.category === newBudget.category);
-    if (existingIndex > -1) {
-      this.budgets[existingIndex].limit = newBudget.limit;
-      this.budgets[existingIndex].currency = newBudget.currency;
-      this.messageService.add({ severity: 'success', summary: 'Budget Updated', detail: `Budget for ${newBudget.category} updated.` });
-    } else {
-      this.budgets.push(newBudget);
-      this.messageService.add({ severity: 'success', summary: 'Budget Set', detail: `Budget for ${newBudget.category} has been set.` });
-    }
+    const existingIndex = this.budgets.findIndex(b => b.category === newBudget.category && b.accountNumber === newBudget.accountNumber);
+    const action = existingIndex > -1 ? 'update' : 'set';
+    const summary = existingIndex > -1 ? 'Update Budget' : 'Set Budget';
+    const message = `Are you sure you want to ${action} the budget for ${newBudget.category}?`;
 
-    localStorage.setItem('budgets', JSON.stringify(this.budgets));
-    this.bankingDataService.transactions$.subscribe(transactions => {
-        this.calculateSpending(transactions);
-        this.prepareChartData();
-    }).unsubscribe();
-    this.budgetForm.reset({ currency: 'USD' });
+    this.confirmationService.confirm({
+      message: message,
+      header: summary,
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        if (existingIndex > -1) {
+          this.budgets = this.budgets.map((b, i) => i === existingIndex ? { ...b, limit: newBudget.limit, currency: newBudget.currency } : b);
+          this.messageService.add({ severity: 'success', summary: 'Budget Updated', detail: `Budget for ${newBudget.category} updated.` });
+        } else {
+          this.budgets = [...this.budgets, newBudget];
+          this.messageService.add({ severity: 'success', summary: 'Budget Set', detail: `Budget for ${newBudget.category} has been set.` });
+        }
+
+        localStorage.setItem('budgets', JSON.stringify(this.budgets));
+        this.bankingDataService.transactions$.subscribe(transactions => {
+            this.calculateSpending(transactions);
+            this.prepareChartData();
+        }).unsubscribe();
+        this.budgetForm.reset({ currency: 'USD' });
+        this.showBudgetForm = false;
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'info', summary: 'Cancelled', detail: `The budget ${action} was cancelled.` });
+      }
+    });
   }
 
-  removeBudget(category: string): void {
-    this.budgets = this.budgets.filter(b => b.category !== category);
-    localStorage.setItem('budgets', JSON.stringify(this.budgets));
-    this.prepareChartData();
-    this.messageService.add({ severity: 'info', summary: 'Budget Removed', detail: `Budget for ${category} has been removed.` });
+  deleteBudget(budgetToDelete: Budget): void {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete the budget for ${budgetToDelete.category}? This action cannot be undone.`,
+      header: 'Confirm Deletion',
+      icon: 'pi pi-trash',
+      accept: () => {
+        this.budgets = this.budgets.filter(b => !(b.category === budgetToDelete.category && b.accountNumber === budgetToDelete.accountNumber));
+        localStorage.setItem('budgets', JSON.stringify(this.budgets));
+        this.prepareChartData(); 
+        this.messageService.add({ severity: 'success', summary: 'Budget Deleted', detail: `Budget for ${budgetToDelete.category} has been deleted.` });
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'info', summary: 'Cancelled', detail: 'Deletion was cancelled.' });
+      }
+    });
   }
 
   extractCategories(transactions: Transaction[]): void {
@@ -154,6 +206,7 @@ export class BudgetPlanningComponent implements OnInit {
         .filter(t => {
           const transactionDate = new Date(t.date);
           return (
+            t.accountNumber === budget.accountNumber &&
             t.description === budget.category &&
             t.amount < 0 &&
             transactionDate.getMonth() === currentMonth &&
@@ -166,9 +219,11 @@ export class BudgetPlanningComponent implements OnInit {
   }
 
   prepareChartData(): void {
-    const labels = this.budgets.map(b => b.category);
-    const spentData = this.budgets.map(b => b.spent);
-    const limitData = this.budgets.map(b => b.limit);
+    if (!this.selectedAccount) return;
+    const accountBudgets = this.budgets.filter(b => b.accountNumber === this.selectedAccount?.number);
+    const labels = accountBudgets.map(b => b.category);
+    const spentData = accountBudgets.map(b => b.spent);
+    const limitData = accountBudgets.map(b => b.limit);
 
     this.budgetChartData = {
       labels: labels,

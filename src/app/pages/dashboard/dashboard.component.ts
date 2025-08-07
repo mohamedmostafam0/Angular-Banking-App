@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { BankingDataService } from '../../services/banking-data.service';
 import { AuthService } from '../../services/auth.service';
 import { Observable, of, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Account } from '../../interfaces/Account.interface';
 import { Transaction } from '../../interfaces/Transaction.interface';
 import { CardModule } from 'primeng/card';
@@ -13,7 +12,6 @@ import { ChartModule } from 'primeng/chart';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -37,7 +35,7 @@ import { FormsModule } from '@angular/forms';
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  providers: [MessageService]
+  providers: []
 })
 
 export class DashboardComponent implements OnInit, OnDestroy {
@@ -64,7 +62,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private bankingDataService: BankingDataService,
     private authService: AuthService,
-    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {

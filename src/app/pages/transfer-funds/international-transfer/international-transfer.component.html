@@ -1,0 +1,118 @@
+<p-toast></p-toast>
+<div class="transfer-page">
+  <div class="header">
+    <h1>International Transfer</h1>
+    <p>Transfer funds to an account in another country.</p>
+  </div>
+
+  <p-card>
+    <ng-template pTemplate="title">New International Transfer</ng-template>
+    <ng-template pTemplate="subtitle">Please fill in the details below.</ng-template>
+    <p-splitter styleClass="mb-5">
+      <ng-template pTemplate="form">
+        <div class="flex align-items-center justify-content-center h-full">
+          <div class="instructions">
+            <h4>Instructions for International Transfer</h4>
+            <p>
+              Follow these steps to complete an international fund transfer:
+            </p>
+            <ul>
+              <li>
+                <strong>Select From Account:</strong> Choose the account from which you want to transfer funds.
+              </li>
+              <li>
+                <strong>Enter To Account:</strong> Provide the recipient's account number in the destination country.
+              </li>
+              <li>
+                <strong>Enter Amount and Currencies:</strong> Specify the amount to send, your currency, and the recipient's currency.
+              </li>
+              <li>
+                <strong>Review and Confirm:</strong> Click "Review Transfer" to verify details, including exchange rates, then confirm.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="flex align-items-center justify-content-center h-full">
+          <div class="col-12 flex justify-content-center">
+            <form class="transfer-form" [formGroup]="transferForm" (ngSubmit)="initiateTransfer()">
+              <div class="p-fluid">
+                <div class="field mb-3">
+                  <label for="fromAccount" class="col-12 md:col-4">From Account</label>
+                  <div class="col-12 md:col-8">
+                    <p-dropdown 
+                      inputId="fromAccount" 
+                      [options]="accounts"
+                      formControlName="fromAccount"
+                      placeholder="Select an account"
+                      optionLabel="number">
+                    </p-dropdown>
+                  </div>
+                </div>
+
+                <div class="field mb-3">
+                  <label for="toAccount" class="col-12 md:col-4">To Account</label>
+                  <div class="col-12 md:col-8">
+                    <input 
+                      pInputText 
+                      id="toAccount" 
+                      formControlName="toAccount" 
+                      placeholder="Enter account number" />
+                  </div>
+                </div>
+
+                <div class="field mb-3">
+                  <label for="amount" class="col-12 md:col-4">Amount</label>
+                  <div class="col-12 md:col-8">
+                    <p-inputNumber 
+                      inputId="amount" 
+                      formControlName="amount" 
+                      mode="currency" 
+                      [currency]="transferForm.get('currency')?.value || 'USD'" 
+                      locale="en-US">
+                    </p-inputNumber>
+                  </div>
+                </div>
+                <div class="field mb-3">
+                  <label for="currency" class="col-12 md:col-4">Currency</label>
+                  <div class="col-12 md:col-8">
+                    <p-dropdown 
+                      inputId="currency" 
+                      [options]="supportedCurrencies" 
+                      formControlName="currency" 
+                      placeholder="Select a currency">
+                    </p-dropdown>
+                  </div>
+                </div>
+
+                <div class="field mb-3">
+                  <label for="toCurrency" class="col-12 md:col-4">Recipient's Currency</label>
+                  <div class="col-12 md:col-8">
+                    <p-dropdown 
+                      inputId="toCurrency" 
+                      [options]="supportedCurrencies" 
+                      formControlName="toCurrency" 
+                      placeholder="Select a currency">
+                    </p-dropdown>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-content-center mt-3">
+                <p-button 
+                  label="Review Transfer" 
+                  type="submit" 
+                  icon="pi pi-arrow-right" 
+                  [disabled]="transferForm.invalid">
+                </p-button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </ng-template>
+    </p-splitter>
+  </p-card>
+
+
+</div>

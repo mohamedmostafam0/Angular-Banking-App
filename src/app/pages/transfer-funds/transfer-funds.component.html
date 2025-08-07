@@ -1,1 +1,46 @@
-<p>transfer-funds works!</p>
+<div class="transfer-funds-page">
+  <div class="header">
+    <h1>Transfer Funds</h1>
+    <p>Easily transfer funds between accounts.</p>
+  </div>
+
+  <div class="grid">
+    <div class="col-12">
+      <p-card header="Initiate Transfer" styleClass="h-full">
+        <p-splitter styleClass="mb-5" [panelSizes]="[40, 60]">
+          <ng-template pTemplate>
+            <div class="flex align-items-center justify-content-center h-full">
+              <div class="instructions">
+                <h4>How to Transfer Funds</h4>
+                <p>
+                  Follow these steps to transfer funds:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Select Transfer Type:</strong> Choose between Domestic, International, or Within Bank transfer.
+                  </li>
+                  <li>
+                    <strong>Fill Details:</strong> Provide all necessary transfer details.
+                  </li>
+                  <li>
+                    <strong>Confirm:</strong> Review and confirm your transfer.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate>
+            <div class="flex align-items-center justify-content-center h-full">
+              <div class="col-12 flex justify-content-center">
+                <!-- Placeholder for transfer form -->
+                <div class="transfer-form">
+                  <p>Transfer form will go here.</p>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-splitter>
+      </p-card>
+    </div>
+  </div>
+</div>

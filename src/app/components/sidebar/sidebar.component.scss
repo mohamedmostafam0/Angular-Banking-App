@@ -1,21 +1,21 @@
 .sidebar-container {
   width: 270px;
-  height: 100vh;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: "Segoe UI", sans-serif;
   background-color: #ededf1;
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
   position: fixed;
 }
 
 
 .sidebar-content {
-  flex: 1;
   padding: 1rem 1.2rem;
   background-color: #ededf1;
-
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 }
 
 .sidebar-section {

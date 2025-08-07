@@ -102,14 +102,3 @@
 .p-message {
   margin-bottom: 1.5rem;
 }
-
-@media (max-width: 992px) {
-  .login-left {
-    display: none;
-  }
-
-  .login-right {
-    flex: 1;
-    justify-content: center;
-  }
-} 

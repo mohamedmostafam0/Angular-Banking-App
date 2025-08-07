@@ -1,10 +1,15 @@
 <div class="sidebar-container">
-  <div class="sidebar-header">
-    <div class="logo-container">
-      <span>Banking App</span>
-    </div>
-  </div>
   <div class="sidebar-content">
-    <p-panelMenu [model]="items" [multiple]="false" styleClass="sidebar-menu"></p-panelMenu>
+    <div *ngFor="let section of sections" class="sidebar-section">
+      <h4 class="section-title">{{ section.title }}</h4>
+      <ul class="section-items">
+        <li *ngFor="let item of section.items">
+          <a [routerLink]="item.route" [queryParams]="item.queryParams">
+            <i [ngClass]="item.icon" class="pi-icon"></i>
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

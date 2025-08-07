@@ -1,41 +1,68 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, PanelMenuModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
-  items: MenuItem[] = [];
-
-  ngOnInit() {
-    this.items = [
-      {
-        label: 'Dashboard',
-        icon: 'pi pi-fw pi-home',
-        routerLink: '/dashboard'
-      },
-      {
-        label: 'Accounts',
-        icon: 'pi pi-fw pi-wallet',
-        routerLink: '/accounts'
-      },
-      {
-        label: 'Transactions',
-        icon: 'pi pi-fw pi-chart-bar',
-        routerLink: '/transactions'
-      },
-      {
-        label: 'Account Operations',
-        icon: 'pi pi-fw pi-cog',
-        routerLink: '/account-operations'
-      }
-    ];
-  }
+export class SidebarComponent {
+sections = [
+    {
+      title: 'Dashboard',
+      items: [
+        { label: 'Overview', route: '/dashboard', icon: 'pi pi-home' }
+      ]
+    },
+    {
+      title: 'Accounts',
+      items: [
+        { label: 'All Accounts', route: '/accounts', icon: 'pi pi-wallet' },
+        {
+          label: 'Current Accounts',
+          route: '/accounts',
+          icon: 'pi pi-credit-card',
+          queryParams: { type: 'Current' }
+        },
+        {
+          label: 'Savings Accounts',
+          route: '/accounts',
+          icon: 'pi pi-dollar',
+          queryParams: { type: 'Savings' }
+        }
+      ]
+    },
+    {
+      title: 'Transactions',
+      items: [
+        { label: 'All Transactions', route: '/transactions', icon: 'pi pi-chart-bar' }
+      ]
+    },
+    {
+      title: 'Tools',
+      items: [
+        { label: 'Budget Planning', route: '/budget-planning', icon: 'pi pi-chart-pie' },
+        { label: 'Schedule Reports', route: '/schedule-reports', icon: 'pi pi-calendar' },
+        { label: 'Currency Converter', route: '/currency-converter', icon: 'pi pi-money-bill' }
+      ]
+    },
+    {
+      title: 'Transfers',
+      items: [
+        { label: 'Domestic', route: '/transfer-funds/domestic', icon: 'pi pi-exchange' },
+        { label: 'International', route: '/transfer-funds/international', icon: 'pi pi-send' },
+        { label: 'Within Bank', route: '/transfer-funds/within-bank', icon: 'pi pi-sitemap' }
+      ]
+    },
+    {
+      title: 'Account Operations',
+      items: [
+        { label: 'All Account Operations', route: '/account-operations', icon: 'pi pi-cog' },
+        {label: 'QR code payment', route: '/qr-code-payment', icon: 'pi pi-qrcode' }
+      ]
+    }
+  ];
 }

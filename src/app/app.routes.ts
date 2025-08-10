@@ -11,7 +11,9 @@ import { BudgetPlanningComponent } from './pages/budget-planning/budget-planning
 import { ScheduleReportsComponent } from './pages/schedule-reports/schedule-reports.component';
 import { DomesticTransferComponent } from './pages/transfer-funds/domestic-transfer/domestic-transfer.component';
 import { InternationalTransferComponent } from './pages/transfer-funds/international-transfer/international-transfer.component';
+import { IntraAccountTransferComponent } from './pages/transfer-funds/intra-account-transfer/intra-account-transfer.component';
 import { WithinBankTransferComponent } from './pages/transfer-funds/within-bank-transfer/within-bank-transfer.component';
+import { QrCodePaymentComponent } from './pages/qr-code-payment/qr-code-payment.component';
 
 export const routes: Routes = [
   // Public routes
@@ -36,7 +38,9 @@ export const routes: Routes = [
       { path: 'schedule-reports', component: ScheduleReportsComponent, title: 'Schedule Reports' },
       { path: 'transfer-funds/domestic', component: DomesticTransferComponent, title: 'Domestic Transfer' },
       { path: 'transfer-funds/international', component: InternationalTransferComponent, title: 'International Transfer' },
-      { path: 'transfer-funds/within-bank', component: WithinBankTransferComponent, title: 'Within-Bank Transfer' },
+      { path: 'transfer-funds/intra-account', component: IntraAccountTransferComponent, title: 'intra-account Transfer' },
+      { path: 'transfer-funds/within-bank', component: WithinBankTransferComponent, title: 'Within Bank Transfer' },
+      { path: 'qr-code-payment', component: QrCodePaymentComponent, title: 'QR Code Payment' },
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
     ]
   },

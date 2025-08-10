@@ -46,7 +46,8 @@ sections = [
       items: [
         { label: 'Budget Planning', route: '/budget-planning', icon: 'pi pi-chart-pie' },
         { label: 'Schedule Reports', route: '/schedule-reports', icon: 'pi pi-calendar' },
-        { label: 'Currency Converter', route: '/currency-converter', icon: 'pi pi-money-bill' }
+        { label: 'Currency Converter', route: '/currency-converter', icon: 'pi pi-money-bill' },
+        {label: 'QR code payment', route: '/qr-code-payment', icon: 'pi pi-qrcode' }
       ]
     },
     {
@@ -54,14 +55,14 @@ sections = [
       items: [
         { label: 'Domestic', route: '/transfer-funds/domestic', icon: 'pi pi-exchange' },
         { label: 'International', route: '/transfer-funds/international', icon: 'pi pi-send' },
-        { label: 'Within Bank', route: '/transfer-funds/within-bank', icon: 'pi pi-sitemap' }
+        { label: 'Intra-Account', route: '/transfer-funds/intra-account', icon: 'pi pi-sitemap' },
+        { label: 'Within Bank', route: '/transfer-funds/within-bank', icon: 'pi pi-building' }
       ]
     },
     {
       title: 'Account Operations',
       items: [
-        { label: 'All Account Operations', route: '/account-operations', icon: 'pi pi-cog' },
-        {label: 'QR code payment', route: '/qr-code-payment', icon: 'pi pi-qrcode' }
+        { label: 'All Account Operations', route: '/account-operations', icon: 'pi pi-cog' }
       ]
     }
   ];

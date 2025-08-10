@@ -1,17 +1,17 @@
-<div class="app-layout">
-  <app-header *ngIf="authService.authState$ | async"></app-header>
+<div class="app-layout" [class.login-layout]="isLoginPage">
+  <app-header *ngIf="!isLoginPage && (authService.authState$ | async)"></app-header>
 
   <div class="main-container">
-    <div class="sidebar-container" *ngIf="authService.authState$ | async">
+    <div class="sidebar-container" *ngIf="!isLoginPage && (authService.authState$ | async)">
       <app-sidebar></app-sidebar>
     </div>
 
-    <main class="main-content" [class.logged-in]="authService.authState$ | async">
+    <main class="main-content" [class.logged-in]="!isLoginPage && (authService.authState$ | async)">
       <router-outlet></router-outlet>
     </main>
   </div>
 
-  <app-footer *ngIf="authService.authState$ | async"></app-footer>
+  <app-footer *ngIf="!isLoginPage && (authService.authState$ | async)"></app-footer>
 
   <p-toast></p-toast>
   <p-confirmDialog [style]="{width: '450px'}" [baseZIndex]="10000"></p-confirmDialog>

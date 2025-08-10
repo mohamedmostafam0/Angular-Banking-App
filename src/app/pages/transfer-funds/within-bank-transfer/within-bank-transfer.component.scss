@@ -1,88 +1,30 @@
-.transfer-page {
-  padding: 2rem;
-  background-color: var(white);
-  min-height: 100%;
-
-  .header {
-    margin-bottom: 2rem;
+.within-bank-transfer-container {
+    padding: 20px;
   }
-}
-
-.field {
-  width: 100%;
-  margin-bottom: 1.5rem;
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
   label {
     display: block;
-    text-align: left;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
+    margin-bottom: 5px;
   }
-}
-
-  :host {
-    ::ng-deep .p-splitter {
-      background: transparent;
-      border: none;
-    }
-    ::ng-deep .p-splitter-gutter {
-      background-color: var(--surface-card);
-      pointer-events: none;
-      cursor: default;
-    }
-
-    .p-inputtext, ::ng-deep .p-inputnumber-input, .p-dropdown {
-      background-color: var(--white) !important;
-      width: 100% !important;
-    }
-
-    ::ng-deep .p-datatable .p-datatable-tbody > tr {
-      background: var(--surface-card);
-    }
   
-  }
-
-  ::ng-deep .p-button {
+  input[type="text"],
+  input[type="number"],
+  textarea {
     width: 100%;
-    justify-content: center;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
   }
-  .instructions {
-    background-color: var(--surface-card);
-    padding-right: 2rem;
-    border-color: var(--surface-card);
-    
-    h4 {
-      margin-bottom: 1rem;
-      font-weight: 600;
-      color: var(--text-color-secondary);
-    }
-
-    p {
-      color: var(--text-color-secondary);
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    ul {
-      list-style-position: inside;
-      padding-left: 0;
-      color: var(--text-color-secondary);
-
-      li {
-        margin-bottom: 0.75rem;
-        line-height: 1.6;
-
-        strong {
-          color: var(--text-color-secondary);
-          font-weight: 600;
-        }
-      }
-    }
+  
+  button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
   }
-
-:host ::ng-deep .p-card .p-card-body {
-  padding-top: 0;
-}
-
-:host ::ng-deep .p-card .p-card-content {
-  padding-top: 0;
-}

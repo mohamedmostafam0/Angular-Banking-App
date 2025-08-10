@@ -4,6 +4,7 @@ import { catchError, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Transaction } from '../interfaces/Transaction.interface';
 import { ScheduledReport } from '../interfaces/ScheduledReport.interface';
+import { ExchangeRatesResponse } from '../interfaces/ExchangeRates.interface';
 import { Account } from '../interfaces/Account.interface';
 import { MessageService } from 'primeng/api';
 import { environment } from '../../environments/environment';
@@ -11,12 +12,6 @@ import { environment } from '../../environments/environment';
 interface CachedRates {
   timestamp: number;
   rates: { [key: string]: number };
-}
-
-interface ExchangeRatesResponse {
-  rates: { [key: string]: number };
-  base: string;
-  date: string;
 }
 
 type ExchangeRates = { [key: string]: number };
@@ -64,20 +59,7 @@ export class BankingDataService {
       const savedAccounts = localStorage.getItem(this.ACCOUNTS_KEY);
       if (savedAccounts) {
         this.accountsSubject.next(JSON.parse(savedAccounts));
-      } else {
-        const initialAccounts: Account[] = [
-          { type: "Current", number: "1000000001", balance: 1100.75, status: "Active", currency: 'USD' },
-          { type: "Savings", number: "1000000002", balance: 1200.50, status: "Active", currency: 'EUR' },
-          { type: "Savings", number: "1000000004", balance: 1400.50, status: "Active", currency: 'AED' },
-          { type: "Current", number: "1000000013", balance: 2300.75, status: "Active", currency: 'EGP' },
-          { type: "Savings", number: "1000000016", balance: 2600.50, status: "Active", currency: 'USD' },
-          { type: "Current", number: "1000000017", balance: 2700.75, status: "Active", currency: 'EUR' },
-          { type: "Savings", number: "1000000014", balance: 2400.50, status: "Active", currency: 'AED' },
-          { type: "Savings", number: "1000000018", balance: 2800.50, status: "Inactive", currency: 'EGP' }
-        ];
-        this.accountsSubject.next(initialAccounts);
-        this.saveAccounts();
-      }
+      } 
     } catch (e) {
       console.error('Error loading accounts from localStorage:', e);
     }
@@ -96,64 +78,65 @@ export class BankingDataService {
       const savedTransactions = localStorage.getItem(this.TRANSACTIONS_KEY);
       if (savedTransactions) {
         this.transactionsSubject.next(JSON.parse(savedTransactions));
-      } else {
-        const initialTransactions: Transaction[] = [
-          // Transactions for account 1000000001 (USD)
-          { date: '2025-07-01', description: 'Salary', amount: 3500.00, accountNumber: '1000000001', currency: 'USD' },
-          { date: '2025-07-05', description: 'Groceries', amount: -150.50, accountNumber: '1000000001', currency: 'USD' },
-          { date: '2025-07-10', description: 'Rent', amount: -1200.00, accountNumber: '1000000001', currency: 'USD' },
-          { date: '2025-07-15', description: 'Online Shopping', amount: -75.25, accountNumber: '1000000001', currency: 'USD' },
-          { date: '2025-07-20', description: 'Utility Bill', amount: -100.00, accountNumber: '1000000001', currency: 'USD' },
-          { date: '2025-07-25', description: 'Restaurant', amount: -60.00, accountNumber: '1000000001', currency: 'USD' },
-
-          // Transactions for account 1000000002 (EUR)
-          { date: '2025-07-02', description: 'Freelance Payment', amount: 1200.00, accountNumber: '1000000002', currency: 'EUR' },
-          { date: '2025-07-06', description: 'Restaurant', amount: -45.23, accountNumber: '1000000002', currency: 'EUR' },
-          { date: '2025-07-11', description: 'Groceries', amount: -90.70, accountNumber: '1000000002', currency: 'EUR' },
-          { date: '2025-07-16', description: 'Utility Bill', amount: -70.00, accountNumber: '1000000002', currency: 'EUR' },
-          { date: '2025-07-21', description: 'Online Shopping', amount: -200.50, accountNumber: '1000000002', currency: 'EUR' },
-
-          // Transactions for account 1000000004 (AED)
-          { date: '2025-07-03', description: 'Stock Dividend', amount: 500.00, accountNumber: '1000000004', currency: 'AED' },
-          { date: '2025-07-07', description: 'Rent', amount: -3000.00, accountNumber: '1000000004', currency: 'AED' },
-          { date: '2025-07-12', description: 'Groceries', amount: -400.00, accountNumber: '1000000004', currency: 'AED' },
-          { date: '2025-07-18', description: 'Gift', amount: 200.00, accountNumber: '1000000004', currency: 'AED' },
-          { date: '2025-07-22', description: 'Restaurant', amount: -150.00, accountNumber: '1000000004', currency: 'AED' },
-
-          // Transactions for account 1000000013 (EGP)
-          { date: '2025-07-04', description: 'Salary', amount: 15000.00, accountNumber: '1000000013', currency: 'EGP' },
-          { date: '2025-07-08', description: 'Utility Bill', amount: -800.00, accountNumber: '1000000013', currency: 'EGP' },
-          { date: '2025-07-13', description: 'Online Shopping', amount: -1200.00, accountNumber: '1000000013', currency: 'EGP' },
-          { date: '2025-07-19', description: 'Groceries', amount: -2000.00, accountNumber: '1000000013', currency: 'EGP' },
-          { date: '2025-07-24', description: 'Refund', amount: 500.00, accountNumber: '1000000013', currency: 'EGP' },
-          { date: '2025-07-28', description: 'Restaurant', amount: -600.00, accountNumber: '1000000013', currency: 'EGP' },
-
-          // Transactions for account 1000000014 (AED)
-          { date: '2025-07-03', description: 'Freelance Payment', amount: 5000.00, accountNumber: '1000000014', currency: 'AED' },
-          { date: '2025-07-07', description: 'Rent', amount: -4000.00, accountNumber: '1000000014', currency: 'AED' },
-          { date: '2025-07-12', description: 'Groceries', amount: -600.00, accountNumber: '1000000014', currency: 'AED' },
-          { date: '2025-07-18', description: 'Refund', amount: 300.00, accountNumber: '1000000014', currency: 'AED' },
-          { date: '2025-07-22', description: 'Restaurant', amount: -250.00, accountNumber: '1000000014', currency: 'AED' },
-
-          // Transactions for account 1000000016 (USD)
-          { date: '2025-07-01', description: 'Freelance Payment', amount: 2500.00, accountNumber: '1000000016', currency: 'USD' },
-          { date: '2025-07-05', description: 'Online Shopping', amount: -300.00, accountNumber: '1000000016', currency: 'USD' },
-          { date: '2025-07-10', description: 'Rent', amount: -1500.00, accountNumber: '1000000016', currency: 'USD' },
-          { date: '2025-07-15', description: 'Stock Dividend', amount: 150.00, accountNumber: '1000000016', currency: 'USD' },
-          { date: '2025-07-20', description: 'Groceries', amount: -250.00, accountNumber: '1000000016', currency: 'USD' },
-
-          // Transactions for account 1000000017 (EUR)
-          { date: '2025-07-02', description: 'Salary', amount: 4000.00, accountNumber: '1000000017', currency: 'EUR' },
-          { date: '2025-07-06', description: 'Restaurant', amount: -100.00, accountNumber: '1000000017', currency: 'EUR' },
-          { date: '2025-07-11', description: 'Utility Bill', amount: -120.00, accountNumber: '1000000017', currency: 'EUR' },
-          { date: '2025-07-16', description: 'Gift', amount: 100.00, accountNumber: '1000000017', currency: 'EUR' },
-          { date: '2025-07-21', description: 'Online Shopping', amount: -500.00, accountNumber: '1000000017', currency: 'EUR' },
-          { date: '2025-07-26', description: 'Groceries', amount: -180.00, accountNumber: '1000000017', currency: 'EUR' }
-          
-        ];
-        this.transactionsSubject.next(initialTransactions);
-        this.saveTransactions();
       }
+      // else {
+      //   const initialTransactions: Transaction[] = [
+      //     // Transactions for account 1000000001 (USD)
+      //     { date: '2025-07-01', description: 'Salary', amount: 3500.00, accountNumber: '1000000001', currency: 'USD' },
+      //     { date: '2025-07-05', description: 'Groceries', amount: -150.50, accountNumber: '1000000001', currency: 'USD' },
+      //     { date: '2025-07-10', description: 'Rent', amount: -1200.00, accountNumber: '1000000001', currency: 'USD' },
+      //     { date: '2025-07-15', description: 'Online Shopping', amount: -75.25, accountNumber: '1000000001', currency: 'USD' },
+      //     { date: '2025-07-20', description: 'Utility Bill', amount: -100.00, accountNumber: '1000000001', currency: 'USD' },
+      //     { date: '2025-07-25', description: 'Restaurant', amount: -60.00, accountNumber: '1000000001', currency: 'USD' },
+
+      //     // Transactions for account 1000000002 (EUR)
+      //     { date: '2025-07-02', description: 'Freelance Payment', amount: 1200.00, accountNumber: '1000000002', currency: 'EUR' },
+      //     { date: '2025-07-06', description: 'Restaurant', amount: -45.23, accountNumber: '1000000002', currency: 'EUR' },
+      //     { date: '2025-07-11', description: 'Groceries', amount: -90.70, accountNumber: '1000000002', currency: 'EUR' },
+      //     { date: '2025-07-16', description: 'Utility Bill', amount: -70.00, accountNumber: '1000000002', currency: 'EUR' },
+      //     { date: '2025-07-21', description: 'Online Shopping', amount: -200.50, accountNumber: '1000000002', currency: 'EUR' },
+
+      //     // Transactions for account 1000000004 (AED)
+      //     { date: '2025-07-03', description: 'Stock Dividend', amount: 500.00, accountNumber: '1000000004', currency: 'AED' },
+      //     { date: '2025-07-07', description: 'Rent', amount: -3000.00, accountNumber: '1000000004', currency: 'AED' },
+      //     { date: '2025-07-12', description: 'Groceries', amount: -400.00, accountNumber: '1000000004', currency: 'AED' },
+      //     { date: '2025-07-18', description: 'Gift', amount: 200.00, accountNumber: '1000000004', currency: 'AED' },
+      //     { date: '2025-07-22', description: 'Restaurant', amount: -150.00, accountNumber: '1000000004', currency: 'AED' },
+
+      //     // Transactions for account 1000000013 (EGP)
+      //     { date: '2025-07-04', description: 'Salary', amount: 15000.00, accountNumber: '1000000013', currency: 'EGP' },
+      //     { date: '2025-07-08', description: 'Utility Bill', amount: -800.00, accountNumber: '1000000013', currency: 'EGP' },
+      //     { date: '2025-07-13', description: 'Online Shopping', amount: -1200.00, accountNumber: '1000000013', currency: 'EGP' },
+      //     { date: '2025-07-19', description: 'Groceries', amount: -2000.00, accountNumber: '1000000013', currency: 'EGP' },
+      //     { date: '2025-07-24', description: 'Refund', amount: 500.00, accountNumber: '1000000013', currency: 'EGP' },
+      //     { date: '2025-07-28', description: 'Restaurant', amount: -600.00, accountNumber: '1000000013', currency: 'EGP' },
+
+      //     // Transactions for account 1000000014 (AED)
+      //     { date: '2025-07-03', description: 'Freelance Payment', amount: 5000.00, accountNumber: '1000000014', currency: 'AED' },
+      //     { date: '2025-07-07', description: 'Rent', amount: -4000.00, accountNumber: '1000000014', currency: 'AED' },
+      //     { date: '2025-07-12', description: 'Groceries', amount: -600.00, accountNumber: '1000000014', currency: 'AED' },
+      //     { date: '2025-07-18', description: 'Refund', amount: 300.00, accountNumber: '1000000014', currency: 'AED' },
+      //     { date: '2025-07-22', description: 'Restaurant', amount: -250.00, accountNumber: '1000000014', currency: 'AED' },
+
+      //     // Transactions for account 1000000016 (USD)
+      //     { date: '2025-07-01', description: 'Freelance Payment', amount: 2500.00, accountNumber: '1000000016', currency: 'USD' },
+      //     { date: '2025-07-05', description: 'Online Shopping', amount: -300.00, accountNumber: '1000000016', currency: 'USD' },
+      //     { date: '2025-07-10', description: 'Rent', amount: -1500.00, accountNumber: '1000000016', currency: 'USD' },
+      //     { date: '2025-07-15', description: 'Stock Dividend', amount: 150.00, accountNumber: '1000000016', currency: 'USD' },
+      //     { date: '2025-07-20', description: 'Groceries', amount: -250.00, accountNumber: '1000000016', currency: 'USD' },
+
+      //     // Transactions for account 1000000017 (EUR)
+      //     { date: '2025-07-02', description: 'Salary', amount: 4000.00, accountNumber: '1000000017', currency: 'EUR' },
+      //     { date: '2025-07-06', description: 'Restaurant', amount: -100.00, accountNumber: '1000000017', currency: 'EUR' },
+      //     { date: '2025-07-11', description: 'Utility Bill', amount: -120.00, accountNumber: '1000000017', currency: 'EUR' },
+      //     { date: '2025-07-16', description: 'Gift', amount: 100.00, accountNumber: '1000000017', currency: 'EUR' },
+      //     { date: '2025-07-21', description: 'Online Shopping', amount: -500.00, accountNumber: '1000000017', currency: 'EUR' },
+      //     { date: '2025-07-26', description: 'Groceries', amount: -180.00, accountNumber: '1000000017', currency: 'EUR' }
+          
+      //   ];
+      //   this.transactionsSubject.next(initialTransactions);
+      //   this.saveTransactions();
+      // }
     } catch (e) {
       console.error('Error loading transactions from localStorage:', e);
     }
@@ -182,12 +165,6 @@ export class BankingDataService {
 
   // --- Account and Transaction Methods ---
 
-  getRecentTransactionsForAccount(accountNumber: string): Transaction[] {
-    return this.transactionsSubject.value
-      .filter(tx => tx.accountNumber === accountNumber)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 5);
-  }
 
   getTransactionsByDateRange(accountNumber: string, startDate: Date, endDate: Date): (Transaction & { balance: number })[] {
     const account = this.getAccounts().find(acc => acc.number === accountNumber);
@@ -210,7 +187,7 @@ export class BankingDataService {
     }
 
     return transactionsWithBalance;
-  }
+  } 
 
   getAccounts() {
     return this.accountsSubject.getValue();
@@ -489,5 +466,4 @@ export class BankingDataService {
     }
   }
 
-  // Add other methods as needed
 }

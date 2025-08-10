@@ -1,0 +1,27 @@
+.qr-code-payment-page {
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  .qr-code-payment-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+
+    .form-card {
+      flex: 1;
+    }
+
+    .qr-code-card {
+      flex-shrink: 0;
+      width: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .qr-code-container {
+        padding: 1rem;
+      }
+    }
+  }
+}

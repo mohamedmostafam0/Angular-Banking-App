@@ -45,6 +45,39 @@
     width: 100%;
     justify-content: center;
   }
+  .instructions {
+    background-color: var(--surface-card);
+    padding-right: 2rem;
+    border-color: var(--surface-card);
+    
+    h4 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--text-color-secondary);
+    }
+
+    p {
+      color: var(--text-color-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style-position: inside;
+      padding-left: 0;
+      color: var(--text-color-secondary);
+
+      li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+
+        strong {
+          color: var(--text-color-secondary);
+          font-weight: 600;
+        }
+      }
+    }
+  }
 
 :host ::ng-deep .p-card .p-card-body {
   padding-top: 0;

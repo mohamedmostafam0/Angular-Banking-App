@@ -34,6 +34,7 @@ import { HttpClientModule } from '@angular/common/http';
   providers: [ConfirmationService, MessageService]
 })
 export class AppComponent implements OnInit {
+  isLoginPage: boolean = false;
 
   constructor(
     public authService: AuthService, 
@@ -43,6 +44,14 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.isLoginPage = event.url === '/login';
+      }
+    });
+
     this.authService.authState$.subscribe(isAuth => {
       if (!isAuth) {
         this.router.navigate(['/login']);

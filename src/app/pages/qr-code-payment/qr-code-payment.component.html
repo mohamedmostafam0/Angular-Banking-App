@@ -1,1 +1,29 @@
-<p>qr-code-payment works!</p>
+<div class="qr-code-payment-page">
+  <p-toolbar styleClass="header">
+    <div class="p-toolbar-group-left">
+      <h2 class="page-title">QR Code Payment</h2>
+    </div>
+  </p-toolbar>
+
+  <div class="qr-code-payment-container">
+    <p-card styleClass="form-card">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="recipient">Recipient</label>
+          <input id="recipient" type="text" pInputText [(ngModel)]="recipient" name="recipient" />
+        </div>
+        <div class="p-field">
+          <label for="amount">Amount</label>
+          <p-inputNumber id="amount" [(ngModel)]="amount" name="amount" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber>
+        </div>
+        <p-button label="Generate QR Code" (click)="generateQrCode()"></p-button>
+      </div>
+    </p-card>
+
+    <p-card *ngIf="qrdata" styleClass="qr-code-card">
+      <div class="qr-code-container">
+        <qrcode [qrdata]="qrdata"></qrcode>
+      </div>
+    </p-card>
+  </div>
+</div>

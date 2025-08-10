@@ -15,7 +15,9 @@
   background-color: #ededf1;
   overflow-y: auto;
   flex: 1;
+  overflow: scroll;
   min-height: 0;
+  padding-bottom: 90px;
 }
 
 .sidebar-section {

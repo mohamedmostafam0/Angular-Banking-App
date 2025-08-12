@@ -332,12 +332,6 @@
   }
 }
 
-/* Dialog Responsive */
-@media (max-width: 600px) {
-  ::ng-deep .dialog-responsive {
-    width: 90vw !important;
-  }
-}
 
 /* Dialog styles */
 ::ng-deep .p-dialog {

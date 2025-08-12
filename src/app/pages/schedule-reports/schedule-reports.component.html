@@ -12,60 +12,55 @@
   <div class="reports-content">
     <div class="centered-container">
       <p-card header="Schedule Your Report" styleClass="schedule-card">
-        <p-splitter styleClass="mb-5" [panelSizes]="[40, 60]">
-          <ng-template pTemplate>
-            <div class="flex align-items-center justify-content-center h-full">
-              <div class="instructions">
-                <p>
-                  1. Select the account you want to receive a report for from
-                  the dropdown menu.
-                </p>
-                <p>
-                  2. Choose a day of the month (1-28) on which you want the
-                  report to be generated.
-                </p>
-                <p>3. Click the "Schedule Report" button to confirm.</p>
-                <p>
-                  You will receive a monthly email with the report attached.
-                </p>
+        <div class="grid">
+          <div class="col-5">
+            <div class="instructions">
+              <p>
+                1. Select the account you want to receive a report for from the
+                dropdown menu.
+              </p>
+              <p>
+                2. Choose a day of the month (1-28) on which you want the report
+                to be generated.
+              </p>
+              <p>3. Click the "Schedule Report" button to confirm.</p>
+              <p>You will receive a monthly email with the report attached.</p>
+            </div>
+          </div>
+          <div class="col-7">
+            <div class="p-fluid grid">
+              <div class="field col-12">
+                <label for="reportAccount">Account</label>
+                <p-dropdown
+                  inputId="reportAccount"
+                  [options]="accountOptions"
+                  [(ngModel)]="selectedReportAccount"
+                  placeholder="Select an Account"
+                  (onChange)="onAccountChange($event)"
+                ></p-dropdown>
+              </div>
+              <div class="field col-12">
+                <label for="reportDay">Day of Month</label>
+                <p-inputNumber
+                  inputId="reportDay"
+                  [(ngModel)]="reportDay"
+                  [min]="1"
+                  [max]="28"
+                  [style]="{ width: '100%' }"
+                ></p-inputNumber>
+              </div>
+              <div class="col-12">
+                <p-button
+                  label="Schedule Report"
+                  icon="pi pi-calendar-plus"
+                  (onClick)="scheduleReport()"
+                  styleClass="w-full"
+                  [style]="{ width: '100%' }"
+                ></p-button>
               </div>
             </div>
-          </ng-template>
-          <ng-template pTemplate>
-            <div class="flex align-items-center justify-content-center h-full">
-              <div class="col-12 flex justify-content-center">
-                <div class="p-fluid grid">
-                  <div class="field col-12">
-                    <label for="reportAccount">Account</label>
-                    <p-dropdown
-                      inputId="reportAccount"
-                      [options]="accountOptions"
-                      [(ngModel)]="selectedReportAccount"
-                      placeholder="Select an Account"
-                      (onChange)="onAccountChange($event)"
-                    ></p-dropdown>
-                  </div>
-                  <div class="field col-12">
-                    <label for="reportDay">Day of Month</label>
-                    <p-inputNumber
-                      inputId="reportDay"
-                      [(ngModel)]="reportDay"
-                      [min]="1"
-                      [max]="28"
-                    ></p-inputNumber>
-                  </div>
-                  <div class="col-12">
-                    <p-button
-                      label="Schedule Report"
-                      icon="pi pi-calendar-plus"
-                      (onClick)="scheduleReport()"
-                    ></p-button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ng-template>
-        </p-splitter>
+          </div>
+        </div>
       </p-card>
     </div>
   </div>

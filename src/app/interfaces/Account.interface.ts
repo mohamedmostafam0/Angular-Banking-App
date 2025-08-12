@@ -4,6 +4,8 @@ export interface Account {
   balance: number;
   status: 'Active' | 'Inactive';
   currency: 'USD' | 'EUR' | 'EGP' | 'AED' | 'SAR';
+  iban: string;
+  swiftCode: string;
   nickname?: string;
   alerts?: {
     lowBalance?: {

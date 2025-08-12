@@ -72,13 +72,12 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onOtpSubmit() {
+  onOtpSubmit(otp: string) {
     if (this.otpForm.invalid) {
       return;
     }
 
     this.loading = true;
-    const { otp } = this.otpForm.value;
     this.auth.validateOtp(otp).subscribe(response => {
       this.loading = false;
       if (response.success) {
@@ -87,7 +86,14 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl(returnUrl);
       } else {
         this.otpErrorMsg = response.message;
+        this.otpForm.get('otp')?.reset();
       }
     });
+  }
+
+  onOtpChange(otp: string) {
+    if (otp.length === 6) {
+      this.onOtpSubmit(otp);
+    }
   }
 }

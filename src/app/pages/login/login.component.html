@@ -66,16 +66,24 @@
   [(visible)]="showOtpDialog"
   [modal]="true"
   [closable]="false"
-  [style]="{ width: '25rem' }"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '30rem' }"
 >
-  <form [formGroup]="otpForm" (ngSubmit)="onOtpSubmit()">
+  <form [formGroup]="otpForm" (ngSubmit)="onOtpSubmit(otpForm.value.otp)">
     <div class="p-field">
-      <label for="otp">A 6-digit OTP has been sent to your registered device.</label>
+      <label for="otp"
+        >A 6-digit OTP has been sent to your registered device.</label
+      >
       <div class="flex justify-content-center">
-        <p-inputOtp formControlName="otp" [length]="6"></p-inputOtp>
+        <p-inputOtp
+          formControlName="otp"
+          [length]="6"
+          (ngModelChange)="onOtpChange($event)"
+        ></p-inputOtp>
       </div>
       <div
-        *ngIf="otpForm.get('otp')?.invalid && otpForm.get('otp')?.dirty"
+        *ngIf="otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched"
         class="p-error"
       >
         Enter a valid 6-digit OTP.
@@ -86,14 +94,5 @@
       severity="error"
       [text]="otpErrorMsg"
     ></p-message>
-    <div class="login-button-wrapper">
-      <p-button
-        label="Verify OTP"
-        type="submit"
-        styleClass="login-button"
-        [disabled]="otpForm.invalid || loading"
-        [loading]="loading"
-      ></p-button>
-    </div>
   </form>
 </p-dialog>

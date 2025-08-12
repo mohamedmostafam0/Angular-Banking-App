@@ -1,18 +1,11 @@
 :host {
-  ::ng-deep .p-splitter {
-    background: transparent;
-    border: none;
-  }
-
-  ::ng-deep .p-splitter-gutter {
-    background-color: var(--surface-card);
-    pointer-events: none;
-    cursor: default;
-  }
-
-  .p-inputtext, ::ng-deep .p-inputnumber-input, .p-dropdown {
+  ::ng-deep .p-inputtext, ::ng-deep .p-inputnumber-input, .p-dropdown, .p-button {
     background-color: var(white) !important;
-  }
+  display: flex !important;
+  flex: 1 !important;
+  position: relative;
+  width: 100%;
+}
 
   ::ng-deep .p-datatable .p-datatable-tbody > tr {
     background: var(--surface-card);
@@ -24,9 +17,8 @@
     background-color: var(white);
     min-height: 100%;
     
-    .form{
+    .form{  
       background-color: var(--surface-card);
-      padding: 1.5rem;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
@@ -74,6 +66,8 @@
     margin-top: 1.5rem;
   }
 
+  
+
   .instructions {
     background-color: var(--surface-card);
     padding-right: 2rem;
@@ -108,12 +102,24 @@
     }
   }
 
-  .vertical-separator {
-    width: 1px;
-    background-color: var(--surface-border);
-    height: 70%;
-    margin: auto 0;
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
   }
+
+  .col-5 {
+    flex: 0 0 41.66667%;
+    max-width: 41.66667%;
+    padding: 0.5rem;
+  }
+
+  .col-7 {
+    flex: 0 0 58.33333%;
+    max-width: 58.33333%;
+    padding: 0.5rem;
+  }
+
+  
 }
 
 .hidden-charts {

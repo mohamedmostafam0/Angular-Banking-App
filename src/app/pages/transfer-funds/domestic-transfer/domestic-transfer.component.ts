@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { BankingDataService } from '../../../services/banking-data.service';
 import { Account } from '../../../interfaces/Account.interface';
 import { MessageService, ConfirmationService, ConfirmEventType } from 'primeng/api';
@@ -42,7 +43,8 @@ export class DomesticTransferComponent implements OnInit {
     private bankingDataService: BankingDataService,
     private messageService: MessageService,
     private currencyExchangeService: CurrencyExchangeService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -55,6 +57,12 @@ export class DomesticTransferComponent implements OnInit {
 
     this.bankingDataService.accounts$.subscribe(accounts => {
       this.accounts = accounts;
+      this.route.queryParams.subscribe(params => {
+        const accountNumber = params['accountNumber'];
+        if (accountNumber) {
+          this.transferForm.patchValue({ toAccount: accountNumber });
+        }
+      });
     });
 
     this.supportedCurrencies = this.currencyExchangeService.getSupportedCurrencies();

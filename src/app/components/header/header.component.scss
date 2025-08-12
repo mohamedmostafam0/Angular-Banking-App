@@ -20,6 +20,10 @@
     padding: 0 1rem;
   }
 
+   ::ng-deep .p-menu{
+    top: 50px !important;
+  }
+
   .header-left {
     display: flex;
     align-items: center;

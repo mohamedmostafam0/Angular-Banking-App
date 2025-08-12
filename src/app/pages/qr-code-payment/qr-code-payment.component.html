@@ -1,29 +1,57 @@
 <div class="qr-code-payment-page">
-  <p-toolbar styleClass="header">
-    <div class="p-toolbar-group-left">
-      <h2 class="page-title">QR Code Payment</h2>
-    </div>
-  </p-toolbar>
-
-  <div class="qr-code-payment-container">
-    <p-card styleClass="form-card">
-      <div class="p-fluid">
-        <div class="p-field">
-          <label for="recipient">Recipient</label>
-          <input id="recipient" type="text" pInputText [(ngModel)]="recipient" name="recipient" />
-        </div>
-        <div class="p-field">
-          <label for="amount">Amount</label>
-          <p-inputNumber id="amount" [(ngModel)]="amount" name="amount" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber>
-        </div>
-        <p-button label="Generate QR Code" (click)="generateQrCode()"></p-button>
-      </div>
-    </p-card>
-
-    <p-card *ngIf="qrdata" styleClass="qr-code-card">
-      <div class="qr-code-container">
-        <qrcode [qrdata]="qrdata"></qrcode>
-      </div>
-    </p-card>
+  <div class="header">
+    <h1>QR Code Payment</h1>
+    <p>Generate a QR code to receive payments.</p>
   </div>
+
+  <p-card>
+    <p-splitter styleClass="mb-5">
+      <ng-template pTemplate>
+        <div class="flex align-items-center justify-content-center h-full">
+          <div class="instructions">
+            <h4>Instructions for QR Code Payment</h4>
+            <p>Follow these steps to generate a QR code for payment:</p>
+            <ul>
+              <li>
+                <strong>Select Account:</strong> Choose the account for the transaction.
+              </li>
+              <li>
+                <strong>Select Transfer Type:</strong> Choose between Domestic and International transfer.
+              </li>
+              <li>
+                <strong>Generate QR Code:</strong> Click the "Generate QR Code" button to create a unique QR code for this payment.
+              </li>
+              <li>
+                <strong>Scan and Pay:</strong> The recipient can scan the generated QR code with their device to complete the payment.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="flex align-items-center justify-content-center h-full">
+          <div class="col-12 flex justify-content-center">
+            <div class="p-fluid">
+              <div class="p-field">
+                <label for="account">Account</label>
+                <p-dropdown id="account" [options]="accounts" [(ngModel)]="selectedAccount" optionLabel="nickname" placeholder="Select an Account"></p-dropdown>
+              </div>
+              <div class="p-field">
+                <label for="transferType">Transfer Type</label>
+                <p-dropdown id="transferType" [options]="[ 'Domestic', 'International' ]" [(ngModel)]="transferType"></p-dropdown>
+              </div>
+              <p-button
+                label="Generate QR Code"
+                (click)="generateQrCode()"
+              ></p-button>
+
+              <div *ngIf="qrdata" class="qr-code-container">
+                <qrcode [qrdata]="qrdata"></qrcode>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-splitter>
+  </p-card>
 </div>

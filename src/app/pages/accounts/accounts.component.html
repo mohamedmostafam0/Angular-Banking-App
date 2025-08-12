@@ -1,6 +1,11 @@
 <div class="accounts-page">
   <div class="accounts-container">
     <!-- Header with title and filters -->
+    <div class="welcome-header">
+      <h1>My Accounts</h1>
+      <p>Track all accounts and their transactions.</p>
+    </div>
+
     <p-toolbar styleClass="accounts-header">
       <div class="p-toolbar-group-left">
         <h2 class="card-title">My Accounts</h2>
@@ -47,6 +52,8 @@
       [style]="{ width: '450px' }"
       (onHide)="selectedAccount = null"
       styleClass="dialog-responsive"
+      [draggable]="false"
+      [resizable]="false"
     >
       <div *ngIf="selectedAccount" class="dialog-content">
         <p class="mb-3">
@@ -96,6 +103,8 @@
       [modal]="true"
       [style]="{ width: '450px' }"
       (onHide)="selectedAccount = null"
+      [draggable]="false"
+      [resizable]="false"
       styleClass="dialog-responsive"
     >
       <div *ngIf="selectedAccount" class="dialog-content">

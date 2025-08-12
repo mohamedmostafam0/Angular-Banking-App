@@ -58,11 +58,125 @@ export class BankingDataService {
     try {
       const savedAccounts = localStorage.getItem(this.ACCOUNTS_KEY);
       if (savedAccounts) {
-        this.accountsSubject.next(JSON.parse(savedAccounts));
-      } 
+        let accounts = JSON.parse(savedAccounts);
+        accounts = accounts.map((acc: any, index: number) => ({
+          ...acc,
+          iban: acc.iban || `SA12345678901234567890${12 + index}`,
+          swiftCode: acc.swiftCode || 'CUBISAEADXXX',
+        }));
+        this.accountsSubject.next(accounts);
+        this.saveAccounts();
+      } else {
+        this.initializeAccounts();
+      }
     } catch (e) {
       console.error('Error loading accounts from localStorage:', e);
     }
+  }
+
+  private initializeAccounts() {
+    const initialAccounts: Account[] = [
+      {
+        number: '1000000001',
+        type: 'Savings',
+        balance: 5000.0,
+        status: 'Active',
+        currency: 'USD',
+        iban: 'SA1234567890123456789012',
+        swiftCode: 'CUBISAEADXXX',
+        nickname: 'My US Savings',
+        alerts: {
+          lowBalance: { enabled: true, threshold: 500 },
+          largeTransaction: { enabled: true, threshold: 1000 },
+        },
+      },
+      {
+        number: '1000000002',
+        type: 'Checking',
+        balance: 2500.0,
+        status: 'Active',
+        currency: 'EUR',
+        iban: 'SA1234567890123456789013',
+        swiftCode: 'CUBISAEADXXX',
+        nickname: 'My Euro Checking',
+        alerts: {
+          lowBalance: { enabled: true, threshold: 200 },
+          largeTransaction: { enabled: true, threshold: 800 },
+        },
+      },
+      {
+        number: '1000000004',
+        type: 'Savings',
+        balance: 15000.0,
+        status: 'Active',
+        currency: 'AED',
+        iban: 'SA1234567890123456789014',
+        swiftCode: 'CUBISAEADXXX',
+        nickname: 'My AED Savings',
+        alerts: {
+          lowBalance: { enabled: true, threshold: 1000 },
+          largeTransaction: { enabled: true, threshold: 5000 },
+        },
+      },
+      {
+        number: '1000000013',
+        type: 'Savings',
+        balance: 100000.0,
+        status: 'Active',
+        currency: 'EGP',
+        iban: 'SA1234567890123456789015',
+        swiftCode: 'CUBISAEADXXX',
+        nickname: 'My EGP Savings',
+        alerts: {
+          lowBalance: { enabled: true, threshold: 10000 },
+          largeTransaction: { enabled: true, threshold: 20000 },
+        },
+      },
+      {
+        number: '1000000014',
+        type: 'Checking',
+        balance: 25000.0,
+        status: 'Active',
+        currency: 'AED',
+        iban: 'SA1234567890123456789016',
+        swiftCode: 'CUBISAEADXXX',
+        nickname: 'My AED Checking',
+        alerts: {
+          lowBalance: { enabled: true, threshold: 2000 },
+          largeTransaction: { enabled: true, threshold: 10000 },
+        },
+      },
+      {
+        number: '1000000016',
+        type: 'Savings',
+        balance: 12000.0,
+        status: 'Active',
+        currency: 'USD',
+        iban: 'SA1234567890123456789017',
+        swiftCode: 'CUBISAEADXXX',
+        nickname: 'My Second US Savings',
+        alerts: {
+          lowBalance: { enabled: true, threshold: 1000 },
+          largeTransaction: { enabled: true, threshold: 2000 },
+        },
+      },
+      {
+        number: '1000000017',
+        type: 'Checking',
+        balance: 8000.0,
+        status: 'Active',
+        currency: 'EUR',
+        iban: 'SA1234567890123456789018',
+        swiftCode: 'CUBISAEADXXX',
+        nickname: 'My Second Euro Checking',
+        alerts: {
+          lowBalance: { enabled: true, threshold: 500 },
+          largeTransaction: { enabled: true, threshold: 1500 },
+        },
+      },
+    ];
+    this.accountsSubject.next(initialAccounts);
+    this.saveAccounts();
   }
 
   private saveAccounts() {

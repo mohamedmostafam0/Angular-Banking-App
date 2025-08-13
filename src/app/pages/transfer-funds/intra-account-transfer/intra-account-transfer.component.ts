@@ -14,7 +14,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
 import { SplitterModule } from 'primeng/splitter';
 import { ConfirmDialog } from 'primeng/confirmdialog';
-
 @Component({
   selector: 'app-intra-account-transfer',
   standalone: true,

@@ -4,6 +4,16 @@
   background-color: #fff;
 }
 
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+#dashboardPage ::ng-deep .p-select-option.p-select-option-selected.p-focus,#dashboardPage ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+
 .dashboard-page {
   .dashboard-toolbar {
     display: flex;
@@ -11,18 +21,6 @@
     align-items: center;
     margin-bottom: 2rem;
 
-    .header {
-      margin-bottom: 0; /* Remove margin-bottom as it's now part of the toolbar */
-      h1 {
-        font-size: 2rem;
-        font-weight: 600;
-        color: #2c3e50;
-      }
-      p {
-        font-size: 1.1rem;
-        color: #7f8c8d;
-      }
-    }
 
     .p-field {
       margin-bottom: 0; /* Remove margin-bottom from the dropdown field */

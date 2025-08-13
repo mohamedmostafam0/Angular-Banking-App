@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { QRCodeModule } from 'angularx-qrcode';
+import { QRCodeModule, QRCodeComponent } from 'angularx-qrcode';
 import { NgIf } from '@angular/common';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CardModule } from 'primeng/card';
@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SplitterModule } from 'primeng/splitter';
 import { DropdownModule } from 'primeng/dropdown';
+import { ToastModule } from 'primeng/toast';
 import { BankingDataService } from '../../services/banking-data.service';
 import { Account } from '../../interfaces/Account.interface';
 
@@ -25,7 +26,8 @@ import { Account } from '../../interfaces/Account.interface';
     ButtonModule,
     InputTextModule,
     SplitterModule,
-    DropdownModule
+    DropdownModule,
+    ToastModule
   ],
   templateUrl: './qr-code-payment.component.html',
   styleUrls: ['./qr-code-payment.component.scss']
@@ -45,12 +47,12 @@ export class QrCodePaymentComponent implements OnInit {
   generateQrCode() {
     if (this.selectedAccount) {
       const baseUrl = window.location.origin;
-      let url = `${baseUrl}/transfer-funds/`;
+      let url = `${baseUrl}/#/transfer-funds/`;
 
       if (this.transferType === 'Domestic') {
-        url += 'domestic-transfer';
+        url += 'domestic';
       } else {
-        url += 'international-transfer';
+        url += 'international';
       }
 
       const params = new URLSearchParams();
@@ -58,11 +60,49 @@ export class QrCodePaymentComponent implements OnInit {
       params.set('currency', this.selectedAccount.currency);
 
       if (this.transferType === 'International') {
-        params.set('iban', this.selectedAccount.iban);
-        params.set('swiftCode', this.selectedAccount.swiftCode);
+        params.set('iban', this.selectedAccount.iban!);
+        params.set('swiftCode', this.selectedAccount.swiftCode!);
       }
 
       this.qrdata = `${url}?${params.toString()}`;
     }
+  }
+
+  async shareQrCode(qrCodeComponent: QRCodeComponent) {
+    const canvas = qrCodeComponent.qrcElement.nativeElement.querySelector('canvas');
+    if (!canvas) {
+      console.error('QR Code canvas not found');
+      return;
+    }
+
+    canvas.toBlob(async (blob: Blob | null) => {
+      if (!blob) {
+        console.error('Could not create blob from canvas');
+        return;
+      }
+
+      const file = new File([blob], 'qr-code.png', { type: 'image/png' });
+      const shareData = {
+        files: [file],
+        title: 'QR Code Payment',
+        text: 'Scan this QR code to make a payment.',
+      };
+
+      if (navigator.canShare && navigator.canShare(shareData)) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          console.error('Error sharing QR code:', err);
+        }
+      } else {
+        // Fallback for browsers that do not support sharing
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'qr-code.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    }, 'image/png');
   }
 }

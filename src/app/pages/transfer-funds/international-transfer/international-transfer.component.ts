@@ -5,7 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { BankingDataService } from '../../../services/banking-data.service';
 import { CurrencyExchangeService } from '../../../services/currency-exchange.service';
 import { Account } from '../../../interfaces/Account.interface';
-import { MessageService, ConfirmationService, ConfirmEventType } from 'primeng/api';
+import { Beneficiary } from '../../../interfaces/beneficiary';
+import { MessageService, ConfirmationService, ConfirmEventType, MenuItem } from 'primeng/api';
 
 // PrimeNG Modules
 import { CardModule } from 'primeng/card';
@@ -15,6 +16,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
 import { SplitterModule } from 'primeng/splitter';
+import { ChipModule } from 'primeng/chip';
+import { TooltipModule } from 'primeng/tooltip';
+import { StepsModule } from 'primeng/steps';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-international-transfer',
@@ -28,17 +34,25 @@ import { SplitterModule } from 'primeng/splitter';
     InputTextModule,
     InputNumberModule,
     ToastModule,
-    SplitterModule
+    SplitterModule,
+    ChipModule,
+    TooltipModule,
+    StepsModule,
+    DialogModule,
+    ConfirmDialogModule
   ],
   templateUrl: './international-transfer.component.html',
   styleUrls: ['./international-transfer.component.scss'],
-  providers: []
+  providers: [MessageService, ConfirmationService]
 })
 export class InternationalTransferComponent implements OnInit {
   transferForm!: FormGroup;
+  steps: MenuItem[] = [];
+  activeIndex: number = 0;
   accounts: Account[] = [];
   supportedCurrencies: string[] = [];
   countries: { label: string, value: string }[] = [];
+  beneficiaries: Beneficiary[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -91,7 +105,7 @@ export class InternationalTransferComponent implements OnInit {
     'Congo, Democratic Republic of the',
     'Congo, Republic of the',
     'Costa Rica',
-    'Côte d\'Ivoire',
+    "Côte d'Ivoire",
     'Croatia',
     'Cuba',
     'Cyprus',
@@ -249,6 +263,13 @@ export class InternationalTransferComponent implements OnInit {
     'Zimbabwe',
   ].map(country => ({ label: country, value: country }));
 
+    this.steps = [
+      { label: 'Beneficiary Details' },
+      { label: 'Bank Details' },
+      { label: 'Amount & Purpose' },
+      { label: 'Confirmation' }
+    ];
+
     this.transferForm = this.fb.group({
       fromAccount: [null, Validators.required],
       toAccount: ['', Validators.required],
@@ -268,24 +289,21 @@ export class InternationalTransferComponent implements OnInit {
 
     this.bankingDataService.accounts$.subscribe(accounts => {
       this.accounts = accounts;
-      this.route.queryParams.subscribe(params => {
-        const accountNumber = params['accountNumber'];
-        const currency = params['currency'];
-        const iban = params['iban'];
-        const swiftCode = params['swiftCode'];
-
-        if (accountNumber) {
-          this.transferForm.patchValue({ 
-            toAccount: accountNumber,
-            currency: currency,
-            iban: iban,
-            swiftBic: swiftCode
-          });
-        }
-      });
     });
 
     this.supportedCurrencies = this.currencyExchangeService.getSupportedCurrencies();
+
+    this.loadBeneficiaries();
+
+    this.route.params.subscribe(params => {
+      const beneficiaryId = params['beneficiaryId'];
+      if (beneficiaryId) {
+        const selectedBeneficiary = this.beneficiaries.find(b => b.id === beneficiaryId);
+        if (selectedBeneficiary) {
+          this.selectBeneficiary(selectedBeneficiary);
+        }
+      }
+    });
 
     this.transferForm.get('country')?.valueChanges.subscribe(country => {
       const sortCodeControl = this.transferForm.get('sortCode');
@@ -298,13 +316,67 @@ export class InternationalTransferComponent implements OnInit {
     });
   }
 
+  nextStep() {
+    if (this.activeIndex < this.steps.length - 1) {
+      this.activeIndex++;
+    }
+  }
+
+  prevStep() {
+    if (this.activeIndex > 0) {
+      this.activeIndex--;
+    }
+  }
+
+  isCurrentStepValid(): boolean {
+    switch (this.activeIndex) {
+      case 0:
+        return !!this.transferForm.get('fromAccount')?.valid &&
+               !!this.transferForm.get('beneficiaryName')?.valid &&
+               !!this.transferForm.get('beneficiaryAddress')?.valid &&
+               !!this.transferForm.get('country')?.valid &&
+               !!this.transferForm.get('toAccount')?.valid &&
+               !!this.transferForm.get('iban')?.valid;
+      case 1:
+        return !!this.transferForm.get('bankName')?.valid &&
+               !!this.transferForm.get('bankAddress')?.valid &&
+               !!this.transferForm.get('swiftBic')?.valid;
+      case 2:
+        return !!this.transferForm.get('amount')?.valid &&
+               !!this.transferForm.get('currency')?.valid &&
+               !!this.transferForm.get('toCurrency')?.valid &&
+               !!this.transferForm.get('purpose')?.valid;
+      case 3:
+        return this.transferForm.valid;
+      default:
+        return false;
+    }
+  }
+
+  loadBeneficiaries() {
+    const data = localStorage.getItem('beneficiaries');
+    this.beneficiaries = data ? JSON.parse(data) : [];
+    this.beneficiaries = this.beneficiaries.filter(b => b.isInternational);
+  }
+
+  selectBeneficiary(beneficiary: Beneficiary) {
+    this.transferForm.patchValue({
+      toAccount: beneficiary.accountNumber,
+      beneficiaryName: beneficiary.name,
+      iban: beneficiary.iban,
+      swiftBic: beneficiary.swiftCode,
+      bankName: beneficiary.bankName
+    });
+    this.messageService.add({ severity: 'info', summary: 'Beneficiary Selected', detail: `Selected ${beneficiary.name}` });
+  }
+
   initiateTransfer() {
-    if (this.transferForm.invalid) {
-      this.messageService.add({ severity: 'warn', summary: 'Invalid Form', detail: 'Please fill in all fields correctly.' });
+    const { fromAccount, toAccount, beneficiaryName, beneficiaryAddress, iban, bankName, bankAddress, swiftBic, amount, currency, toCurrency, purpose } = this.transferForm.value;
+
+    if (!fromAccount) {
+      this.messageService.add({ severity: 'warn', summary: 'Validation Error', detail: 'Please select a source account.' });
       return;
     }
-
-    const { fromAccount, toAccount, beneficiaryName, beneficiaryAddress, iban, bankName, bankAddress, swiftBic, amount, currency, toCurrency, purpose } = this.transferForm.value;
 
     this.currencyExchangeService.getExchangeRate(currency, toCurrency)
       .subscribe(rate => {
@@ -345,31 +417,23 @@ export class InternationalTransferComponent implements OnInit {
   }
 
   executeTransfer(convertedAmount: number) {
-    const { fromAccount, toAccount, amount, toCurrency, beneficiaryName, beneficiaryAddress, iban, bankName, bankAddress, swiftBic, purpose } = this.transferForm.value;
+    const { fromAccount, toAccount, amount } = this.transferForm.value;
 
-    if (fromAccount.balance < amount) {
-      this.messageService.add({ severity: 'error', summary: 'Insufficient Funds', detail: 'You do not have enough money to make this transfer.' });
-      return;
+    if (!fromAccount || !toAccount || !amount) {
+        this.messageService.add({ severity: 'error', summary: 'Transfer Failed', detail: 'Missing transfer details. Please fill out the form completely.' });
+        return;
     }
 
-    this.bankingDataService.withdraw(fromAccount.number, amount);
+    const success = this.bankingDataService.transfer(fromAccount.number, toAccount, amount, convertedAmount, 'International Transfer');
 
-    // In a real app, you would have a more complex system for international transfers.
-    // For this simulation, we'll just log the converted amount and all the details.
-    console.log(`Simulating international transfer with the following details:`);
-    console.log(`  From Account: ${fromAccount.number}`);
-    console.log(`  Beneficiary: ${beneficiaryName}`);
-    console.log(`  Beneficiary Address: ${beneficiaryAddress}`);
-    console.log(`  Beneficiary Account: ${toAccount}`);
-    console.log(`  IBAN: ${iban}`);
-    console.log(`  Bank: ${bankName}`);
-    console.log(`  Bank Address: ${bankAddress}`);
-    console.log(`  SWIFT/BIC: ${swiftBic}`);
-    console.log(`  Purpose: ${purpose}`);
-    console.log(`  Amount: ${amount} ${this.transferForm.value.currency}`);
-    console.log(`  Converted Amount: ${convertedAmount.toFixed(2)} ${toCurrency}`);
-
-    this.messageService.add({ severity: 'success', summary: 'Transfer Successful', detail: 'The funds have been transferred.' });
-    this.transferForm.reset();
-  }
+    if (success) {
+      this.messageService.add({ severity: 'success', summary: 'Transfer Successful', detail: 'The international transfer has been initiated.' });
+      this.transferForm.reset();
+    } else {
+      this.messageService.add({ severity: 'error', summary: 'Transfer Failed', detail: 'An error occurred during the transfer. Please check the details and try again.' });
+    }
 }
+
+
+  }
+

@@ -6,6 +6,7 @@ import { BankingDataService } from '../../../services/banking-data.service';
 import { Account } from '../../../interfaces/Account.interface';
 import { MessageService, ConfirmationService, ConfirmEventType } from 'primeng/api';
 import { CurrencyExchangeService } from '../../../services/currency-exchange.service';
+import { Beneficiary } from '../../../interfaces/beneficiary';
 
 import { SplitterModule } from 'primeng/splitter';
 import { ButtonModule } from 'primeng/button';
@@ -14,6 +15,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
+import { ChipModule } from 'primeng/chip';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-domestic-transfer',
@@ -27,7 +30,9 @@ import { CardModule } from 'primeng/card';
     InputTextModule,
     InputNumberModule,
     ToastModule,
-    SplitterModule
+    SplitterModule,
+    ChipModule,
+    TooltipModule
   ],
   templateUrl: './domestic-transfer.component.html',
   styleUrls: ['./domestic-transfer.component.scss'],
@@ -37,6 +42,7 @@ export class DomesticTransferComponent implements OnInit {
   transferForm!: FormGroup;
   accounts: Account[] = [];
   supportedCurrencies: string[] = [];
+  beneficiaries: Beneficiary[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -57,15 +63,34 @@ export class DomesticTransferComponent implements OnInit {
 
     this.bankingDataService.accounts$.subscribe(accounts => {
       this.accounts = accounts;
-      this.route.queryParams.subscribe(params => {
-        const accountNumber = params['accountNumber'];
-        if (accountNumber) {
-          this.transferForm.patchValue({ toAccount: accountNumber });
-        }
-      });
     });
 
     this.supportedCurrencies = this.currencyExchangeService.getSupportedCurrencies();
+    this.loadBeneficiaries(); // Load beneficiaries first
+
+    this.route.params.subscribe(params => { // Subscribe to route params
+      const beneficiaryId = params['beneficiaryId'];
+      if (beneficiaryId) {
+        const selectedBeneficiary = this.beneficiaries.find(b => b.id === beneficiaryId);
+        if (selectedBeneficiary) {
+          this.selectBeneficiary(selectedBeneficiary);
+        }
+      }
+    });
+  }
+
+  loadBeneficiaries() {
+    const data = localStorage.getItem('beneficiaries');
+    this.beneficiaries = data ? JSON.parse(data) : [];
+    // Filter for domestic beneficiaries
+    this.beneficiaries = this.beneficiaries.filter(b => !b.isInternational);
+  }
+
+  selectBeneficiary(beneficiary: Beneficiary) {
+    this.transferForm.patchValue({
+      toAccount: beneficiary.accountNumber
+    });
+    this.messageService.add({ severity: 'info', summary: 'Beneficiary Selected', detail: `Selected ${beneficiary.name}` });
   }
 
   initiateTransfer() {
@@ -99,15 +124,13 @@ export class DomesticTransferComponent implements OnInit {
   executeTransfer() {
     const { fromAccount, toAccount, amount } = this.transferForm.value;
 
-    if (fromAccount.balance < amount) {
-      this.messageService.add({ severity: 'error', summary: 'Insufficient Funds', detail: 'You do not have enough money to make this transfer.' });
-      return;
+    const success = this.bankingDataService.transfer(fromAccount.number, toAccount, amount, amount, 'Domestic Transfer');
+
+    if (success) {
+      this.messageService.add({ severity: 'success', summary: 'Transfer Successful', detail: 'The funds have been transferred.' });
+      this.transferForm.reset();
+    } else {
+      this.messageService.add({ severity: 'error', summary: 'Transfer Failed', detail: 'An error occurred during the transfer. Please check the details and try again.' });
     }
-
-    this.bankingDataService.withdraw(fromAccount.number, amount);
-    this.bankingDataService.deposit(toAccount, amount);
-
-    this.messageService.add({ severity: 'success', summary: 'Transfer Successful', detail: 'The funds have been transferred.' });
-    this.transferForm.reset();
   }
 }

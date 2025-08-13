@@ -1,13 +1,18 @@
-<div class="qr-code-payment-page">
+<p-toast></p-toast>
+<div class="transfer-page">
   <div class="header">
     <h1>QR Code Payment</h1>
     <p>Generate a QR code to receive payments.</p>
   </div>
 
   <p-card>
-    <p-splitter styleClass="mb-5">
-      <ng-template pTemplate>
-        <div class="flex align-items-center justify-content-center h-full">
+    <ng-template pTemplate="subtitle"
+      >Please fill in the details below.</ng-template
+    >
+    <ng-template pTemplate="title">Generate QR Code</ng-template>
+    <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
+      <ng-template pTemplate="form">
+        <div class="flex align-items-center h-full">
           <div class="instructions">
             <h4>Instructions for QR Code Payment</h4>
             <p>Follow these steps to generate a QR code for payment:</p>
@@ -29,24 +34,34 @@
         </div>
       </ng-template>
       <ng-template pTemplate>
-        <div class="flex align-items-center justify-content-center h-full">
-          <div class="col-12 flex justify-content-center">
+        <div class="flex align-items-center h-full" style="width: 100%">
+          <div class="col-12 flex">
             <div class="p-fluid">
-              <div class="p-field">
+              <div class="field mb-3">
                 <label for="account">Account</label>
-                <p-dropdown id="account" [options]="accounts" [(ngModel)]="selectedAccount" optionLabel="nickname" placeholder="Select an Account"></p-dropdown>
+                <p-dropdown id="account" [options]="accounts" [(ngModel)]="selectedAccount" optionLabel="number" placeholder="Select an Account" name="account"></p-dropdown>
               </div>
-              <div class="p-field">
+              <div class="field mb-3">
                 <label for="transferType">Transfer Type</label>
-                <p-dropdown id="transferType" [options]="[ 'Domestic', 'International' ]" [(ngModel)]="transferType"></p-dropdown>
+                <p-dropdown id="transferType" [options]="[ 'Domestic', 'International' ]" [(ngModel)]="transferType" name="transferType"></p-dropdown>
               </div>
-              <p-button
-                label="Generate QR Code"
-                (click)="generateQrCode()"
-              ></p-button>
+              <div class="flex mt-3">
+                <p-button
+                  label="Generate QR Code"
+                  (click)="generateQrCode()"
+                  icon="pi pi-qrcode"
+                ></p-button>
+              </div>
 
               <div *ngIf="qrdata" class="qr-code-container">
-                <qrcode [qrdata]="qrdata"></qrcode>
+                <qrcode [qrdata]="qrdata" #qrCodeEl></qrcode>
+                <p-button
+                  label="Share QR Code"
+                  icon="pi pi-share-alt"
+                  (click)="shareQrCode(qrCodeEl)"
+                  [disabled]="!qrdata"
+                  styleClass="p-button-secondary mt-2"
+                ></p-button>
               </div>
             </div>
           </div>

@@ -18,6 +18,7 @@ export type TransactionType =
 export interface Transaction {
   date: string;
   description: TransactionType;
+  details?: string; // Optional field for more details
   amount: number;
   accountNumber: string;
   currency: 'USD' | 'EUR' | 'EGP' | 'AED' | 'SAR';

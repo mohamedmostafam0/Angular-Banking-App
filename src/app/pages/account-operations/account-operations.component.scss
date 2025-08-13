@@ -1,19 +1,26 @@
 :host {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background-color: var(--surface-ground);
+  display: block;
+  padding: 1.5rem;
+  background-color: #fff;
+
 }
 
 .account-operations {
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
 }
+
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+
+
 
   .custom-op-btn {
     font-size: 1.15rem;

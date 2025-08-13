@@ -1,7 +1,10 @@
+:host {
+
+    display: block;
+    padding: 1.5rem;
+    background-color: #fff;
+  }
   
-
-  :host {
-
   ::ng-deep .p-splitter {
     background: transparent;
     border: none;
@@ -20,12 +23,8 @@
   ::ng-deep .p-datatable .p-datatable-tbody > tr {
     background: var(--surface-card);
   }
-}
 
 .budget-planning-page {
-    padding: 2rem;
-    background-color: var(white);
-    min-height: 100%;
     
     .form{
       background-color: var(--surface-card);
@@ -49,6 +48,7 @@
 
   .budget-form .p-button {
     width: 100%;
+    justify-content: center;
   }
 
   .usage-bar {
@@ -133,4 +133,31 @@
     height: 70%;
     margin: auto 0;
   }
+
+  .header {
+    margin-bottom: 2rem;
+  }
+}
+
+.beneficiary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  .p-chip {
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+      background-color: var(--text-color-secondary);
+      color: var(--primary-color-text);
+    }
+  }
+}
+
+.no-beneficiaries-msg {
+  font-style: italic;
+  color: var(--text-color-secondary);
+  padding: 0.5rem 0;
 }

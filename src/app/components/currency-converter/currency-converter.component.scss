@@ -1,13 +1,9 @@
-.currency-converter-page {
-  padding: 2rem;
-  background-color: var(--surface-ground);
-  min-height: 100%;
-}
 
 
 :host {
   display: block;
-  width: 100%;
+  padding: 1.5rem;
+  background-color: #fff;
 }
 
 ::ng-deep .currency-converter-card {

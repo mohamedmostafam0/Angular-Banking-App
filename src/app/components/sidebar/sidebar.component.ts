@@ -51,6 +51,13 @@ sections = [
       ]
     },
     {
+      title: 'Beneficiaries',
+      items: [
+        { label: 'Add Beneficiary', route: '/beneficiaries', icon: 'pi pi-users' },
+        { label: 'View Beneficiaries', route: '/view-beneficiaries', icon: 'pi pi-users' }
+      ]
+    },
+    {
       title: 'Transfers',
       items: [
         { label: 'Domestic', route: '/transfer-funds/domestic', icon: 'pi pi-exchange' },

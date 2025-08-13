@@ -1,5 +1,4 @@
 <p-toast></p-toast>
-<p-confirmDialog></p-confirmDialog>
 <div class="transfer-page">
   <div class="header">
     <h1>Intra-Account Transfer</h1>
@@ -9,117 +8,107 @@
     </p>
   </div>
 
-  <div class="grid">
-    <div class="col-12 lg:col-5">
-      <p-card>
-        <ng-template pTemplate="title">New intra-account Transfer</ng-template>
-        <ng-template pTemplate="subtitle"
-          >Please fill in the details below.</ng-template
-        >
-        <p-splitter styleClass="mb-5">
-          <ng-template pTemplate="form">
-            <div class="flex align-items-center justify-content-center h-full">
-              <div class="instructions">
-                <h4>Instructions for intra-account Transfer</h4>
-                <p>
-                  Follow these steps to complete a transfer to another account
-                  under the same user:
-                </p>
-                <ul>
-                  <li>
-                    <strong>Select From Account:</strong> Choose your account
-                    from which you want to transfer funds.
-                  </li>
-                  <li>
-                    <strong>Select To Account:</strong> Choose the recipient's
-                    account from the list of accounts within the bank.
-                  </li>
-                  <li>
-                    <strong>Enter Amount and Currency:</strong> Specify the
-                    amount you wish to transfer and select the currency.
-                  </li>
-                  <li>
-                    <strong>Review and Confirm:</strong> Click "Review Transfer"
-                    to verify details, then confirm.
-                  </li>
-                </ul>
+  <p-card>
+    <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
+      <ng-template pTemplate="form">
+        <div class="flex align-items-center h-full">
+          <div class="instructions">
+            <h4>Instructions for Intra-Account Transfer</h4>
+            <p>
+              Follow these steps to complete a transfer between your own
+              accounts:
+            </p>
+            <ul>
+              <li>
+                <strong>Select From Account:</strong> Choose the account from
+                which you want to transfer funds.
+              </li>
+              <li>
+                <strong>Select To Account:</strong> Choose the account to which
+                you want to transfer funds.
+              </li>
+              <li>
+                <strong>Enter Amount and Currency:</strong> Specify the amount
+                you wish to transfer and select the currency.
+              </li>
+              <li>
+                <strong>Review and Confirm:</strong> Click "Review Transfer" to
+                verify details, then confirm.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="flex align-items-center h-full" style="width: 100%">
+          <div class="col-12 flex">
+            <form
+              class="transfer-form"
+              [formGroup]="transferForm"
+              (ngSubmit)="initiateTransfer()"
+            >
+              <div class="p-fluid">
+                <div class="field mb-3">
+                  <label for="fromAccount">From Account</label>
+                  <p-dropdown
+                    inputId="fromAccount"
+                    [options]="accounts"
+                    formControlName="fromAccount"
+                    placeholder="Select an account"
+                    optionLabel="number"
+                  >
+                  </p-dropdown>
+                </div>
+
+                <div class="field mb-3">
+                  <label for="toAccount">To Account</label>
+                  <p-dropdown
+                    inputId="toAccount"
+                    [options]="accounts"
+                    formControlName="toAccount"
+                    placeholder="Select an account"
+                    optionLabel="number"
+                  >
+                  </p-dropdown>
+                </div>
+
+                <div class="field mb-3">
+                  <label for="amount">Amount</label>
+                  <p-inputNumber
+                    inputId="amount"
+                    formControlName="amount"
+                    mode="currency"
+                    [currency]="transferForm.get('currency')?.value || 'USD'"
+                    locale="en-US"
+                  >
+                  </p-inputNumber>
+                </div>
+
+                <div class="field mb-3">
+                  <label for="currency">Currency</label>
+                  <p-dropdown
+                    inputId="currency"
+                    [options]="supportedCurrencies"
+                    formControlName="currency"
+                    placeholder="Select a currency"
+                  >
+                  </p-dropdown>
+                </div>
               </div>
-            </div>
-          </ng-template>
-          <ng-template pTemplate>
-            <div class="flex align-items-center justify-content-center h-full">
-              <div class="col-12 flex justify-content-center">
-                <form
-                  class="transfer-form"
-                  [formGroup]="transferForm"
-                  (ngSubmit)="initiateTransfer()"
+
+              <div class="flex mt-3">
+                <p-button
+                  label="Review Transfer"
+                  type="submit"
+                  icon="pi pi-arrow-right"
+                  [disabled]="transferForm.invalid"
                 >
-                  <div class="p-fluid">
-                    <div class="field">
-                      <label for="fromAccount">From Account</label>
-                      <p-dropdown
-                        inputId="fromAccount"
-                        [options]="accounts"
-                        formControlName="fromAccount"
-                        placeholder="Select an account"
-                        optionLabel="number"
-                      >
-                      </p-dropdown>
-                    </div>
-
-                    <div class="field">
-                      <label for="toAccount">To Account</label>
-                      <p-dropdown
-                        inputId="toAccount"
-                        [options]="accounts"
-                        formControlName="toAccount"
-                        placeholder="Select an account"
-                        optionLabel="number"
-                      >
-                      </p-dropdown>
-                    </div>
-
-                    <div class="field">
-                      <label for="amount">Amount</label>
-                      <p-inputNumber
-                        inputId="amount"
-                        formControlName="amount"
-                        mode="currency"
-                        [currency]="
-                          transferForm.get('currency')?.value || 'USD'
-                        "
-                        locale="en-US"
-                      >
-                      </p-inputNumber>
-                    </div>
-
-                    <div class="field">
-                      <label for="currency">Currency</label>
-                      <p-dropdown
-                        inputId="currency"
-                        [options]="supportedCurrencies"
-                        formControlName="currency"
-                        placeholder="Select a currency"
-                      >
-                      </p-dropdown>
-                    </div>
-                  </div>
-
-                  <div class="flex justify-content-center mt-3">
-                    <p-button
-                      label="Review Transfer"
-                      type="submit"
-                      icon="pi pi-arrow-right"
-                      [disabled]="transferForm.invalid"
-                    >
-                    </p-button>
-                  </div>
-                </form>
+                </p-button>
               </div>
-            </div>
-          </ng-template>
-        </p-splitter>
-      </p-card>
-    </div>
-  </div>
+            </form>
+          </div>
+        </div>
+      </ng-template>
+    </p-splitter>
+  </p-card>
 </div>

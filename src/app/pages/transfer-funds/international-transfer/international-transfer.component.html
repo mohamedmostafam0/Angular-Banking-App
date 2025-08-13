@@ -6,233 +6,286 @@
   </div>
 
   <p-card>
-    <ng-template pTemplate="title">New International Transfer</ng-template>
     <ng-template pTemplate="subtitle"
       >Please fill in the details below.</ng-template
     >
-    <ng-template pTemplate="form">
-      <div class="flex align-items-center justify-content-center h-full"></div>
-    </ng-template>
-    <ng-template pTemplate>
-      <div class="flex align-items-center justify-content-center h-full">
-        <div class="col-12 flex justify-content-center">
-          <form
-            class="transfer-form"
-            [formGroup]="transferForm"
-            (ngSubmit)="initiateTransfer()"
-          >
-            <div class="p-fluid">
-              <div class="field mb-3">
-                <label for="fromAccount" class="col-12 md:col-4"
-                  >Your Account Number</label
-                >
-                <div class="col-12 md:col-8">
-                  <p-dropdown
-                    inputId="fromAccount"
-                    [options]="accounts"
-                    formControlName="fromAccount"
-                    placeholder="Select an account"
-                    optionLabel="number"
-                  >
-                  </p-dropdown>
-                </div>
-              </div>
+    <ng-template pTemplate="title">New International Transfer</ng-template>
 
-              <div class="field mb-3">
-                <label for="beneficiaryName" class="col-12 md:col-4"
-                  >Beneficiary's Full Name</label
-                >
-                <div class="col-12 md:col-8">
-                  <input
-                    pInputText
-                    id="beneficiaryName"
-                    formControlName="beneficiaryName"
-                    placeholder="Enter beneficiary's full name"
-                  />
-                </div>
-              </div>
+    <p-steps [model]="steps" [(activeIndex)]="activeIndex" [readonly]="true"></p-steps>
 
-              <div class="field mb-3">
-                <label for="beneficiaryAddress" class="col-12 md:col-4"
-                  >Beneficiary's Postal Address</label
-                >
-                <div class="col-12 md:col-8">
-                  <input
-                    pInputText
-                    id="beneficiaryAddress"
-                    formControlName="beneficiaryAddress"
-                    placeholder="Enter beneficiary's postal address"
-                  />
-                </div>
-              </div>
-
-              <div class="field mb-3">
-                <label for="country" class="col-12 md:col-4">Country</label>
-                <div class="col-12 md:col-8">
-                  <p-dropdown
-                    inputId="country"
-                    [options]="countries"
-                    formControlName="country"
-                    placeholder="Select a country"
-                    [showClear]="true"
-                    [filter]="true"
-                  >
-                  </p-dropdown>
-                </div>
-              </div>
-
-              <div
-                class="field mb-3"
-                *ngIf="
-                  transferForm.get('country')?.value === 'United Kingdom' ||
-                  transferForm.get('country')?.value === 'Ireland'
-                "
-              >
-                <label for="sortCode" class="col-12 md:col-4">Sort Code</label>
-                <div class="col-12 md:col-8">
-                  <input
-                    pInputText
-                    id="sortCode"
-                    formControlName="sortCode"
-                    placeholder="Enter sort code (e.g., 12-34-56)"
-                  />
-                </div>
-              </div>
-
-              <div class="field mb-3">
-                <label for="toAccount" class="col-12 md:col-4"
-                  >Beneficiary's Account Number</label
-                >
-                <div class="col-12 md:col-8">
-                  <input
-                    pInputText
-                    id="toAccount"
-                    formControlName="toAccount"
-                    placeholder="Enter account number"
-                  />
-                </div>
-              </div>
-
-              <div class="field mb-3">
-                <label for="iban" class="col-12 md:col-4">IBAN</label>
-                <div class="col-12 md:col-8">
-                  <input
-                    pInputText
-                    id="iban"
-                    formControlName="iban"
-                    placeholder="Enter IBAN"
-                  />
-                </div>
-              </div>
-
-              <div class="field mb-3">
-                <label for="bankName" class="col-12 md:col-4">Bank Name</label>
-                <div class="col-12 md:col-8">
-                  <input
-                    pInputText
-                    id="bankName"
-                    formControlName="bankName"
-                    placeholder="Enter bank name"
-                  />
-                </div>
-              </div>
-
-              <div class="field mb-3">
-                <label for="bankAddress" class="col-12 md:col-4"
-                  >Bank Address</label
-                >
-                <div class="col-12 md:col-8">
-                  <input
-                    pInputText
-                    id="bankAddress"
-                    formControlName="bankAddress"
-                    placeholder="Enter bank address"
-                  />
-                </div>
-              </div>
-
-              <div class="field mb-3">
-                <label for="swiftBic" class="col-12 md:col-4"
-                  >SWIFT/BIC Code</label
-                >
-                <div class="col-12 md:col-8">
-                  <input
-                    pInputText
-                    id="swiftBic"
-                    formControlName="swiftBic"
-                    placeholder="Enter SWIFT/BIC code"
-                  />
-                </div>
-              </div>
-
-              <div class="field mb-3">
-                <label for="amount" class="col-12 md:col-4">Amount</label>
-                <div class="col-12 md:col-8">
-                  <p-inputNumber
-                    inputId="amount"
-                    formControlName="amount"
-                    mode="currency"
-                    [currency]="transferForm.get('currency')?.value || 'USD'"
-                    locale="en-US"
-                  >
-                  </p-inputNumber>
-                </div>
-              </div>
-              <div class="field mb-3">
-                <label for="currency" class="col-12 md:col-4">Currency</label>
-                <div class="col-12 md:col-8">
-                  <p-dropdown
-                    inputId="currency"
-                    [options]="supportedCurrencies"
-                    formControlName="currency"
-                    placeholder="Select a currency"
-                  >
-                  </p-dropdown>
-                </div>
-              </div>
-
-              <div class="field mb-3">
-                <label for="toCurrency" class="col-12 md:col-4"
-                  >Recipient's Currency</label
-                >
-                <div class="col-12 md:col-8">
-                  <p-dropdown
-                    inputId="toCurrency"
-                    [options]="supportedCurrencies"
-                    formControlName="toCurrency"
-                    placeholder="Select a currency"
-                  >
-                  </p-dropdown>
-                </div>
-              </div>
-
-              <div class="field mb-3">
-                <label for="purpose" class="col-12 md:col-4"
-                  >Purpose of Payment</label
-                >
-                <div class="col-12 md:col-8">
-                  <input
-                    pInputText
-                    id="purpose"
-                    formControlName="purpose"
-                    placeholder="Enter purpose of payment"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="flex justify-content-center mt-3">
-              <p-button
-                label="Review Transfer"
-                type="submit"
-                icon="pi pi-arrow-right"
-                [disabled]="transferForm.invalid"
-              >
-              </p-button>
-            </div>
-          </form>
+    <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
+      <ng-template pTemplate="form">
+        <div class="flex align-items-center h-full">
+          <div class="instructions">
+            <h4>Instructions for International Transfer</h4>
+            <p>
+              Follow these steps to complete an international fund transfer:
+            </p>
+            <ul>
+              <li>
+                <strong>Step 1: Beneficiary Details:</strong> Provide the recipient's account and personal information.
+              </li>
+              <li>
+                <strong>Step 2: Bank Details:</strong> Enter the recipient's bank information.
+              </li>
+              <li>
+                <strong>Step 3: Amount & Purpose:</strong> Specify the transfer amount, currencies, and purpose.
+              </li>
+              <li>
+                <strong>Step 4: Confirmation:</strong> Review all details and confirm the transfer.
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </ng-template>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="flex align-items-center h-full" style="width: 100%">
+          <div class="col-12 flex">
+            <form
+              class="transfer-form"
+              [formGroup]="transferForm"
+            >
+              <!-- Step 0: Beneficiary Details -->
+              <div *ngIf="activeIndex === 0">
+                <div class="field mb-3">
+                  <label>Select a Beneficiary</label>
+                  <div class="beneficiary-chips">
+                    <p-chip
+                      *ngFor="let beneficiary of beneficiaries"
+                      [label]="beneficiary.name"
+                      styleClass="p-chip-clickable"
+                      (click)="selectBeneficiary(beneficiary)"
+                      [pTooltip]="'IBAN: ' + beneficiary.iban"
+                      tooltipPosition="top"
+                    >
+                    </p-chip>
+                    <span
+                      *ngIf="beneficiaries.length === 0"
+                      class="no-beneficiaries-msg"
+                      >No international beneficiaries found.</span
+                    >
+                  </div>
+                </div>
+
+                <div class="p-fluid">
+                  <div class="field mb-3">
+                    <label for="fromAccount">From Account</label>
+                    <p-dropdown
+                      inputId="fromAccount"
+                      [options]="accounts"
+                      formControlName="fromAccount"
+                      placeholder="Select an account"
+                      optionLabel="number"
+                    >
+                    </p-dropdown>
+                  </div>
+
+                  <div class="field mb-3">
+                    <label for="beneficiaryName">Beneficiary's Full Name</label>
+                    <input
+                      pInputText
+                      id="beneficiaryName"
+                      formControlName="beneficiaryName"
+                      placeholder="Enter beneficiary's full name"
+                    />
+                  </div>
+
+                  <div class="field mb-3">
+                    <label for="beneficiaryAddress"
+                      >Beneficiary's Postal Address</label
+                    >
+                    <input
+                      pInputText
+                      id="beneficiaryAddress"
+                      formControlName="beneficiaryAddress"
+                      placeholder="Enter beneficiary's postal address"
+                    />
+                  </div>
+
+                  <div class="field mb-3">
+                    <label for="country">Country</label>
+                    <p-dropdown
+                      inputId="country"
+                      [options]="countries"
+                      formControlName="country"
+                      placeholder="Select a country"
+                      [showClear]="true"
+                      [filter]="true"
+                    >
+                    </p-dropdown>
+                  </div>
+
+                  <div
+                    class="field mb-3"
+                    *ngIf="
+                      transferForm.get('country')?.value === 'United Kingdom' ||
+                      transferForm.get('country')?.value === 'Ireland'
+                    "
+                  >
+                    <label for="sortCode">Sort Code</label>
+                    <input
+                      pInputText
+                      id="sortCode"
+                      formControlName="sortCode"
+                      placeholder="Enter sort code (e.g., 12-34-56)"
+                    />
+                  </div>
+
+                  <div class="field mb-3">
+                    <label for="toAccount">Beneficiary's Account Number</label>
+                    <input
+                      pInputText
+                      id="toAccount"
+                      formControlName="toAccount"
+                      placeholder="Enter account number"
+                    />
+                  </div>
+
+                  <div class="field mb-3">
+                    <label for="iban">IBAN</label>
+                    <input
+                      pInputText
+                      id="iban"
+                      formControlName="iban"
+                      placeholder="Enter IBAN"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 1: Bank Details -->
+              <div *ngIf="activeIndex === 1">
+                <div class="p-fluid">
+                  <div class="field mb-3">
+                    <label for="bankName">Bank Name</label>
+                    <input
+                      pInputText
+                      id="bankName"
+                      formControlName="bankName"
+                      placeholder="Enter bank name"
+                    />
+                  </div>
+
+                  <div class="field mb-3">
+                    <label for="bankAddress">Bank Address</label>
+                    <input
+                      pInputText
+                      id="bankAddress"
+                      formControlName="bankAddress"
+                      placeholder="Enter bank address"
+                    />
+                  </div>
+
+                  <div class="field mb-3">
+                    <label for="swiftBic">SWIFT/BIC Code</label>
+                    <input
+                      pInputText
+                      id="swiftBic"
+                      formControlName="swiftBic"
+                      placeholder="Enter SWIFT/BIC code"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 2: Amount & Purpose -->
+              <div *ngIf="activeIndex === 2">
+                <div class="p-fluid">
+                  <div class="field mb-3">
+                    <label for="amount">Amount</label>
+                    <p-inputNumber
+                      inputId="amount"
+                      formControlName="amount"
+                      mode="currency"
+                      [currency]="transferForm.get('currency')?.value || 'USD'"
+                      locale="en-US"
+                    >
+                    </p-inputNumber>
+                  </div>
+
+                  <div class="field mb-3">
+                    <label for="currency">Currency</label>
+                    <p-dropdown
+                      inputId="currency"
+                      [options]="supportedCurrencies"
+                      formControlName="currency"
+                      placeholder="Select a currency"
+                    >
+                    </p-dropdown>
+                  </div>
+
+                  <div class="field mb-3">
+                    <label for="toCurrency">Recipient's Currency</label>
+                    <p-dropdown
+                      inputId="toCurrency"
+                      [options]="supportedCurrencies"
+                      formControlName="toCurrency"
+                      placeholder="Select a currency"
+                    >
+                    </p-dropdown>
+                  </div>
+
+                  <div class="field mb-3">
+                    <label for="purpose">Purpose of Payment</label>
+                    <input
+                      pInputText
+                      id="purpose"
+                      formControlName="purpose"
+                      placeholder="Enter purpose of payment"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 3: Confirmation -->
+              <div *ngIf="activeIndex === 3">
+                <div class="confirmation-summary">
+                  <h4>Review Your Transfer Details</h4>
+                  <p><strong>From Account:</strong> {{ transferForm.get('fromAccount')?.value?.number }}</p>
+                  <p><strong>Beneficiary:</strong> {{ transferForm.get('beneficiaryName')?.value }}</p>
+                  <p><strong>Beneficiary Address:</strong> {{ transferForm.get('beneficiaryAddress')?.value }}</p>
+                  <p><strong>Country:</strong> {{ transferForm.get('country')?.value }}</p>
+                  <p *ngIf="transferForm.get('sortCode')?.value"><strong>Sort Code:</strong> {{ transferForm.get('sortCode')?.value }}</p>
+                  <p><strong>Beneficiary Account:</strong> {{ transferForm.get('toAccount')?.value }}</p>
+                  <p><strong>IBAN:</strong> {{ transferForm.get('iban')?.value }}</p>
+                  <p><strong>Bank Name:</strong> {{ transferForm.get('bankName')?.value }}</p>
+                  <p><strong>Bank Address:</strong> {{ transferForm.get('bankAddress')?.value }}</p>
+                  <p><strong>SWIFT/BIC:</strong> {{ transferForm.get('swiftBic')?.value }}</p>
+                  <p><strong>Amount to Transfer:</strong> {{ transferForm.get('amount')?.value }} {{ transferForm.get('currency')?.value }}</p>
+                  <p><strong>Recipient will receive approximately:</strong> (Calculated on confirmation)</p>
+                  <p><strong>Purpose:</strong> {{ transferForm.get('purpose')?.value }}</p>
+                </div>
+              </div>
+
+              <div class="flex justify-content-between mt-3">
+                <p-button
+                  label="Previous"
+                  icon="pi pi-arrow-left"
+                  (click)="prevStep()"
+                  [disabled]="activeIndex === 0"
+                  styleClass="p-button-secondary"
+                ></p-button>
+                <p-button
+                  *ngIf="activeIndex < steps.length - 1"
+                  label="Next"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  (click)="nextStep()"
+                  [disabled]="!isCurrentStepValid()"
+                ></p-button>
+                <p-button
+                  *ngIf="activeIndex === steps.length - 1"
+                  label="Review Transfer"
+                  type="submit"
+                  icon="pi pi-check"
+                  (click)="initiateTransfer()"
+                  [disabled]="transferForm.invalid"
+                ></p-button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </ng-template>
+    </p-splitter>
   </p-card>
 </div>

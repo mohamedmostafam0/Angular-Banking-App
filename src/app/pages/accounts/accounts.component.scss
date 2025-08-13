@@ -1,24 +1,14 @@
-.accounts-page {
-  padding: 2rem;
-  background-color: var(--surface-ground);
-  min-height: 100%;
-}
 
 /* Main Container */
 :host {
   display: block;
-  width: 100%;
-}
-
-.accounts-container {
-  max-width: 1400px; /* Increased max-width */
-  margin: 0 auto;
+  padding: 1.5rem;
+  background-color: #fff;
 }
 
 ::ng-deep .p-button {
   color: #fff;
 }
-
 
 /* Header */
 ::ng-deep .accounts-header {
@@ -526,4 +516,14 @@
   }
 }
 
+
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
 

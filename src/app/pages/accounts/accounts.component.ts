@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { Account } from '../../interfaces/Account.interface';
 import { Transaction } from '../../interfaces/Transaction.interface';
+
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
@@ -275,16 +276,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   exportStatement(format: 'pdf' | 'csv') {
     if (!this.statementForm.valid || !this.selectedAccount) return;
 
-    const months = this.statementForm.get('months')?.value;
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setMonth(startDate.getMonth() - months);
-
-    const transactions = this.bankingDataService.getTransactionsByDateRange(
-      this.selectedAccount.number,
-      startDate,
-      endDate
-    );
+    const { transactions, startDate, endDate } = this.getStatementData();
 
     if (format === 'pdf') {
       this.exportPdf(this.selectedAccount, transactions, startDate, endDate);
@@ -299,6 +291,21 @@ export class AccountsComponent implements OnInit, OnDestroy {
       detail: `Statement for account ${this.selectedAccount.number} is being generated.`,
       life: 3000
     });
+  }
+
+  private getStatementData() {
+    const months = this.statementForm.get('months')?.value;
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setMonth(startDate.getMonth() - months);
+
+    const transactions = this.bankingDataService.getTransactionsByDateRange(
+      this.selectedAccount!.number,
+      startDate,
+      endDate
+    );
+
+    return { transactions, startDate, endDate };
   }
 
   private exportPdf(account: Account, transactions: (any & { balance: number })[], startDate: Date, endDate: Date) {

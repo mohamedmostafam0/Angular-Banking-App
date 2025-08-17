@@ -1,0 +1,132 @@
+<p-toast></p-toast>
+<div class="budget-planning-page">
+  <div class="header">
+    <h1>Marketplace</h1>
+    <p>Pay your utility bills and other services.</p>
+  </div>
+
+  <p-card>
+    <p-splitter [panelSizes]="[35, 65]">
+      <ng-template pTemplate="form">
+        <div class="flex align-items-center h-full">
+          <div class="instructions">
+            <h2>Pay your bills with ease</h2>
+            <h4>Follow these steps to pay your bills</h4>
+            <ul>
+              <li>
+                <strong>Select a utility:</strong> Choose the bill you want to
+                pay from the carousel.
+              </li>
+              <li>
+                <strong>Enter amount and account:</strong> Enter the amount to
+                pay and select the account to pay from.
+              </li>
+              <li>
+                <strong>Confirm payment:</strong> Review the details and confirm
+                the payment.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="p-grid">
+          <div class="p-col-12">
+            <p-carousel
+              [value]="utilities"
+              [numVisible]="3"
+              [numScroll]="1"
+              [responsiveOptions]="responsiveOptions"
+            >
+              <ng-template let-utility pTemplate="item">
+                <div class="utility-item" (click)="selectUtility(utility)">
+                  <div class="utility-item-content">
+                    <div class="p-mb-3 text-center">
+                      <img
+                        *ngIf="utility.logo"
+                        [src]="utility.logo"
+                        [alt]="utility.name"
+                        class="product-image"
+                      />
+                      <i
+                        *ngIf="!utility.logo"
+                        [class]="'pi ' + utility.icon"
+                        style="font-size: 3rem;"
+                      ></i>
+                    </div>
+                    <div class="text-center">
+                      <h4 class="p-mb-1">{{ utility.name }}</h4>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-carousel>
+          </div>
+        </div>
+      </ng-template>
+    </p-splitter>
+  </p-card>
+</div>
+
+<p-dialog
+  header="Pay {{ selectedUtility?.name }} Bill"
+  [(visible)]="showDialog"
+  [modal]="true"
+  [style]="{ width: '450px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-fluid">
+    <div class="p-field">
+      <label for="amount">Amount to Pay</label>
+      <p-inputNumber
+        id="amount"
+        [(ngModel)]="billAmount"
+        mode="currency"
+        currency="USD"
+        locale="en-US"
+        [disabled]="true"
+      ></p-inputNumber>
+    </div>
+    <div class="p-field">
+      <label for="account">Pay with Account</label>
+      <p-dropdown
+        id="account"
+        [(ngModel)]="selectedAccount"
+        [options]="accounts"
+        placeholder="Select an account"
+        optionLabel="number"
+        [showClear]="true"
+      >
+        <ng-template let-account pTemplate="selectedItem">
+          <div class="selected-account" *ngIf="account">
+            <span>{{ account.number }}</span>
+          </div>
+        </ng-template>
+        <ng-template let-account pTemplate="item">
+          <div class="account-option">
+            <div class="account-info">
+              <i class="pi pi-credit-card" style="margin-right: 0.5rem"></i>
+              <div>
+                <div class="account-number">{{ account.number }}</div>
+                <div class="account-balance">
+                  Balance:
+                  {{ formatCurrency(account.balance, account.currency) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      label="Confirm Payment"
+      icon="pi pi-check"
+      (click)="payBill()"
+    ></button>
+  </ng-template>
+</p-dialog>

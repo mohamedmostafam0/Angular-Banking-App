@@ -132,3 +132,10 @@
   margin-top: 2rem;
   text-align: center;
 }
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+  color: var(--text-color) !important;
+}

@@ -8,6 +8,7 @@ import { ExchangeRatesResponse } from '../interfaces/ExchangeRates.interface';
 import { Account } from '../interfaces/Account.interface';
 import { MessageService } from 'primeng/api';
 import { environment } from '../../environments/environment';
+import { Loan } from '../interfaces/Loan.interface';
 
 interface CachedRates {
   timestamp: number;
@@ -21,14 +22,17 @@ export class BankingDataService {
   private readonly ACCOUNTS_KEY = 'banking_accounts';
   private readonly TRANSACTIONS_KEY = 'banking_transactions';
   private readonly REPORTS_KEY = 'banking_scheduled_reports';
+  private readonly LOANS_KEY = 'banking_loans';
 
   private accountsSubject = new BehaviorSubject<Account[]>([]);
   private transactionsSubject = new BehaviorSubject<Transaction[]>([]);
   private scheduledReportsSubject = new BehaviorSubject<ScheduledReport[]>([]);
+  private loansSubject = new BehaviorSubject<Loan[]>([]);
 
   accounts$ = this.accountsSubject.asObservable();
   transactions$ = this.transactionsSubject.asObservable();
   scheduledReports$ = this.scheduledReportsSubject.asObservable();
+  loans$ = this.loansSubject.asObservable();
 
   private apiKey = environment.openExchangeRatesApiKey;
   private baseUrl = environment.openExchangeRatesApiUrl;
@@ -52,6 +56,39 @@ export class BankingDataService {
     this.loadAccounts();
     this.loadTransactions();
     this.loadScheduledReports();
+    this.loadLoans();
+  }
+
+  private loadLoans() {
+    try {
+      const savedLoans = localStorage.getItem(this.LOANS_KEY);
+      if (savedLoans) {
+        this.loansSubject.next(JSON.parse(savedLoans));
+      } else {
+        this.loansSubject.next([]);
+      }
+    } catch (e) {
+      console.error('Error loading loans from localStorage:', e);
+    }
+  }
+
+  private saveLoans() {
+    try {
+      localStorage.setItem(this.LOANS_KEY, JSON.stringify(this.loansSubject.getValue()));
+    } catch (e) {
+      console.error('Error saving loans to localStorage:', e);
+    }
+  }
+
+  saveLoanApplication(loan: Loan) {
+    const loans = this.getLoans();
+    loans.push(loan);
+    this.loansSubject.next(loans);
+    this.saveLoans();
+  }
+
+  getLoans() {
+    return this.loansSubject.getValue();
   }
 
   private loadAccounts() {

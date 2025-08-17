@@ -67,9 +67,30 @@ sections = [
       ]
     },
     {
+      title: 'Payments',
+      items: [
+        { label: 'Recurring Payments', route: '/recurring-payments', icon: 'pi pi-replay' },
+        { label: 'Marketplace', route: '/marketplace', icon: 'pi pi-shopping-cart' }
+      ]
+    },
+    {
+      title: 'Loans',
+      items: [
+        { label: 'Loan Application', route: '/loan-application', icon: 'pi pi-file-edit' },
+        { label: 'Loan Tracking', route: '/loan-tracking', icon: 'pi pi-search' }
+      ]
+    },
+    {
       title: 'Account Operations',
       items: [
         { label: 'All Account Operations', route: '/account-operations', icon: 'pi pi-cog' }
+      ]
+    },
+    {
+      title: 'Card Management',
+      items: [
+        { label: 'Credit Cards', route: '/card-management/credit-cards', icon: 'pi pi-credit-card' },
+        { label: 'Debit Cards', route: '/card-management/debit-cards', icon: 'pi pi-wallet' }
       ]
     }
   ];

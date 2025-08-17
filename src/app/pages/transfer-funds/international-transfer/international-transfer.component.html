@@ -5,34 +5,36 @@
     <p>Transfer funds to an account in another country.</p>
   </div>
 
+  <p-steps
+    [model]="steps"
+    [(activeIndex)]="activeIndex"
+    [readonly]="true"
+  ></p-steps>
   <p-card>
-    <ng-template pTemplate="subtitle"
-      >Please fill in the details below.</ng-template
-    >
-    <ng-template pTemplate="title">New International Transfer</ng-template>
-
-    <p-steps [model]="steps" [(activeIndex)]="activeIndex" [readonly]="true"></p-steps>
-
     <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
       <ng-template pTemplate="form">
         <div class="flex align-items-center h-full">
           <div class="instructions">
-            <h4>Instructions for International Transfer</h4>
-            <p>
+            <h2>Instructions for International Transfer</h2>
+            <h4>
               Follow these steps to complete an international fund transfer:
-            </p>
+            </h4>
             <ul>
               <li>
-                <strong>Step 1: Beneficiary Details:</strong> Provide the recipient's account and personal information.
+                <strong>Step 1: Beneficiary Details:</strong> Provide the
+                recipient's account and personal information.
               </li>
               <li>
-                <strong>Step 2: Bank Details:</strong> Enter the recipient's bank information.
+                <strong>Step 2: Bank Details:</strong> Enter the recipient's
+                bank information.
               </li>
               <li>
-                <strong>Step 3: Amount & Purpose:</strong> Specify the transfer amount, currencies, and purpose.
+                <strong>Step 3: Amount & Purpose:</strong> Specify the transfer
+                amount, currencies, and purpose.
               </li>
               <li>
-                <strong>Step 4: Confirmation:</strong> Review all details and confirm the transfer.
+                <strong>Step 4: Confirmation:</strong> Review all details and
+                confirm the transfer.
               </li>
             </ul>
           </div>
@@ -41,10 +43,7 @@
       <ng-template pTemplate>
         <div class="flex align-items-center h-full" style="width: 100%">
           <div class="col-12 flex">
-            <form
-              class="transfer-form"
-              [formGroup]="transferForm"
-            >
+            <form class="transfer-form" [formGroup]="transferForm">
               <!-- Step 0: Beneficiary Details -->
               <div *ngIf="activeIndex === 0">
                 <div class="field mb-3">
@@ -241,19 +240,58 @@
               <div *ngIf="activeIndex === 3">
                 <div class="confirmation-summary">
                   <h4>Review Your Transfer Details</h4>
-                  <p><strong>From Account:</strong> {{ transferForm.get('fromAccount')?.value?.number }}</p>
-                  <p><strong>Beneficiary:</strong> {{ transferForm.get('beneficiaryName')?.value }}</p>
-                  <p><strong>Beneficiary Address:</strong> {{ transferForm.get('beneficiaryAddress')?.value }}</p>
-                  <p><strong>Country:</strong> {{ transferForm.get('country')?.value }}</p>
-                  <p *ngIf="transferForm.get('sortCode')?.value"><strong>Sort Code:</strong> {{ transferForm.get('sortCode')?.value }}</p>
-                  <p><strong>Beneficiary Account:</strong> {{ transferForm.get('toAccount')?.value }}</p>
-                  <p><strong>IBAN:</strong> {{ transferForm.get('iban')?.value }}</p>
-                  <p><strong>Bank Name:</strong> {{ transferForm.get('bankName')?.value }}</p>
-                  <p><strong>Bank Address:</strong> {{ transferForm.get('bankAddress')?.value }}</p>
-                  <p><strong>SWIFT/BIC:</strong> {{ transferForm.get('swiftBic')?.value }}</p>
-                  <p><strong>Amount to Transfer:</strong> {{ transferForm.get('amount')?.value }} {{ transferForm.get('currency')?.value }}</p>
-                  <p><strong>Recipient will receive approximately:</strong> (Calculated on confirmation)</p>
-                  <p><strong>Purpose:</strong> {{ transferForm.get('purpose')?.value }}</p>
+                  <p>
+                    <strong>From Account:</strong>
+                    {{ transferForm.get("fromAccount")?.value?.number }}
+                  </p>
+                  <p>
+                    <strong>Beneficiary:</strong>
+                    {{ transferForm.get("beneficiaryName")?.value }}
+                  </p>
+                  <p>
+                    <strong>Beneficiary Address:</strong>
+                    {{ transferForm.get("beneficiaryAddress")?.value }}
+                  </p>
+                  <p>
+                    <strong>Country:</strong>
+                    {{ transferForm.get("country")?.value }}
+                  </p>
+                  <p *ngIf="transferForm.get('sortCode')?.value">
+                    <strong>Sort Code:</strong>
+                    {{ transferForm.get("sortCode")?.value }}
+                  </p>
+                  <p>
+                    <strong>Beneficiary Account:</strong>
+                    {{ transferForm.get("toAccount")?.value }}
+                  </p>
+                  <p>
+                    <strong>IBAN:</strong> {{ transferForm.get("iban")?.value }}
+                  </p>
+                  <p>
+                    <strong>Bank Name:</strong>
+                    {{ transferForm.get("bankName")?.value }}
+                  </p>
+                  <p>
+                    <strong>Bank Address:</strong>
+                    {{ transferForm.get("bankAddress")?.value }}
+                  </p>
+                  <p>
+                    <strong>SWIFT/BIC:</strong>
+                    {{ transferForm.get("swiftBic")?.value }}
+                  </p>
+                  <p>
+                    <strong>Amount to Transfer:</strong>
+                    {{ transferForm.get("amount")?.value }}
+                    {{ transferForm.get("currency")?.value }}
+                  </p>
+                  <p>
+                    <strong>Recipient will receive approximately:</strong>
+                    (Calculated on confirmation)
+                  </p>
+                  <p>
+                    <strong>Purpose:</strong>
+                    {{ transferForm.get("purpose")?.value }}
+                  </p>
                 </div>
               </div>
 

@@ -1,2 +1,84 @@
-<h1>Settings</h1>
-<p>This is the settings page.</p>
+<div class="settings-page">
+  <div class="header">
+    <h1>Profile & Security</h1>
+    <p>Manage your profile, password, and security settings.</p>
+  </div>
+
+  <p-accordion [multiple]="true">
+    <p-accordionTab header="Edit Profile">
+      <p-card>
+        <div class="p-fluid">
+          <div class="p-field">
+            <label for="name">Name</label>
+            <input id="name" type="text" pInputText [(ngModel)]="profile.name">
+          </div>
+          <div class="p-field">
+            <label for="email">Email</label>
+            <input id="email" type="email" pInputText [(ngModel)]="profile.email">
+          </div>
+          <div class="p-field">
+            <label for="phone">Phone</label>
+            <input id="phone" type="text" pInputText [(ngModel)]="profile.phone">
+          </div>
+        </div>
+        <p-footer>
+          <button pButton type="button" label="Save Profile" icon="pi pi-check"></button>
+        </p-footer>
+      </p-card>
+    </p-accordionTab>
+
+    <p-accordionTab header="Change Password">
+      <p-card>
+        <div class="p-fluid">
+          <div class="p-field">
+            <label for="currentPassword">Current Password</label>
+            <p-password id="currentPassword" [(ngModel)]="password.current" [feedback]="false"></p-password>
+          </div>
+          <div class="p-field">
+            <label for="newPassword">New Password</label>
+            <p-password id="newPassword" [(ngModel)]="password.new" [feedback]="true"></p-password>
+          </div>
+          <div class="p-field">
+            <label for="confirmPassword">Confirm New Password</label>
+            <p-password id="confirmPassword" [(ngModel)]="password.confirm" [feedback]="false"></p-password>
+          </div>
+        </div>
+        <p-footer>
+          <button pButton type="button" label="Change Password" icon="pi pi-key"></button>
+        </p-footer>
+      </p-card>
+    </p-accordionTab>
+
+    <p-accordionTab header="Two-Factor Authentication">
+      <p-card>
+        <div class="p-field-checkbox">
+          <p-inputSwitch [(ngModel)]="twoFactor.sms"></p-inputSwitch>
+          <label>Enable SMS Authentication</label>
+        </div>
+        <div class="p-field-checkbox">
+          <p-inputSwitch [(ngModel)]="twoFactor.email"></p-inputSwitch>
+          <label>Enable Email Authentication</label>
+        </div>
+      </p-card>
+    </p-accordionTab>
+
+    <p-accordionTab header="Audit Log">
+      <p-table [value]="auditLog" [paginator]="true" [rows]="5">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Action</th>
+            <th>Date</th>
+            <th>IP Address</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-log>
+          <tr>
+            <td>{{log.action}}</td>
+            <td>{{log.date | date:'medium'}}</td>
+            <td>{{log.ip}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-accordionTab>
+  </p-accordion>
+</div>

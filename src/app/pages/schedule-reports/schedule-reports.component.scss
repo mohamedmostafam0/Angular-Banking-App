@@ -8,6 +8,15 @@
   }
 }
 
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
 
 
 ::ng-deep .p-splitterpanel-nested{
@@ -25,22 +34,19 @@
   }
 }
 
+
+
+::ng-deep .p-splitter {
+  background: transparent !important;
+  border: none !important;
+
+}
+::ng-deep .p-splitter-gutter {
+  background-color: var(--surface-card) !important;
+  pointer-events: none;
+  cursor: default;
+}
   :host {
-    ::ng-deep .p-splitter {
-      background: transparent;
-      border: none;
-    }
-    ::ng-deep .p-splitter-gutter {
-      background-color: var(--surface-card);
-      pointer-events: none;
-      cursor: default;
-    }
-
-    ::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown {
-      background-color: var(--white) !important;
-      width: 100% !important;
-
-    }
 
     ::ng-deep .p-datatable .p-datatable-tbody > tr {
       background: var(--surface-card);
@@ -115,4 +121,13 @@
   font-style: italic;
   color: var(--text-color-secondary);
   padding: 0.5rem 0;
+}
+
+    ::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown {
+      background-color: var(--white) !important;
+      width: 100% !important;
+    }
+
+::ng-deep.ng-star-inserted{
+  width: 100% !important;
 }

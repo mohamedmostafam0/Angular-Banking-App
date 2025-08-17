@@ -6,28 +6,29 @@
   </div>
 
   <p-card>
-    <ng-template pTemplate="subtitle"
-      >Please fill in the details below.</ng-template
-    >
-    <ng-template pTemplate="title">Generate QR Code</ng-template>
+    <ng-template></ng-template>
     <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
       <ng-template pTemplate="form">
         <div class="flex align-items-center h-full">
           <div class="instructions">
-            <h4>Instructions for QR Code Payment</h4>
-            <p>Follow these steps to generate a QR code for payment:</p>
+            <h2>Instructions for QR Code Payment</h2>
+            <h4>Follow these steps to generate a QR code for payment:</h4>
             <ul>
               <li>
-                <strong>Select Account:</strong> Choose the account for the transaction.
+                <strong>Select Account:</strong> Choose the account for the
+                transaction.
               </li>
               <li>
-                <strong>Select Transfer Type:</strong> Choose between Domestic and International transfer.
+                <strong>Select Transfer Type:</strong> Choose between Domestic
+                and International transfer.
               </li>
               <li>
-                <strong>Generate QR Code:</strong> Click the "Generate QR Code" button to create a unique QR code for this payment.
+                <strong>Generate QR Code:</strong> Click the "Generate QR Code"
+                button to create a unique QR code for this payment.
               </li>
               <li>
-                <strong>Scan and Pay:</strong> The recipient can scan the generated QR code with their device to complete the payment.
+                <strong>Scan and Pay:</strong> The recipient can scan the
+                generated QR code with their device to complete the payment.
               </li>
             </ul>
           </div>
@@ -39,11 +40,23 @@
             <div class="p-fluid">
               <div class="field mb-3">
                 <label for="account">Account</label>
-                <p-dropdown id="account" [options]="accounts" [(ngModel)]="selectedAccount" optionLabel="number" placeholder="Select an Account" name="account"></p-dropdown>
+                <p-dropdown
+                  id="account"
+                  [options]="accounts"
+                  [(ngModel)]="selectedAccount"
+                  optionLabel="number"
+                  placeholder="Select an Account"
+                  name="account"
+                ></p-dropdown>
               </div>
               <div class="field mb-3">
                 <label for="transferType">Transfer Type</label>
-                <p-dropdown id="transferType" [options]="[ 'Domestic', 'International' ]" [(ngModel)]="transferType" name="transferType"></p-dropdown>
+                <p-dropdown
+                  id="transferType"
+                  [options]="['Domestic', 'International']"
+                  [(ngModel)]="transferType"
+                  name="transferType"
+                ></p-dropdown>
               </div>
               <div class="flex mt-3">
                 <p-button

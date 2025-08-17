@@ -128,3 +128,12 @@
   background-color: var(--surface-card) !important;
 }
 
+::ng-deep .p-steps-item-active .p-steps-item-label{
+  color: var(--p-steps-item-label-color) !important;
+}
+
+
+::ng-deep .p-steps-item-active .p-steps-item-number {
+  background-color: var(--primary-color) !important;
+  color: var(--white) !important;
+}

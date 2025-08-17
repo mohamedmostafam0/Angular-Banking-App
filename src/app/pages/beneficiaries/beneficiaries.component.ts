@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { StepperModule } from 'primeng/stepper';
+import { StepsModule } from 'primeng/steps';
 import { SplitterModule } from 'primeng/splitter';
 
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,7 +12,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 
-import { MessageService } from 'primeng/api';
+import { MessageService, MenuItem } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 
@@ -31,7 +31,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
     ButtonModule,
     DialogModule,
-    StepperModule,
+    StepsModule,
     SplitterModule,
     InputTextModule,
     InputMaskModule,
@@ -48,40 +48,44 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class BeneficiariesComponent implements OnInit {
   beneficiaryForm!: FormGroup;
   isEditMode: boolean = false;
-  activeStep: number = 1;
+  activeIndex: number = 0;
+  steps!: MenuItem[];
   supportedCurrencies: string[] = [];
-  showStepper: boolean = false;
+  instructions: any[];
 
-  get isStep2Valid(): boolean {
-    return (this.beneficiaryForm.get('name')?.valid ?? false) &&
-           (this.beneficiaryForm.get('accountNumber')?.valid ?? false) &&
-           (this.beneficiaryForm.get('bankName')?.valid ?? false) &&
-           (this.beneficiaryForm.get('accountCurrency')?.valid ?? false);
-  }
-
-  get isStep3Valid(): boolean {
-    const isInternational = this.beneficiaryForm.get('isInternational')?.value;
-    if (isInternational) {
-      return (this.beneficiaryForm.get('swiftCode')?.valid ?? false) &&
-             (this.beneficiaryForm.get('iban')?.valid ?? false) &&
-             (this.beneficiaryForm.get('bankAddress')?.valid ?? false) &&
-             (this.beneficiaryForm.get('beneficiaryAddress')?.valid ?? false) &&
-             (this.beneficiaryForm.get('beneficiaryCountry')?.valid ?? false);
-    } else {
-      return (this.beneficiaryForm.get('bankBranchName')?.valid ?? false) &&
-             (this.beneficiaryForm.get('bankBranchCode')?.valid ?? false);
-    }
-  }
-
-  get isStep4Valid(): boolean {
-    const isInternational = this.beneficiaryForm.get('isInternational')?.value;
-    if (isInternational) {
-      return (this.beneficiaryForm.get('group')?.valid ?? false) &&
-             (this.beneficiaryForm.get('purposeNickname')?.valid ?? false) &&
-             (this.beneficiaryForm.get('purposeOfPayment')?.valid ?? false);
-    } else {
-      return (this.beneficiaryForm.get('group')?.valid ?? false) &&
-             (this.beneficiaryForm.get('purposeNickname')?.valid ?? false);
+  isStepValid(step: number): boolean {
+    switch (step) {
+      case 0:
+        return this.beneficiaryForm.get('isInternational')!.valid;
+      case 1:
+        return (this.beneficiaryForm.get('name')?.valid ?? false) &&
+               (this.beneficiaryForm.get('accountNumber')?.valid ?? false) &&
+               (this.beneficiaryForm.get('bankName')?.valid ?? false) &&
+               (this.beneficiaryForm.get('accountCurrency')?.valid ?? false);
+      case 2:
+        const isInternational = this.beneficiaryForm.get('isInternational')?.value;
+        if (isInternational) {
+          return (this.beneficiaryForm.get('swiftCode')?.valid ?? false) &&
+                 (this.beneficiaryForm.get('iban')?.valid ?? false) &&
+                 (this.beneficiaryForm.get('bankAddress')?.valid ?? false) &&
+                 (this.beneficiaryForm.get('beneficiaryAddress')?.valid ?? false) &&
+                 (this.beneficiaryForm.get('beneficiaryCountry')?.valid ?? false);
+        } else {
+          return (this.beneficiaryForm.get('bankBranchName')?.valid ?? false) &&
+                 (this.beneficiaryForm.get('bankBranchCode')?.valid ?? false);
+        }
+      case 3:
+        const isInternationalStep4 = this.beneficiaryForm.get('isInternational')?.value;
+        if (isInternationalStep4) {
+          return (this.beneficiaryForm.get('group')?.valid ?? false) &&
+                 (this.beneficiaryForm.get('purposeNickname')?.valid ?? false) &&
+                 (this.beneficiaryForm.get('purposeOfPayment')?.valid ?? false);
+        } else {
+          return (this.beneficiaryForm.get('group')?.valid ?? false) &&
+                 (this.beneficiaryForm.get('purposeNickname')?.valid ?? false);
+        }
+      default:
+        return true;
     }
   }
 
@@ -103,14 +107,23 @@ export class BeneficiariesComponent implements OnInit {
   ];
 
   constructor(
-    private fb: FormBuilder, 
-    private messageService: MessageService, 
+    private fb: FormBuilder,
+    private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute,
     private currencyExchangeService: CurrencyExchangeService
-  ) {}
+  ) {
+    this.instructions = [
+      { title: 'Beneficiary Type', description: 'Select whether the beneficiary is domestic or international.' },
+      { title: 'Core Details', description: 'Enter the main details of the beneficiary.' },
+      { title: 'Address & Bank Info', description: 'Provide address and bank information.' },
+      { title: 'Purpose & Group', description: 'Specify the purpose of the beneficiary and assign a group.' },
+      { title: 'Review', description: 'Review all the details before saving.' }
+    ];
+  }
 
   ngOnInit(): void {
+    this.steps = this.instructions.map(i => ({ label: i.title }));
     this.initForm();
     this.supportedCurrencies = this.currencyExchangeService.getSupportedCurrencies();
     this.beneficiaryForm.get('isInternational')?.valueChanges.subscribe(value => {
@@ -222,9 +235,13 @@ export class BeneficiariesComponent implements OnInit {
     });
   }
 
-  goToStep(step: number): void {
-    if (step < this.activeStep) {
-      this.activeStep = step;
+  nextStep() {
+    if (this.isStepValid(this.activeIndex)) {
+      this.activeIndex++;
     }
+  }
+
+  prevStep() {
+    this.activeIndex--;
   }
 }

@@ -336,5 +336,24 @@ body .p-radiobutton .p-radiobutton-box.p-highlight .p-radiobutton-icon {
 }
 
 
+::ng-deep .p-splitter {
+  background: transparent !important;
+  border: none !important;
+}
+::ng-deep .p-splitter-gutter {
+  background-color: var(--surface-card) !important;
+  pointer-events: none;
+  cursor: default;
+}
 
     
+  ::ng-deep .field {
+    width: 100% !important;
+    margin-bottom: 1.5rem !important;
+    ::ng-deep label {
+      display: block !important;
+      text-align: left !important;
+      margin-bottom: 0.5rem !important;
+      font-weight: 500 !important;
+    }
+  }

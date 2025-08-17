@@ -1,0 +1,53 @@
+
+:host {
+    display: block;
+    padding: 1.5rem;
+    background-color: #fff;
+}
+
+.utility-item {
+    border: 1px solid #e9ecef;
+    border-radius: 3px;
+    margin: .3rem;
+    text-align: center;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.utility-item-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product-image {
+    width: 50px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+
+::ng-deep .p-splitter {
+  background: transparent !important;
+  border: none !important;
+}
+::ng-deep .p-splitter-gutter {
+  background-color: var(--surface-card) !important;
+  pointer-events: none;
+  cursor: default;
+}
+
+::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown {
+  background-color: var(--white) !important;
+  width: 100% !important;
+
+}

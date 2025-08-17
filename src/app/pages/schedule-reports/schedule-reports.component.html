@@ -2,26 +2,27 @@
 <div class="transfer-page">
   <div class="header">
     <h1>Schedule Reports</h1>
-    <p>Select an account to view its data and schedule a recurring monthly report.</p>
+    <p>
+      Select an account to view its data and schedule a recurring monthly
+      report.
+    </p>
   </div>
 
   <p-card>
-    <ng-template pTemplate="subtitle"
-      >Please fill in the details below.</ng-template
-    >
-    <ng-template pTemplate="title">Schedule Your Report</ng-template>
     <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
       <ng-template pTemplate="form">
         <div class="flex align-items-center h-full">
           <div class="instructions">
-            <h4>Instructions for Scheduling Reports</h4>
-            <p>Follow these steps to schedule a recurring monthly report:</p>
+            <h2>Instructions for Scheduling Reports</h2>
+            <h4>Follow these steps to schedule a recurring monthly report:</h4>
             <ul>
               <li>
-                <strong>Select Account:</strong> Choose the account for which you want to receive a report.
+                <strong>Select Account:</strong> Choose the account for which
+                you want to receive a report.
               </li>
               <li>
-                <strong>Select Day of Month:</strong> Choose a day of the month (1-28) on which you want the report to be generated.
+                <strong>Select Day of Month:</strong> Choose a day of the month
+                (1-28) on which you want the report to be generated.
               </li>
               <li>
                 <strong>Confirm:</strong> Click "Schedule Report" to confirm.
@@ -34,9 +35,7 @@
       <ng-template pTemplate>
         <div class="flex align-items-center h-full" style="width: 100%">
           <div class="col-12 flex">
-            <form
-              class="transfer-form"
-            >
+            <form class="transfer-form">
               <div class="p-fluid">
                 <div class="field mb-3">
                   <label for="reportAccount">Account</label>
@@ -78,15 +77,4 @@
       </ng-template>
     </p-splitter>
   </p-card>
-
-  <!-- Hidden chart elements for PDF generation -->
-  <div class="hidden-charts">
-    <p-chart
-      #spendingByCategoryChart
-      type="pie"
-      [data]="spendingByCategoryData"
-    ></p-chart>
-    <p-chart #balanceTrendChart type="line" [data]="balanceTrendData"></p-chart>
-    <p-chart #cashflowChart type="bar" [data]="cashflowData"></p-chart>
-  </div>
 </div>

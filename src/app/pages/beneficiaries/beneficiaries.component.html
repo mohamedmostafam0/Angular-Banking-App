@@ -1,521 +1,383 @@
-<div class="beneficiaries-page">
+<div class="transfer-page">
+  <div class="header">
+    <h1>{{ isEditMode ? "Edit Beneficiary" : "New Beneficiary" }}</h1>
+    <p>Please fill in the details below.</p>
+  </div>
+
+  <p-steps
+    [model]="steps"
+    [(activeIndex)]="activeIndex"
+    [readonly]="false"
+  ></p-steps>
+
   <p-card>
-    <ng-template pTemplate="title">
-      {{ isEditMode ? "Edit Beneficiary" : "New Beneficiary" }}
-    </ng-template>
-    <ng-template pTemplate="content">
-      <form [formGroup]="beneficiaryForm">
-        <p-stepper [(value)]="activeStep" [linear]="true">
-          <p-step-list>
-            <p-step [value]="1" (click)="goToStep(1)">Beneficiary Type</p-step>
-            <p-step [value]="2" (click)="goToStep(2)">Core Details</p-step>
-            <p-step [value]="3" (click)="goToStep(3)">Address & Bank Info</p-step>
-            <p-step [value]="4" (click)="goToStep(4)">Purpose & Group</p-step>
-            <p-step [value]="5" (click)="goToStep(5)">Review</p-step>
-          </p-step-list>
-          <p-step-panels>
-            <p-step-panel [value]="1">
-              <ng-template
-                pTemplate="content"
-                let-activateCallback="activateCallback"
-              >
-                <div class="step-content">
-                  <h3>Is this a domestic or international beneficiary?</h3>
-                  <div class="p-field-radiobutton">
-                    <p-radioButton
-                      name="isInternational"
-                      [value]="false"
-                      formControlName="isInternational"
-                    ></p-radioButton>
-                    <label>Domestic</label>
-                  </div>
-                  <div class="p-field-radiobutton">
-                    <p-radioButton
-                      name="isInternational"
-                      [value]="true"
-                      formControlName="isInternational"
-                    ></p-radioButton>
-                    <label>International</label>
-                  </div>
-                </div>
-                <div class="stepper-buttons flex pt-6 justify-end">
-                  <p-button
-                    label="Next"
-                    icon="pi pi-arrow-right"
-                    iconPos="right"
-                    (onClick)="activateCallback(2)"
-                  ></p-button>
-                </div>
-              </ng-template>
-            </p-step-panel>
-            <p-step-panel [value]="2">
-              <ng-template
-                pTemplate="content"
-                let-activateCallback="activateCallback"
-              >
-                <div class="step-content">
-                  <div class="p-field">
-                    <label for="name">Name</label>
-                    <input
-                      id="name"
-                      type="text"
-                      pInputText
-                      formControlName="name"
-                    />
-                    <p-message
-                      *ngIf="
-                        beneficiaryForm.get('name')?.invalid &&
-                        beneficiaryForm.get('name')?.touched
-                      "
-                      severity="error"
-                      text="Name is required"
-                    ></p-message>
-                  </div>
-                  <div class="p-field">
-                    <label for="accountNumber">Account Number</label>
-                    <input
-                      id="accountNumber"
-                      type="text"
-                      pInputText
-                      formControlName="accountNumber"
-                    />
-                    <p-message
-                      *ngIf="
-                        beneficiaryForm.get('accountNumber')?.invalid &&
-                        beneficiaryForm.get('accountNumber')?.touched
-                      "
-                      severity="error"
-                      text="Account Number is required"
-                    ></p-message>
-                  </div>
-                  <div class="p-field">
-                    <label for="bankName">Bank Name</label>
-                    <input
-                      id="bankName"
-                      type="text"
-                      pInputText
-                      formControlName="bankName"
-                    />
-                    <p-message
-                      *ngIf="
-                        beneficiaryForm.get('bankName')?.invalid &&
-                        beneficiaryForm.get('bankName')?.touched
-                      "
-                      severity="error"
-                      text="Bank Name is required"
-                    ></p-message>
-                  </div>
-                  <div class="p-field">
-                    <label for="accountCurrency">Account Currency</label>
-                    <p-dropdown
-                      id="accountCurrency"
-                      [options]="supportedCurrencies"
-                      formControlName="accountCurrency"
-                    ></p-dropdown>
-                    <p-message
-                      *ngIf="
-                        beneficiaryForm.get('accountCurrency')?.invalid &&
-                        beneficiaryForm.get('accountCurrency')?.touched
-                      "
-                      severity="error"
-                      text="Account Currency is required"
-                    ></p-message>
-                  </div>
-                </div>
-                <div class="stepper-buttons flex pt-6 justify-between">
-                  <div class="flex">
-                    <p-button
-                      label="Back"
-                      icon="pi pi-arrow-left"
-                      (onClick)="activateCallback(1)"
-                      severity="secondary"
-                      styleClass="p-mr-2"
-                    ></p-button>
-                    <p-button
-                      label="Cancel"
-                      icon="pi pi-times"
-                      (click)="cancel()"
-                      severity="danger"
-                    ></p-button>
-                  </div>
-                  <p-button
-                    label="Next"
-                    icon="pi pi-arrow-right"
-                    iconPos="right"
-                    (onClick)="activateCallback(3)"
-                    [disabled]="!isStep2Valid"
-                  ></p-button>
-                </div>
-              </ng-template>
-            </p-step-panel>
-            <p-step-panel [value]="3">
-              <ng-template
-                pTemplate="content"
-                let-activateCallback="activateCallback"
-              >
-                <div class="step-content">
-                  <div *ngIf="!beneficiaryForm.get('isInternational')?.value">
-                    <div class="p-field">
-                      <label for="bankBranchName">Bank Branch Name</label>
-                      <input
-                        id="bankBranchName"
-                        type="text"
-                        pInputText
-                        formControlName="bankBranchName"
-                      />
-                      <p-message
-                        *ngIf="
-                          beneficiaryForm.get('bankBranchName')?.invalid &&
-                          beneficiaryForm.get('bankBranchName')?.touched
-                        "
-                        severity="error"
-                        text="Bank Branch Name is required"
-                      ></p-message>
-                    </div>
-                    <div class="p-field">
-                      <label for="bankBranchCode">Bank Branch Code</label>
-                      <input
-                        id="bankBranchCode"
-                        type="text"
-                        pInputText
-                        formControlName="bankBranchCode"
-                      />
-                      <p-message
-                        *ngIf="
-                          beneficiaryForm.get('bankBranchCode')?.invalid &&
-                          beneficiaryForm.get('bankBranchCode')?.touched
-                        "
-                        severity="error"
-                        text="Bank Branch Code is required"
-                      ></p-message>
-                    </div>
-                  </div>
-                  <div *ngIf="beneficiaryForm.get('isInternational')?.value">
-                    <div class="p-field">
-                      <label for="swiftCode">SWIFT Code</label>
-                      <input
-                        id="swiftCode"
-                        type="text"
-                        pInputText
-                        formControlName="swiftCode"
-                      />
-                      <p-message
-                        *ngIf="
-                          beneficiaryForm.get('swiftCode')?.invalid &&
-                          beneficiaryForm.get('swiftCode')?.touched
-                        "
-                        severity="error"
-                        text="SWIFT Code is required"
-                      ></p-message>
-                    </div>
-                    <div class="p-field">
-                      <label for="iban">IBAN</label>
-                      <input
-                        id="iban"
-                        type="text"
-                        pInputText
-                        formControlName="iban"
-                      />
-                      <p-message
-                        *ngIf="
-                          beneficiaryForm.get('iban')?.invalid &&
-                          beneficiaryForm.get('iban')?.touched
-                        "
-                        severity="error"
-                        text="IBAN is required"
-                      ></p-message>
-                    </div>
-                    <div class="p-field">
-                      <label for="bankAddress">Bank Address</label>
-                      <input
-                        id="bankAddress"
-                        type="text"
-                        pInputText
-                        formControlName="bankAddress"
-                      />
-                      <p-message
-                        *ngIf="
-                          beneficiaryForm.get('bankAddress')?.invalid &&
-                          beneficiaryForm.get('bankAddress')?.touched
-                        "
-                        severity="error"
-                        text="Bank Address is required"
-                      ></p-message>
-                    </div>
-                    <div class="p-field">
-                      <label for="beneficiaryAddress"
-                        >Beneficiary Address</label
-                      >
-                      <input
-                        id="beneficiaryAddress"
-                        type="text"
-                        pInputText
-                        formControlName="beneficiaryAddress"
-                      />
-                      <p-message
-                        *ngIf="
-                          beneficiaryForm.get('beneficiaryAddress')?.invalid &&
-                          beneficiaryForm.get('beneficiaryAddress')?.touched
-                        "
-                        severity="error"
-                        text="Beneficiary Address is required"
-                      ></p-message>
-                    </div>
-                    <div class="p-field">
-                      <label for="beneficiaryCountry"
-                        >Beneficiary Country</label
-                      >
-                      <p-dropdown
-                        id="beneficiaryCountry"
-                        [options]="countries"
-                        formControlName="beneficiaryCountry"
-                      ></p-dropdown>
-                      <p-message
-                        *ngIf="
-                          beneficiaryForm.get('beneficiaryCountry')?.invalid &&
-                          beneficiaryForm.get('beneficiaryCountry')?.touched
-                        "
-                        severity="error"
-                        text="Beneficiary Country is required"
-                      ></p-message>
-                    </div>
-                  </div>
-                </div>
-                <div class="stepper-buttons flex pt-6 justify-between">
-                  <div class="flex">
-                    <p-button
-                      label="Back"
-                      icon="pi pi-arrow-left"
-                      (onClick)="activateCallback(2)"
-                      severity="secondary"
-                      styleClass="p-mr-2"
-                    ></p-button>
-                    <p-button
-                      label="Cancel"
-                      icon="pi pi-times"
-                      (click)="cancel()"
-                      severity="danger"
-                    ></p-button>
-                  </div>
-                  <p-button
-                    label="Next"
-                    icon="pi pi-arrow-right"
-                    iconPos="right"
-                    (onClick)="activateCallback(4)"
-                    [disabled]="!isStep3Valid"
-                  ></p-button>
-                </div>
-              </ng-template>
-            </p-step-panel>
-            <p-step-panel [value]="4">
-              <ng-template
-                pTemplate="content"
-                let-activateCallback="activateCallback"
-              >
-                <div class="step-content">
-                  <div class="p-field">
-                    <label for="group">Group</label>
-                    <p-dropdown
-                      id="group"
-                      [options]="groups"
-                      formControlName="group"
-                    ></p-dropdown>
-                    <p-message
-                      *ngIf="
-                        beneficiaryForm.get('group')?.invalid &&
-                        beneficiaryForm.get('group')?.touched
-                      "
-                      severity="error"
-                      text="Group is required"
-                    ></p-message>
-                  </div>
-                  <div class="p-field">
-                    <label for="purposeNickname">Purpose / Nickname</label>
-                    <input
-                      id="purposeNickname"
-                      type="text"
-                      pInputText
-                      formControlName="purposeNickname"
-                    />
-                    <p-message
-                      *ngIf="
-                        beneficiaryForm.get('purposeNickname')?.invalid &&
-                        beneficiaryForm.get('purposeNickname')?.touched
-                      "
-                      severity="error"
-                      text="Purpose / Nickname is required"
-                    ></p-message>
-                  </div>
-                  <div
-                    class="p-field"
-                    *ngIf="beneficiaryForm.get('isInternational')?.value"
-                  >
-                    <label for="purposeOfPayment">Purpose of Payment</label>
-                    <input
-                      id="purposeOfPayment"
-                      type="text"
-                      pInputText
-                      formControlName="purposeOfPayment"
-                    />
-                    <p-message
-                      *ngIf="
-                        beneficiaryForm.get('purposeOfPayment')?.invalid &&
-                        beneficiaryForm.get('purposeOfPayment')?.touched
-                      "
-                      severity="error"
-                      text="Purpose of Payment is required"
-                    ></p-message>
-                  </div>
-                </div>
-                <div class="stepper-buttons flex pt-6 justify-between">
-                  <div class="flex">
-                    <p-button
-                      label="Back"
-                      icon="pi pi-arrow-left"
-                      (onClick)="activateCallback(3)"
-                      severity="secondary"
-                      styleClass="p-mr-2"
-                    ></p-button>
-                    <p-button
-                      label="Cancel"
-                      icon="pi pi-times"
-                      (click)="cancel()"
-                      severity="danger"
-                    ></p-button>
-                  </div>
-                  <p-button
-                    label="Next"
-                    icon="pi pi-arrow-right"
-                    iconPos="right"
-                    (onClick)="activateCallback(5)"
-                    [disabled]="!isStep4Valid"
-                  ></p-button>
-                </div>
-              </ng-template>
-            </p-step-panel>
-            <p-step-panel [value]="5">
-              <ng-template
-                pTemplate="content"
-                let-activateCallback="activateCallback"
-              >
-                <div class="step-content review-summary">
-                  <h4>Review Your Beneficiary Details</h4>
-                  <div class="summary-grid">
-                    <div class="summary-item">
-                      <strong>Name:</strong>
-                      <span>{{ beneficiaryForm.get("name")?.value }}</span>
-                    </div>
-                    <div class="summary-item">
-                      <strong>Account Number:</strong>
-                      <span>{{
-                        beneficiaryForm.get("accountNumber")?.value
-                      }}</span>
-                    </div>
-                    <div class="summary-item">
-                      <strong>Bank Name:</strong>
-                      <span>{{ beneficiaryForm.get("bankName")?.value }}</span>
-                    </div>
-                    <div class="summary-item">
-                      <strong>Account Currency:</strong>
-                      <span>{{
-                        beneficiaryForm.get("accountCurrency")?.value
-                      }}</span>
-                    </div>
-                    <div class="summary-item">
-                      <strong>Group:</strong>
-                      <span>{{ beneficiaryForm.get("group")?.value }}</span>
-                    </div>
-                    <div class="summary-item">
-                      <strong>Purpose/Nickname:</strong>
-                      <span>{{
-                        beneficiaryForm.get("purposeNickname")?.value
-                      }}</span>
-                    </div>
+    <form [formGroup]="beneficiaryForm" (ngSubmit)="saveBeneficiary()">
+      <p-splitter [panelSizes]="[35, 65]">
+        <ng-template pTemplate="form">
+          <div class="flex align-items-center h-full">
+            <div class="instructions">
+              <h4>{{ instructions[activeIndex].title }}</h4>
+              <p>{{ instructions[activeIndex].description }}</p>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate>
+          <div *ngIf="activeIndex === 0">
+            <div class="step-content">
+              <h3>Is this a domestic or international beneficiary?</h3>
+              <div class="p-field-radiobutton">
+                <p-radioButton
+                  name="isInternational"
+                  [value]="false"
+                  formControlName="isInternational"
+                ></p-radioButton>
+                <label>Domestic</label>
+              </div>
+              <div class="p-field-radiobutton">
+                <p-radioButton
+                  name="isInternational"
+                  [value]="true"
+                  formControlName="isInternational"
+                ></p-radioButton>
+                <label>International</label>
+              </div>
+            </div>
+            <div class="stepper-buttons flex pt-6 justify-end">
+              <p-button
+                label="Next"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (click)="nextStep()"
+              ></p-button>
+            </div>
+          </div>
 
-                    <ng-container
-                      *ngIf="beneficiaryForm.get('isInternational')?.value"
-                    >
-                      <div class="summary-item">
-                        <strong>SWIFT Code:</strong>
-                        <span>{{
-                          beneficiaryForm.get("swiftCode")?.value
-                        }}</span>
-                      </div>
-                      <div class="summary-item">
-                        <strong>IBAN:</strong>
-                        <span>{{ beneficiaryForm.get("iban")?.value }}</span>
-                      </div>
-                      <div class="summary-item">
-                        <strong>Bank Address:</strong>
-                        <span>{{
-                          beneficiaryForm.get("bankAddress")?.value
-                        }}</span>
-                      </div>
-                      <div class="summary-item">
-                        <strong>Beneficiary Address:</strong>
-                        <span>{{
-                          beneficiaryForm.get("beneficiaryAddress")?.value
-                        }}</span>
-                      </div>
-                      <div class="summary-item">
-                        <strong>Beneficiary Country:</strong>
-                        <span>{{
-                          beneficiaryForm.get("beneficiaryCountry")?.value
-                        }}</span>
-                      </div>
-                      <div class="summary-item">
-                        <strong>Purpose of Payment:</strong>
-                        <span>{{
-                          beneficiaryForm.get("purposeOfPayment")?.value
-                        }}</span>
-                      </div>
-                    </ng-container>
+          <div *ngIf="activeIndex === 1">
+            <div class="step-content">
+              <div class="field mb-3">
+                <label for="name">Name</label>
+                <input
+                  id="name"
+                  type="text"
+                  pInputText
+                  formControlName="name"
+                />
+              </div>
+              <div class="field mb-3">
+                <label for="accountNumber">Account Number</label>
+                <input
+                  id="accountNumber"
+                  type="text"
+                  pInputText
+                  formControlName="accountNumber"
+                />
+              </div>
+              <div class="field mb-3">
+                <label for="bankName">Bank Name</label>
+                <input
+                  id="bankName"
+                  type="text"
+                  pInputText
+                  formControlName="bankName"
+                />
+              </div>
+              <div class="field mb-3">
+                <label for="accountCurrency">Account Currency</label>
+                <p-dropdown
+                  id="accountCurrency"
+                  [options]="supportedCurrencies"
+                  formControlName="accountCurrency"
+                ></p-dropdown>
+              </div>
+            </div>
+            <div class="stepper-buttons flex pt-6">
+              <div class="flex">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  (click)="prevStep()"
+                  severity="secondary"
+                  styleClass="p-mr-2"
+                ></p-button>
+                <p-button
+                  label="Cancel"
+                  icon="pi pi-times"
+                  (click)="cancel()"
+                  severity="danger"
+                ></p-button>
+              </div>
+              <p-button
+                label="Next"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (click)="nextStep()"
+                [disabled]="!isStepValid(1)"
+              ></p-button>
+            </div>
+          </div>
 
-                    <ng-container
-                      *ngIf="!beneficiaryForm.get('isInternational')?.value"
-                    >
-                      <div class="summary-item">
-                        <strong>Bank Branch Name:</strong>
-                        <span>{{
-                          beneficiaryForm.get("bankBranchName")?.value
-                        }}</span>
-                      </div>
-                      <div class="summary-item">
-                        <strong>Bank Branch Code:</strong>
-                        <span>{{
-                          beneficiaryForm.get("bankBranchCode")?.value
-                        }}</span>
-                      </div>
-                    </ng-container>
-                  </div>
+          <div *ngIf="activeIndex === 2">
+            <div class="step-content">
+              <div *ngIf="!beneficiaryForm.get('isInternational')?.value">
+                <div class="field mb-3">
+                  <label for="bankBranchName">Bank Branch Name</label>
+                  <input
+                    id="bankBranchName"
+                    type="text"
+                    pInputText
+                    formControlName="bankBranchName"
+                  />
                 </div>
-                <div class="stepper-buttons flex pt-6 justify-between">
-                  <div class="flex">
-                    <p-button
-                      label="Back"
-                      icon="pi pi-arrow-left"
-                      (onClick)="activateCallback(4)"
-                      severity="secondary"
-                      styleClass="p-mr-2"
-                    ></p-button>
-                    <p-button
-                      label="Cancel"
-                      icon="pi pi-times"
-                      (click)="cancel()"
-                      severity="danger"
-                    ></p-button>
-                  </div>
-                  <p-button
-                    label="Save"
-                    (click)="saveBeneficiary()"
-                    [disabled]="beneficiaryForm.invalid"
-                  ></p-button>
+                <div class="field mb-3">
+                  <label for="bankBranchCode">Bank Branch Code</label>
+                  <input
+                    id="bankBranchCode"
+                    type="text"
+                    pInputText
+                    formControlName="bankBranchCode"
+                  />
                 </div>
-              </ng-template>
-            </p-step-panel>
-          </p-step-panels>
-        </p-stepper>
-      </form>
-    </ng-template>
+              </div>
+              <div *ngIf="beneficiaryForm.get('isInternational')?.value">
+                <div class="field mb-3">
+                  <label for="swiftCode">SWIFT Code</label>
+                  <input
+                    id="swiftCode"
+                    type="text"
+                    pInputText
+                    formControlName="swiftCode"
+                  />
+                </div>
+                <div class="field mb-3">
+                  <label for="iban">IBAN</label>
+                  <input
+                    id="iban"
+                    type="text"
+                    pInputText
+                    formControlName="iban"
+                  />
+                </div>
+                <div class="field mb-3">
+                  <label for="bankAddress">Bank Address</label>
+                  <input
+                    id="bankAddress"
+                    type="text"
+                    pInputText
+                    formControlName="bankAddress"
+                  />
+                </div>
+                <div class="field mb-3">
+                  <label for="beneficiaryAddress">Beneficiary Address</label>
+                  <input
+                    id="beneficiaryAddress"
+                    type="text"
+                    pInputText
+                    formControlName="beneficiaryAddress"
+                  />
+                </div>
+                <div class="field mb-3">
+                  <label for="beneficiaryCountry">Beneficiary Country</label>
+                  <p-dropdown
+                    id="beneficiaryCountry"
+                    [options]="countries"
+                    formControlName="beneficiaryCountry"
+                  ></p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="stepper-buttons flex pt-6">
+              <div class="flex">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  (click)="prevStep()"
+                  severity="secondary"
+                  styleClass="p-mr-2"
+                ></p-button>
+                <p-button
+                  label="Cancel"
+                  icon="pi pi-times"
+                  (click)="cancel()"
+                  severity="danger"
+                ></p-button>
+              </div>
+              <p-button
+                label="Next"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (click)="nextStep()"
+                [disabled]="!isStepValid(2)"
+              ></p-button>
+            </div>
+          </div>
+
+          <div *ngIf="activeIndex === 3">
+            <div class="step-content">
+              <div class="field mb-3">
+                <label for="group">Group</label>
+                <p-dropdown
+                  id="group"
+                  [options]="groups"
+                  formControlName="group"
+                ></p-dropdown>
+              </div>
+              <div class="field mb-3">
+                <label for="purposeNickname">Purpose / Nickname</label>
+                <input
+                  id="purposeNickname"
+                  type="text"
+                  pInputText
+                  formControlName="purposeNickname"
+                />
+              </div>
+              <div
+                class="field mb-3"
+                *ngIf="beneficiaryForm.get('isInternational')?.value"
+              >
+                <label for="purposeOfPayment">Purpose of Payment</label>
+                <input
+                  id="purposeOfPayment"
+                  type="text"
+                  pInputText
+                  formControlName="purposeOfPayment"
+                />
+              </div>
+            </div>
+            <div class="stepper-buttons flex pt-6">
+              <div class="flex">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  (click)="prevStep()"
+                  severity="secondary"
+                  styleClass="p-mr-2"
+                ></p-button>
+                <p-button
+                  label="Cancel"
+                  icon="pi pi-times"
+                  (click)="cancel()"
+                  severity="danger"
+                ></p-button>
+              </div>
+              <p-button
+                label="Next"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (click)="nextStep()"
+                [disabled]="!isStepValid(3)"
+              ></p-button>
+            </div>
+          </div>
+
+          <div *ngIf="activeIndex === 4">
+            <div class="step-content review-summary">
+              <h4>Review Your Beneficiary Details</h4>
+              <div class="summary-grid">
+                <div class="summary-item">
+                  <strong>Name:</strong>
+                  <span>{{ beneficiaryForm.get("name")?.value }}</span>
+                </div>
+                <div class="summary-item">
+                  <strong>Account Number:</strong>
+                  <span>{{ beneficiaryForm.get("accountNumber")?.value }}</span>
+                </div>
+                <div class="summary-item">
+                  <strong>Bank Name:</strong>
+                  <span>{{ beneficiaryForm.get("bankName")?.value }}</span>
+                </div>
+                <div class="summary-item">
+                  <strong>Account Currency:</strong>
+                  <span>{{
+                    beneficiaryForm.get("accountCurrency")?.value
+                  }}</span>
+                </div>
+                <div class="summary-item">
+                  <strong>Group:</strong>
+                  <span>{{ beneficiaryForm.get("group")?.value }}</span>
+                </div>
+                <div class="summary-item">
+                  <strong>Purpose/Nickname:</strong>
+                  <span>{{
+                    beneficiaryForm.get("purposeNickname")?.value
+                  }}</span>
+                </div>
+                <ng-container
+                  *ngIf="beneficiaryForm.get('isInternational')?.value"
+                >
+                  <div class="summary-item">
+                    <strong>SWIFT Code:</strong>
+                    <span>{{ beneficiaryForm.get("swiftCode")?.value }}</span>
+                  </div>
+                  <div class="summary-item">
+                    <strong>IBAN:</strong>
+                    <span>{{ beneficiaryForm.get("iban")?.value }}</span>
+                  </div>
+                  <div class="summary-item">
+                    <strong>Bank Address:</strong>
+                    <span>{{ beneficiaryForm.get("bankAddress")?.value }}</span>
+                  </div>
+                  <div class="summary-item">
+                    <strong>Beneficiary Address:</strong>
+                    <span>{{
+                      beneficiaryForm.get("beneficiaryAddress")?.value
+                    }}</span>
+                  </div>
+                  <div class="summary-item">
+                    <strong>Beneficiary Country:</strong>
+                    <span>{{
+                      beneficiaryForm.get("beneficiaryCountry")?.value
+                    }}</span>
+                  </div>
+                  <div class="summary-item">
+                    <strong>Purpose of Payment:</strong>
+                    <span>{{
+                      beneficiaryForm.get("purposeOfPayment")?.value
+                    }}</span>
+                  </div>
+                </ng-container>
+                <ng-container
+                  *ngIf="!beneficiaryForm.get('isInternational')?.value"
+                >
+                  <div class="summary-item">
+                    <strong>Bank Branch Name:</strong>
+                    <span>{{
+                      beneficiaryForm.get("bankBranchName")?.value
+                    }}</span>
+                  </div>
+                  <div class="summary-item">
+                    <strong>Bank Branch Code:</strong>
+                    <span>{{
+                      beneficiaryForm.get("bankBranchCode")?.value
+                    }}</span>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="stepper-buttons flex pt-6">
+              <div class="flex">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  (click)="prevStep()"
+                  severity="secondary"
+                  styleClass="p-mr-2"
+                ></p-button>
+                <p-button
+                  label="Cancel"
+                  icon="pi pi-times"
+                  (click)="cancel()"
+                  severity="danger"
+                ></p-button>
+              </div>
+              <p-button
+                label="Save"
+                (click)="saveBeneficiary()"
+                [disabled]="beneficiaryForm.invalid"
+              ></p-button>
+            </div>
+          </div>
+        </ng-template>
+      </p-splitter>
+    </form>
   </p-card>
 </div>

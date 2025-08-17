@@ -6,16 +6,12 @@
   </div>
 
   <p-card>
-    <ng-template pTemplate="subtitle"
-      >Please fill in the details below.</ng-template
-    >
-    <ng-template pTemplate="title">New Domestic Transfer</ng-template>
-    <p-splitter styleClass="mb-5">
+    <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
       <ng-template pTemplate="form">
-        <div class="flex align-items-center justify-content-center h-full">
+        <div class="flex align-items-center h-full">
           <div class="instructions">
-            <h4>Instructions for Domestic Transfer</h4>
-            <p>Follow these steps to complete a domestic fund transfer:</p>
+            <h2>Instructions for Domestic Transfer</h2>
+            <h4>Follow these steps to complete a domestic fund transfer</h4>
             <ul>
               <li>
                 <strong>Select From Account:</strong> Choose the account from
@@ -38,13 +34,33 @@
         </div>
       </ng-template>
       <ng-template pTemplate>
-        <div class="flex align-items-center justify-content-center h-full">
-          <div class="col-12 flex justify-content-center">
+        <div class="flex align-items-center h-full" style="width: 100%">
+          <div class="col-12 flex">
             <form
               class="transfer-form"
               [formGroup]="transferForm"
               (ngSubmit)="initiateTransfer()"
             >
+              <div class="field mb-3">
+                <label>Select a Beneficiary</label>
+                <div class="beneficiary-chips">
+                  <p-chip
+                    *ngFor="let beneficiary of beneficiaries"
+                    [label]="beneficiary.name"
+                    styleClass="p-chip-clickable"
+                    (click)="selectBeneficiary(beneficiary)"
+                    [pTooltip]="'Account: ' + beneficiary.accountNumber"
+                    tooltipPosition="top"
+                  >
+                  </p-chip>
+                  <span
+                    *ngIf="beneficiaries.length === 0"
+                    class="no-beneficiaries-msg"
+                    >No domestic beneficiaries found.</span
+                  >
+                </div>
+              </div>
+
               <div class="p-fluid">
                 <div class="field mb-3">
                   <div class="field mb-3">
@@ -59,6 +75,7 @@
                     </p-dropdown>
                   </div>
                 </div>
+
                 <div class="field mb-3">
                   <label for="toAccount" class="col-12 md:col-4"
                     >To Account</label
@@ -68,7 +85,7 @@
                       pInputText
                       id="toAccount"
                       formControlName="toAccount"
-                      placeholder="Enter account number"
+                      placeholder="Enter account number or select a beneficiary"
                     />
                   </div>
                 </div>
@@ -100,7 +117,7 @@
                 </div>
               </div>
 
-              <div class="flex justify-content-center mt-3">
+              <div class="flex mt-3">
                 <p-button
                   label="Review Transfer"
                   type="submit"

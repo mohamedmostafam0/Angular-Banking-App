@@ -1,30 +1,128 @@
-.within-bank-transfer-container {
-    padding: 20px;
+.transfer-page {
+  padding: 2rem;
+  background-color: var(white);
+  min-height: 100%;
+
+  .header {
+    margin-bottom: 2rem;
   }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
+}
+
+
+
+::ng-deep .p-splitterpanel-nested{
+  justify-content: start !important;
+}
+
+.field {
+  width: 100%;
+  margin-bottom: 1.5rem;
   label {
     display: block;
-    margin-bottom: 5px;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
   }
+}
+
+  :host {
+    ::ng-deep .p-splitter {
+      background: transparent;
+      border: none;
+    }
+    ::ng-deep .p-splitter-gutter {
+      background-color: var(--surface-card);
+      pointer-events: none;
+      cursor: default;
+    }
+
+    ::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown {
+      background-color: var(--white) !important;
+      width: 100% !important;
+    }
+
+    ::ng-deep .p-datatable .p-datatable-tbody > tr {
+      background: var(--surface-card);
+    }
   
-  input[type="text"],
-  input[type="number"],
-  textarea {
+  }
+
+  ::ng-deep .p-button {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    justify-content: center;
   }
-  
-  button {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
+  .instructions {
+    background-color: var(--surface-card);
+    padding-right: 2rem;
+    border-color: var(--surface-card);
+    
+    h4 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--text-color-secondary);
+    }
+
+    p {
+      color: var(--text-color-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style-position: inside;
+      padding-left: 0;
+      color: var(--text-color-secondary);
+
+      li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+
+        strong {
+          color: var(--text-color-secondary);
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+:host ::ng-deep .p-card .p-card-body {
+  padding-top: 0;
+}
+
+:host ::ng-deep .p-card .p-card-content {
+  padding-top: 0;
+}
+
+.beneficiary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  .p-chip {
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+      background-color: var(--text-color-secondary);
+      color: var(--primary-color-text);
+    }
   }
+}
+
+.no-beneficiaries-msg {
+  font-style: italic;
+  color: var(--text-color-secondary);
+  padding: 0.5rem 0;
+}
+
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+

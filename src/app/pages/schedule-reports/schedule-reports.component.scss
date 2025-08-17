@@ -1,73 +1,63 @@
-:host {
-  ::ng-deep .p-inputtext, ::ng-deep .p-inputnumber-input, .p-dropdown, .p-button {
-    background-color: var(white) !important;
-  display: flex !important;
-  flex: 1 !important;
-  position: relative;
+.transfer-page {
+  padding: 2rem;
+  background-color: var(white);
+  min-height: 100%;
+
+  .header {
+    margin-bottom: 2rem;
+  }
+}
+
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+
+
+::ng-deep .p-splitterpanel-nested{
+  justify-content: start !important;
+}
+
+.field {
   width: 100%;
-}
-
-  ::ng-deep .p-datatable .p-datatable-tbody > tr {
-    background: var(--surface-card);
+  margin-bottom: 1.5rem;
+  label {
+    display: block;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
   }
 }
 
-.reports-page {
-    padding: 2rem;
-    background-color: var(white);
-    min-height: 100%;
-    
-    .form{  
-      background-color: var(--surface-card);
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+
+::ng-deep .p-splitter {
+  background: transparent !important;
+  border: none !important;
+
+}
+::ng-deep .p-splitter-gutter {
+  background-color: var(--surface-card) !important;
+  pointer-events: none;
+  cursor: default;
+}
+  :host {
+
+    ::ng-deep .p-datatable .p-datatable-tbody > tr {
+      background: var(--surface-card);
     }
-    .header {
-    margin-bottom: 2rem;
-
-    h1 {
-      font-size: 2rem;
-      font-weight: 600;
-      color: var(--text-color);
-      margin-bottom: 0.5rem;
-    }
-
-    p {
-      color: var(--text-color-secondary);
-      font-size: 1.1rem;
-    }
-  }
-
-  .form-container {
-    margin-bottom: 2rem;
-  }
-
-  .field {
-    width: 100%;
-    margin-bottom: 1.5rem;
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-  }
-
-  ::ng-deep .p-card .p-card-content {
-    padding-top: 0;
-  }
-
-  ::ng-deep .p-datatable-sm .p-datatable-tbody > tr > td {
-    padding: 0.75rem 0.5rem;
-  }
-
-  .schedule-form-section {
-    border-top: 1px solid var(--surface-border);
-    padding-top: 1.5rem;
-    margin-top: 1.5rem;
-  }
-
   
+  }
 
+  ::ng-deep .p-button {
+    width: 100%;
+    justify-content: center;
+  }
   .instructions {
     background-color: var(--surface-card);
     padding-right: 2rem;
@@ -76,7 +66,7 @@
     h4 {
       margin-bottom: 1rem;
       font-weight: 600;
-      color: var(--text-color);
+      color: var(--text-color-secondary);
     }
 
     p {
@@ -95,39 +85,49 @@
         line-height: 1.6;
 
         strong {
-          color: var(--text-color);
+          color: var(--text-color-secondary);
           font-weight: 600;
         }
       }
     }
   }
 
-  .grid {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .col-5 {
-    flex: 0 0 41.66667%;
-    max-width: 41.66667%;
-    padding: 0.5rem;
-  }
-
-  .col-7 {
-    flex: 0 0 58.33333%;
-    max-width: 58.33333%;
-    padding: 0.5rem;
-  }
-
-  
+:host ::ng-deep .p-card .p-card-body {
+  padding-top: 0;
 }
 
-.hidden-charts {
-  position: absolute;
-  left: -9999px;
-  top: -9999px;
-  width: 800px; /* Give them a reasonable size for rendering */
-  height: 400px;
-  overflow: hidden;
-  z-index: -1;
+:host ::ng-deep .p-card .p-card-content {
+  padding-top: 0;
+}
+
+.beneficiary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  .p-chip {
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+      background-color: var(--text-color-secondary);
+      color: var(--primary-color-text);
+    }
+  }
+}
+
+.no-beneficiaries-msg {
+  font-style: italic;
+  color: var(--text-color-secondary);
+  padding: 0.5rem 0;
+}
+
+    ::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown {
+      background-color: var(--white) !important;
+      width: 100% !important;
+    }
+
+::ng-deep.ng-star-inserted{
+  width: 100% !important;
 }

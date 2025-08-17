@@ -1,0 +1,162 @@
+<div class="debit-cards-page">
+  <p-toast></p-toast>
+  <p-confirmPopup></p-confirmPopup>
+
+  <div class="header">
+    <h1>Debit Cards</h1>
+    <p>Manage your debit cards.</p>
+  </div>
+
+  <p-toolbar styleClass="mb-4">
+    <div class="p-toolbar-group-end">
+      <button
+        pButton
+        label="Request Debit Card"
+        icon="pi pi-plus"
+        (click)="showRequestDialog = true"
+      ></button>
+    </div>
+  </p-toolbar>
+
+  <div class="debit-cards-grid">
+    <div class="debit-card-wrapper" *ngFor="let card of debitCards">
+      <p-card styleClass="debit-card">
+        <ng-template pTemplate="header">
+          <div class="card-header">
+            <div class="card-type">
+              <i class="pi pi-credit-card"></i>
+              <span>Debit Card</span>
+            </div>
+            <p-tag value="Active" severity="success"></p-tag>
+          </div>
+        </ng-template>
+
+        <div class="card-content">
+          <div class="card-number">
+            {{ card.cardNumber | creditCardNumber }}
+          </div>
+          <div class="card-holder">
+            <span class="label">Cardholder Name</span>
+            <span class="value">{{ card.cardholderName }}</span>
+          </div>
+          <div class="valid-until">
+            <span class="label">Valid Until</span>
+            <span class="value">{{ card.validUntil }}</span>
+          </div>
+          <div class="tied-account">
+            <span class="label">Tied to Account</span>
+            <span class="value">{{ card.tiedAccount }}</span>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <p-dialog
+    header="Request New Debit Card"
+    [(visible)]="showRequestDialog"
+    [modal]="true"
+    [style]="{ width: '450px' }"
+  >
+    <form [formGroup]="requestForm" (ngSubmit)="confirmRequest($event)">
+      <div class="p-fluid">
+        <div class="field mb-3">
+          <label for="cardholderName">Cardholder Name</label>
+          <input
+            id="cardholderName"
+            type="text"
+            pInputText
+            formControlName="cardholderName"
+          />
+          <small
+            class="p-error"
+            *ngIf="
+              requestForm.get('cardholderName')!.invalid &&
+              requestForm.get('cardholderName')!.touched
+            "
+            >Cardholder Name is required.</small
+          >
+        </div>
+        <div class="field mb-3">
+          <label for="NationalID">National ID Number</label>
+          <input
+            id="NationalID"
+            type="text"
+            pInputText
+            formControlName="nationalID"
+          />
+          <small
+            class="p-error"
+            *ngIf="
+              requestForm.get('nationalID')!.invalid &&
+              requestForm.get('nationalID')!.touched
+            "
+            >National ID Number is required.</small
+          >
+        </div>
+        <div class="field mb-3">
+          <label for="account">Tie to Account</label>
+          <p-dropdown
+            id="account"
+            formControlName="tiedAccount"
+            [options]="accounts"
+            optionLabel="number"
+            placeholder="Select an account"
+            [showClear]="true"
+            [filter]="true"
+            filterBy="number"
+            [autoDisplayFirst]="false"
+            (onChange)="onAccountSelect($event.value)"
+          >
+            <ng-template let-account pTemplate="selectedItem">
+              <div class="selected-account">
+                <span>{{ account?.number || "Select an account" }}</span>
+              </div>
+            </ng-template>
+            <ng-template let-account pTemplate="item">
+              <div class="account-option">
+                <div class="account-info">
+                  <i class="pi pi-credit-card" style="margin-right: 0.5rem"></i>
+                  <div>
+                    <div class="account-number">{{ account.number }}</div>
+                    <div
+                      class="account-balance"
+                      *ngIf="getAccountDetails(account.number) as acc"
+                    >
+                      Balance: {{ formatCurrency(acc.balance, acc.currency) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+          <small
+            class="p-error"
+            *ngIf="
+              requestForm.get('tiedAccount')!.invalid &&
+              requestForm.get('tiedAccount')!.touched
+            "
+            >Account selection is required.</small
+          >
+        </div>
+      </div>
+      <div class="p-dialog-footer">
+        <button
+          pButton
+          type="button"
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="showRequestDialog = false"
+        ></button>
+        <button
+          pButton
+          type="submit"
+          label="Request Card"
+          icon="pi pi-check"
+          [disabled]="requestForm.invalid"
+        ></button>
+      </div>
+    </form>
+  </p-dialog>
+</div>

@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { Transaction } from '../interfaces/Transaction.interface';
+import { Transaction, TransactionType } from '../interfaces/Transaction.interface';
 import { ScheduledReport } from '../interfaces/ScheduledReport.interface';
 import { ExchangeRatesResponse } from '../interfaces/ExchangeRates.interface';
 import { Account } from '../interfaces/Account.interface';
 import { MessageService } from 'primeng/api';
 import { environment } from '../../environments/environment';
+import { Loan } from '../interfaces/Loan.interface';
 
 interface CachedRates {
   timestamp: number;
@@ -21,14 +22,17 @@ export class BankingDataService {
   private readonly ACCOUNTS_KEY = 'banking_accounts';
   private readonly TRANSACTIONS_KEY = 'banking_transactions';
   private readonly REPORTS_KEY = 'banking_scheduled_reports';
+  private readonly LOANS_KEY = 'banking_loans';
 
   private accountsSubject = new BehaviorSubject<Account[]>([]);
   private transactionsSubject = new BehaviorSubject<Transaction[]>([]);
   private scheduledReportsSubject = new BehaviorSubject<ScheduledReport[]>([]);
+  private loansSubject = new BehaviorSubject<Loan[]>([]);
 
   accounts$ = this.accountsSubject.asObservable();
   transactions$ = this.transactionsSubject.asObservable();
   scheduledReports$ = this.scheduledReportsSubject.asObservable();
+  loans$ = this.loansSubject.asObservable();
 
   private apiKey = environment.openExchangeRatesApiKey;
   private baseUrl = environment.openExchangeRatesApiUrl;
@@ -52,6 +56,39 @@ export class BankingDataService {
     this.loadAccounts();
     this.loadTransactions();
     this.loadScheduledReports();
+    this.loadLoans();
+  }
+
+  private loadLoans() {
+    try {
+      const savedLoans = localStorage.getItem(this.LOANS_KEY);
+      if (savedLoans) {
+        this.loansSubject.next(JSON.parse(savedLoans));
+      } else {
+        this.loansSubject.next([]);
+      }
+    } catch (e) {
+      console.error('Error loading loans from localStorage:', e);
+    }
+  }
+
+  private saveLoans() {
+    try {
+      localStorage.setItem(this.LOANS_KEY, JSON.stringify(this.loansSubject.getValue()));
+    } catch (e) {
+      console.error('Error saving loans to localStorage:', e);
+    }
+  }
+
+  saveLoanApplication(loan: Loan) {
+    const loans = this.getLoans();
+    loans.push(loan);
+    this.loansSubject.next(loans);
+    this.saveLoans();
+  }
+
+  getLoans() {
+    return this.loansSubject.getValue();
   }
 
   private loadAccounts() {
@@ -67,116 +104,112 @@ export class BankingDataService {
         this.accountsSubject.next(accounts);
         this.saveAccounts();
       } else {
-        this.initializeAccounts();
+        const initialAccounts: Account[] = [
+          {
+            number: '1000000001',
+            type: 'Savings',
+            balance: 5000.0,
+            status: 'Active',
+            currency: 'USD',
+            iban: 'SA1234567890123456789012',
+            swiftCode: 'CUBISAEADXXX',
+            nickname: 'My US Savings',
+            alerts: {
+              lowBalance: { enabled: true, threshold: 500 },
+              largeTransaction: { enabled: true, threshold: 1000 },
+            },
+          },
+          {
+            number: '1000000002',
+            type: 'Checking',
+            balance: 2500.0,
+            status: 'Active',
+            currency: 'EUR',
+            iban: 'SA1234567890123456789013',
+            swiftCode: 'CUBISAEADXXX',
+            nickname: 'My Euro Checking',
+            alerts: {
+              lowBalance: { enabled: true, threshold: 200 },
+              largeTransaction: { enabled: true, threshold: 800 },
+            },
+          },
+          {
+            number: '1000000004',
+            type: 'Savings',
+            balance: 15000.0,
+            status: 'Active',
+            currency: 'AED',
+            iban: 'SA1234567890123456789014',
+            swiftCode: 'CUBISAEADXXX',
+            nickname: 'My AED Savings',
+            alerts: {
+              lowBalance: { enabled: true, threshold: 1000 },
+              largeTransaction: { enabled: true, threshold: 5000 },
+            },
+          },
+          {
+            number: '1000000013',
+            type: 'Savings',
+            balance: 100000.0,
+            status: 'Active',
+            currency: 'EGP',
+            iban: 'SA1234567890123456789015',
+            swiftCode: 'CUBISAEADXXX',
+            nickname: 'My EGP Savings',
+            alerts: {
+              lowBalance: { enabled: true, threshold: 10000 },
+              largeTransaction: { enabled: true, threshold: 20000 },
+            },
+          },
+          {
+            number: '1000000014',
+            type: 'Checking',
+            balance: 25000.0,
+            status: 'Active',
+            currency: 'AED',
+            iban: 'SA1234567890123456789016',
+            swiftCode: 'CUBISAEADXXX',
+            nickname: 'My AED Checking',
+            alerts: {
+              lowBalance: { enabled: true, threshold: 2000 },
+              largeTransaction: { enabled: true, threshold: 10000 },
+            },
+          },
+          {
+            number: '1000000016',
+            type: 'Savings',
+            balance: 12000.0,
+            status: 'Active',
+            currency: 'USD',
+            iban: 'SA1234567890123456789017',
+            swiftCode: 'CUBISAEADXXX',
+            nickname: 'My Second US Savings',
+            alerts: {
+              lowBalance: { enabled: true, threshold: 1000 },
+              largeTransaction: { enabled: true, threshold: 2000 },
+            },
+          },
+          {
+            number: '1000000017',
+            type: 'Checking',
+            balance: 8000.0,
+            status: 'Active',
+            currency: 'EUR',
+            iban: 'SA1234567890123456789018',
+            swiftCode: 'CUBISAEADXXX',
+            nickname: 'My Second Euro Checking',
+            alerts: {
+              lowBalance: { enabled: true, threshold: 500 },
+              largeTransaction: { enabled: true, threshold: 1500 },
+            },
+          },
+        ];
+        this.accountsSubject.next(initialAccounts);
+        this.saveAccounts();
       }
     } catch (e) {
       console.error('Error loading accounts from localStorage:', e);
     }
-  }
-
-  private initializeAccounts() {
-    const initialAccounts: Account[] = [
-      {
-        number: '1000000001',
-        type: 'Savings',
-        balance: 5000.0,
-        status: 'Active',
-        currency: 'USD',
-        iban: 'SA1234567890123456789012',
-        swiftCode: 'CUBISAEADXXX',
-        nickname: 'My US Savings',
-        alerts: {
-          lowBalance: { enabled: true, threshold: 500 },
-          largeTransaction: { enabled: true, threshold: 1000 },
-        },
-      },
-      {
-        number: '1000000002',
-        type: 'Checking',
-        balance: 2500.0,
-        status: 'Active',
-        currency: 'EUR',
-        iban: 'SA1234567890123456789013',
-        swiftCode: 'CUBISAEADXXX',
-        nickname: 'My Euro Checking',
-        alerts: {
-          lowBalance: { enabled: true, threshold: 200 },
-          largeTransaction: { enabled: true, threshold: 800 },
-        },
-      },
-      {
-        number: '1000000004',
-        type: 'Savings',
-        balance: 15000.0,
-        status: 'Active',
-        currency: 'AED',
-        iban: 'SA1234567890123456789014',
-        swiftCode: 'CUBISAEADXXX',
-        nickname: 'My AED Savings',
-        alerts: {
-          lowBalance: { enabled: true, threshold: 1000 },
-          largeTransaction: { enabled: true, threshold: 5000 },
-        },
-      },
-      {
-        number: '1000000013',
-        type: 'Savings',
-        balance: 100000.0,
-        status: 'Active',
-        currency: 'EGP',
-        iban: 'SA1234567890123456789015',
-        swiftCode: 'CUBISAEADXXX',
-        nickname: 'My EGP Savings',
-        alerts: {
-          lowBalance: { enabled: true, threshold: 10000 },
-          largeTransaction: { enabled: true, threshold: 20000 },
-        },
-      },
-      {
-        number: '1000000014',
-        type: 'Checking',
-        balance: 25000.0,
-        status: 'Active',
-        currency: 'AED',
-        iban: 'SA1234567890123456789016',
-        swiftCode: 'CUBISAEADXXX',
-        nickname: 'My AED Checking',
-        alerts: {
-          lowBalance: { enabled: true, threshold: 2000 },
-          largeTransaction: { enabled: true, threshold: 10000 },
-        },
-      },
-      {
-        number: '1000000016',
-        type: 'Savings',
-        balance: 12000.0,
-        status: 'Active',
-        currency: 'USD',
-        iban: 'SA1234567890123456789017',
-        swiftCode: 'CUBISAEADXXX',
-        nickname: 'My Second US Savings',
-        alerts: {
-          lowBalance: { enabled: true, threshold: 1000 },
-          largeTransaction: { enabled: true, threshold: 2000 },
-        },
-      },
-      {
-        number: '1000000017',
-        type: 'Checking',
-        balance: 8000.0,
-        status: 'Active',
-        currency: 'EUR',
-        iban: 'SA1234567890123456789018',
-        swiftCode: 'CUBISAEADXXX',
-        nickname: 'My Second Euro Checking',
-        alerts: {
-          lowBalance: { enabled: true, threshold: 500 },
-          largeTransaction: { enabled: true, threshold: 1500 },
-        },
-      },
-    ];
-    this.accountsSubject.next(initialAccounts);
-    this.saveAccounts();
   }
 
   private saveAccounts() {
@@ -355,6 +388,56 @@ export class BankingDataService {
       currency: acc.currency
     });
     this.checkAlerts(accountNumber, updatedBalance, amount);
+    return true;
+  }
+
+  transfer(fromAccountNumber: string, toAccountNumber: string, debitAmount: number, creditAmount: number, description: TransactionType): boolean {
+    const accounts = this.getAccounts();
+    const fromAccount = accounts.find(acc => acc.number === fromAccountNumber);
+    const toAccount = accounts.find(acc => acc.number === toAccountNumber);
+
+    if (!fromAccount || !toAccount) {
+      console.error('One or both accounts not found');
+      return false;
+    }
+
+    if (fromAccount.balance < debitAmount) {
+      console.error('Insufficient funds');
+      return false;
+    }
+
+    const fromTxAmount = -debitAmount;
+    const toTxAmount = creditAmount;
+
+    // Update balances
+    fromAccount.balance += fromTxAmount;
+    toAccount.balance += toTxAmount;
+
+    this.updateAccount(fromAccount);
+    this.updateAccount(toAccount);
+
+    // Add transactions
+    this.addTransaction({
+      date: new Date().toISOString().slice(0, 10),
+      description: description,
+      details: `Transfer to account ${toAccount.number}`,
+      amount: fromTxAmount,
+      accountNumber: fromAccountNumber,
+      currency: fromAccount.currency
+    });
+
+    this.addTransaction({
+      date: new Date().toISOString().slice(0, 10),
+      description: description,
+      details: `Transfer from account ${fromAccount.number}`,
+      amount: toTxAmount,
+      accountNumber: toAccountNumber,
+      currency: toAccount.currency
+    });
+
+    this.checkAlerts(fromAccountNumber, fromAccount.balance, Math.abs(fromTxAmount));
+    this.checkAlerts(toAccountNumber, toAccount.balance, toTxAmount);
+
     return true;
   }
 

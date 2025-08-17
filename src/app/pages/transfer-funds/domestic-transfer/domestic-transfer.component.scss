@@ -8,6 +8,23 @@
   }
 }
 
+
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+
+
+
+::ng-deep .p-splitterpanel-nested{
+  justify-content: start !important;
+}
+
 .field {
   width: 100%;
   margin-bottom: 1.5rem;
@@ -30,7 +47,7 @@
       cursor: default;
     }
 
-    .p-inputtext, ::ng-deep .p-inputnumber-input, .p-dropdown {
+    ::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown {
       background-color: var(--white) !important;
       width: 100% !important;
     }
@@ -86,3 +103,27 @@
 :host ::ng-deep .p-card .p-card-content {
   padding-top: 0;
 }
+
+.beneficiary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  .p-chip {
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+      background-color: var(--text-color-secondary);
+      color: var(--primary-color-text);
+    }
+  }
+}
+
+.no-beneficiaries-msg {
+  font-style: italic;
+  color: var(--text-color-secondary);
+  padding: 0.5rem 0;
+}
+

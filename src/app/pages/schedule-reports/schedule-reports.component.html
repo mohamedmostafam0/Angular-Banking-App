@@ -1,78 +1,80 @@
-<div class="reports-page">
-  <div class="reports-toolbar">
-    <div class="header">
-      <h1>Schedule Reports</h1>
-      <p>
-        Select an account to view its data and schedule a recurring monthly
-        report.
-      </p>
-    </div>
+<p-toast></p-toast>
+<div class="transfer-page">
+  <div class="header">
+    <h1>Schedule Reports</h1>
+    <p>
+      Select an account to view its data and schedule a recurring monthly
+      report.
+    </p>
   </div>
 
-  <div class="reports-content">
-    <div class="centered-container">
-      <p-card header="Schedule Your Report" styleClass="schedule-card">
-        <div class="grid">
-          <div class="col-5">
-            <div class="instructions">
-              <p>
-                1. Select the account you want to receive a report for from the
-                dropdown menu.
-              </p>
-              <p>
-                2. Choose a day of the month (1-28) on which you want the report
-                to be generated.
-              </p>
-              <p>3. Click the "Schedule Report" button to confirm.</p>
-              <p>You will receive a monthly email with the report attached.</p>
-            </div>
+  <p-card>
+    <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
+      <ng-template pTemplate="form">
+        <div class="flex align-items-center h-full">
+          <div class="instructions">
+            <h2>Instructions for Scheduling Reports</h2>
+            <h4>Follow these steps to schedule a recurring monthly report:</h4>
+            <ul>
+              <li>
+                <strong>Select Account:</strong> Choose the account for which
+                you want to receive a report.
+              </li>
+              <li>
+                <strong>Select Day of Month:</strong> Choose a day of the month
+                (1-28) on which you want the report to be generated.
+              </li>
+              <li>
+                <strong>Confirm:</strong> Click "Schedule Report" to confirm.
+              </li>
+            </ul>
+            <p>You will receive a monthly email with the report attached.</p>
           </div>
-          <div class="col-7">
-            <div class="p-fluid grid">
-              <div class="field col-12">
-                <label for="reportAccount">Account</label>
-                <p-dropdown
-                  inputId="reportAccount"
-                  [options]="accountOptions"
-                  [(ngModel)]="selectedReportAccount"
-                  placeholder="Select an Account"
-                  (onChange)="onAccountChange($event)"
-                ></p-dropdown>
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="flex align-items-center h-full" style="width: 100%">
+          <div class="col-12 flex">
+            <form class="transfer-form">
+              <div class="p-fluid">
+                <div class="field mb-3">
+                  <label for="reportAccount">Account</label>
+                  <p-dropdown
+                    inputId="reportAccount"
+                    [options]="accountOptions"
+                    [(ngModel)]="selectedReportAccount"
+                    placeholder="Select an Account"
+                    (onChange)="onAccountChange($event)"
+                    name="reportAccount"
+                  >
+                  </p-dropdown>
+                </div>
+
+                <div class="field mb-3">
+                  <label for="reportDay">Day of Month</label>
+                  <p-inputNumber
+                    inputId="reportDay"
+                    [(ngModel)]="reportDay"
+                    [min]="1"
+                    [max]="28"
+                    name="reportDay"
+                  >
+                  </p-inputNumber>
+                </div>
               </div>
-              <div class="field col-12">
-                <label for="reportDay">Day of Month</label>
-                <p-inputNumber
-                  inputId="reportDay"
-                  [(ngModel)]="reportDay"
-                  [min]="1"
-                  [max]="28"
-                  [style]="{ width: '100%' }"
-                ></p-inputNumber>
-              </div>
-              <div class="col-12">
+
+              <div class="flex mt-3">
                 <p-button
                   label="Schedule Report"
                   icon="pi pi-calendar-plus"
                   (onClick)="scheduleReport()"
-                  styleClass="w-full"
-                  [style]="{ width: '100%' }"
-                ></p-button>
+                >
+                </p-button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
-      </p-card>
-    </div>
-  </div>
-
-  <!-- Hidden chart elements for PDF generation -->
-  <div class="hidden-charts">
-    <p-chart
-      #spendingByCategoryChart
-      type="pie"
-      [data]="spendingByCategoryData"
-    ></p-chart>
-    <p-chart #balanceTrendChart type="line" [data]="balanceTrendData"></p-chart>
-    <p-chart #cashflowChart type="bar" [data]="cashflowData"></p-chart>
-  </div>
+      </ng-template>
+    </p-splitter>
+  </p-card>
 </div>

@@ -1,0 +1,28 @@
+<div class="transfer-page">
+  <div class="header">
+    <h1>Loan Tracking</h1>
+    <p>Track the status of your loan application.</p>
+  </div>
+
+  <p-card>
+    <div class="p-fluid">
+      <div class="field mb-3">
+        <label for="loan">Select a Loan</label>
+        <p-dropdown id="loan" [(ngModel)]="selectedLoan" [options]="loans" placeholder="Select a loan" optionLabel="id" (onChange)="onLoanChange()"></p-dropdown>
+      </div>
+    </div>
+
+    <div *ngIf="selectedLoan">
+      <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
+        <ng-template pTemplate="marker" let-event>
+          <span class="custom-marker p-shadow-2" [style.backgroundColor]="event.color">
+            <i [class]="event.icon"></i>
+          </span>
+        </ng-template>
+        <ng-template pTemplate="content" let-event>
+          <p-card [header]="event.status" [subheader]="event.date"></p-card>
+        </ng-template>
+      </p-timeline>
+    </div>
+  </p-card>
+</div>

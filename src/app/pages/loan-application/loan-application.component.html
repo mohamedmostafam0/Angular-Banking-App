@@ -1,0 +1,320 @@
+<div class="transfer-page">
+  <div class="header">
+    <h1>Loan Application</h1>
+    <p>Complete the following steps to apply for a loan.</p>
+  </div>
+
+  <p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+  <p-steps
+    [model]="steps"
+    [(activeIndex)]="activeIndex"
+    [readonly]="false"
+  ></p-steps>
+  <p-card>
+    <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
+      <ng-template pTemplate="form">
+        <div class="flex align-items-center h-full">
+          <div class="instructions">
+            <h2>{{ instructions[activeIndex].title }}</h2>
+            <h4>{{ instructions[activeIndex].description }}</h4>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="flex align-items-center h-full" style="width: 100%">
+          <div class="col-12 flex">
+            <form
+              [formGroup]="loanApplicationForm"
+              (ngSubmit)="onSubmit()"
+              class="transfer-form"
+            >
+              <div *ngIf="activeIndex === 0">
+                <div class="p-fluid">
+                  <div class="field mb-3">
+                    <label for="name" class="col-12 md:col-4">Full Name</label>
+                    <div class="col-12 md:col-8">
+                      <input
+                        id="name"
+                        type="text"
+                        pInputText
+                        formControlName="name"
+                      />
+                      <small
+                        class="p-error"
+                        *ngIf="
+                          loanApplicationForm.get('name')!.invalid &&
+                          loanApplicationForm.get('name')!.touched
+                        "
+                        >Name is required.</small
+                      >
+                    </div>
+                  </div>
+                  <div class="field mb-3">
+                    <label for="email" class="col-12 md:col-4">Email</label>
+                    <div class="col-12 md:col-8">
+                      <input
+                        id="email"
+                        type="email"
+                        pInputText
+                        formControlName="email"
+                      />
+                      <small
+                        class="p-error"
+                        *ngIf="
+                          loanApplicationForm.get('email')!.invalid &&
+                          loanApplicationForm.get('email')!.touched
+                        "
+                        >Enter a valid email.</small
+                      >
+                    </div>
+                  </div>
+                  <div class="field mb-3">
+                    <label for="phone" class="col-12 md:col-4">Phone</label>
+                    <div class="col-12 md:col-8">
+                      <input
+                        id="phone"
+                        type="text"
+                        pInputText
+                        formControlName="phone"
+                      />
+                      <small
+                        class="p-error"
+                        *ngIf="
+                          loanApplicationForm.get('phone')!.invalid &&
+                          loanApplicationForm.get('phone')!.touched
+                        "
+                        >Phone number is required.</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-4">
+                  <div></div>
+                  <button
+                    pButton
+                    type="button"
+                    label="Next"
+                    icon="pi pi-arrow-right"
+                    (click)="nextStep()"
+                    [disabled]="!isStepValid()"
+                  ></button>
+                </div>
+              </div>
+
+              <div *ngIf="activeIndex === 1">
+                <div class="p-fluid">
+                  <div class="field mb-3">
+                    <label for="employer" class="col-12 md:col-4"
+                      >Employer</label
+                    >
+                    <div class="col-12 md:col-8">
+                      <input
+                        id="employer"
+                        type="text"
+                        pInputText
+                        formControlName="employer"
+                      />
+                      <small
+                        class="p-error"
+                        *ngIf="
+                          loanApplicationForm.get('employer')!.invalid &&
+                          loanApplicationForm.get('employer')!.touched
+                        "
+                        >Employer is required.</small
+                      >
+                    </div>
+                  </div>
+                  <div class="field mb-3">
+                    <label for="income" class="col-12 md:col-4"
+                      >Monthly Income</label
+                    >
+                    <div class="col-12 md:col-8">
+                      <p-inputNumber
+                        id="income"
+                        formControlName="income"
+                        mode="currency"
+                        currency="USD"
+                        locale="en-US"
+                      ></p-inputNumber>
+                      <small
+                        class="p-error"
+                        *ngIf="
+                          loanApplicationForm.get('income')!.invalid &&
+                          loanApplicationForm.get('income')!.touched
+                        "
+                        >Income is required.</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-4">
+                  <button
+                    pButton
+                    type="button"
+                    label="Back"
+                    icon="pi pi-arrow-left"
+                    (click)="prevStep()"
+                  ></button>
+                  <button
+                    pButton
+                    type="button"
+                    label="Next"
+                    icon="pi pi-arrow-right"
+                    (click)="nextStep()"
+                    [disabled]="!isStepValid()"
+                  ></button>
+                </div>
+              </div>
+
+              <div *ngIf="activeIndex === 2">
+                <div class="p-fluid">
+                  <div class="field mb-3">
+                    <label for="amount" class="col-12 md:col-4"
+                      >Loan Amount</label
+                    >
+                    <div class="col-12 md:col-8">
+                      <div class="p-inputg roup">
+                        <p-inputNumber
+                          id="amount"
+                          formControlName="amount"
+                          mode="currency"
+                          [currency]="
+                            loanApplicationForm.get('currency')!.value
+                          "
+                          locale="en-US"
+                        ></p-inputNumber>
+                        <p-dropdown
+                          id="currency"
+                          [options]="supportedCurrencies"
+                          formControlName="currency"
+                        ></p-dropdown>
+                      </div>
+                      <small
+                        class="p-error"
+                        *ngIf="
+                          loanApplicationForm.get('amount')!.invalid &&
+                          loanApplicationForm.get('amount')!.touched
+                        "
+                        >Amount is required and must be at least 1000.</small
+                      >
+                    </div>
+                  </div>
+                  <div class="field mb-3">
+                    <label for="purpose" class="col-12 md:col-4"
+                      >Purpose of Loan</label
+                    >
+                    <div class="col-12 md:col-8">
+                      <p-dropdown
+                        id="purpose"
+                        [options]="loanPurposes"
+                        formControlName="purpose"
+                        placeholder="Select a purpose"
+                      ></p-dropdown>
+                      <small
+                        class="p-error"
+                        *ngIf="
+                          loanApplicationForm.get('purpose')!.invalid &&
+                          loanApplicationForm.get('purpose')!.touched
+                        "
+                        >Purpose is required.</small
+                      >
+                    </div>
+                  </div>
+                  <div class="field mb-3">
+                    <label for="loanTerm" class="col-12 md:col-4"
+                      >Loan Term (Months)</label
+                    >
+                    <div class="col-12 md:col-8">
+                      <p-inputNumber
+                        id="loanTerm"
+                        formControlName="loanTerm"
+                      ></p-inputNumber>
+                      <small
+                        class="p-error"
+                        *ngIf="
+                          loanApplicationForm.get('loanTerm')!.invalid &&
+                          loanApplicationForm.get('loanTerm')!.touched
+                        "
+                        >Loan term is required.</small
+                      >
+                    </div>
+                  </div>
+                  <div class="field mb-3">
+                    <label for="collateral" class="col-12 md:col-4"
+                      >Collateral (Optional)</label
+                    >
+                    <div class="col-12 md:col-8">
+                      <input
+                        id="collateral"
+                        type="text"
+                        pInputText
+                        formControlName="collateral"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-4">
+                  <button
+                    pButton
+                    type="button"
+                    label="Back"
+                    icon="pi pi-arrow-left"
+                    (click)="prevStep()"
+                  ></button>
+                  <button
+                    pButton
+                    type="button"
+                    label="Next"
+                    icon="pi pi-arrow-right"
+                    (click)="nextStep()"
+                    [disabled]="!isStepValid()"
+                  ></button>
+                </div>
+              </div>
+
+              <div *ngIf="activeIndex === 3">
+                <p-fileUpload
+                  name="documents[]"
+                  (onUpload)="onUpload($event)"
+                  [multiple]="true"
+                  accept=".pdf"
+                >
+                  <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFiles.length">
+                      <li *ngFor="let file of uploadedFiles">
+                        {{ file.name }} - {{ file.size }} bytes
+                      </li>
+                    </ul>
+                    <div class="p-text-center p-mt-3">
+                      <i class="pi pi-upload p-mr-2"></i>
+                      <span
+                        >Drag and drop PDF files here or click to browse.</span
+                      >
+                    </div>
+                  </ng-template>
+                </p-fileUpload>
+                <div class="p-d-flex p-jc-between p-mt-4">
+                  <button
+                    pButton
+                    type="button"
+                    label="Back"
+                    icon="pi pi-arrow-left"
+                    (click)="prevStep()"
+                  ></button>
+                  <button
+                    pButton
+                    type="submit"
+                    label="Submit Application"
+                    icon="pi pi-check"
+                  ></button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </ng-template>
+    </p-splitter>
+  </p-card>
+</div>

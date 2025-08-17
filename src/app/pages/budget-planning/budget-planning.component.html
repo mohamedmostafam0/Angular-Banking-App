@@ -36,13 +36,9 @@
           class="budget-form-section"
           [@formAnimation]="showBudgetForm ? 'visible' : 'void'"
         >
-          <h1>Set/Update Budgets</h1>
-          <br />
-          <p-splitter styleClass="mb-5">
+          <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
             <ng-template pTemplate="form">
-              <div
-                class="flex align-items-center justify-content-center h-full"
-              >
+              <div class="flex align-items-center h-full">
                 <div class="instructions">
                   <h4>How to Set Your Budget</h4>
                   <p>
@@ -71,10 +67,8 @@
               </div>
             </ng-template>
             <ng-template pTemplate>
-              <div
-                class="flex align-items-center justify-content-center h-full"
-              >
-                <div class="col-12 flex justify-content-center">
+              <div class="flex align-items-center h-full" style="width: 100%">
+                <div class="col-12 flex">
                   <form
                     class="budget-form"
                     [formGroup]="budgetForm"
@@ -112,7 +106,7 @@
                         ></p-dropdown>
                       </div>
                     </div>
-                    <div class="flex justify-content-center mt-4">
+                    <div class="flex mt-3">
                       <p-button
                         label="Save Budget"
                         type="submit"

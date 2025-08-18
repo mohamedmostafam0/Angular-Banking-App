@@ -1,0 +1,131 @@
+:host {
+  display: block;
+  padding: 1.5rem;
+  background-color: #fff;
+}
+  
+.request-credit-card-page {
+
+  .form-card {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .instructions {
+    padding: 1rem;
+    h3 {
+      margin-top: 0;
+    }
+  }
+
+  .form-container {
+    padding: 1rem;
+  }
+
+  .card-type-item {
+    text-align: center;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &.selected {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-image {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .p-field-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+
+.field {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  label {
+    display: block;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+}
+
+::ng-deep .p-splitter {
+  background: transparent !important;
+  border: none !important;
+}
+::ng-deep .p-splitter-gutter {
+  background-color: var(--surface-card) !important;
+  pointer-events: none;
+  cursor: default;
+}
+
+::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown {
+  background-color: var(--white) !important;
+  width: 100% !important;
+}
+
+
+
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+
+::ng-deep .p-steps-item-active .p-steps-item-label{
+  color: var(--p-steps-item-label-color) !important;
+}
+
+
+::ng-deep .p-steps-item-active .p-steps-item-number {
+  background-color: var(--primary-color) !important;
+  color: var(--white) !important;
+}
+
+::ng-deep .p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color) !important;
+}
+
+
+::ng-deep .p-splitterpanel-nested{
+  justify-content: start !important;
+  display: block !important;
+}
+
+
+::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown {
+  background-color: var(--white) !important;
+  width: 100% !important;
+}
+
+
+::ng-deep .field {
+  width: 100% !important;
+  margin-bottom: 1.5rem !important;
+
+  ::ng-deep label {
+    display: block !important;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+}
+
+
+::ng-deep .p-splitterpanel-nested{
+  justify-content: start !important;
+}
+

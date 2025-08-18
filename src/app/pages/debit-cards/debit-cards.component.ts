@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { CommonModule } from '@angular/common';
-import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,17 +9,13 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToolbarModule } from 'primeng/toolbar';
 import { DropdownModule } from 'primeng/dropdown';
 import { BankingDataService } from '../../services/banking-data.service';
 import { Account } from '../../interfaces/Account.interface';
+import { DebitCard } from '../../interfaces/DebitCard.interface';
 import { CreditCardNumberPipe } from '../../pipes/credit-card-number.pipe';
-
-interface DebitCard {
-  cardNumber: string;
-  cardholderName: string;
-  validUntil: string;
-  tiedAccount: string;
-}
+import { UppercaseTextPipe } from '../../pipes/uppercase-text.pipe';
 
 @Component({
   selector: 'app-debit-cards',
@@ -29,7 +24,6 @@ interface DebitCard {
     CommonModule,
     CardModule,
     TagModule,
-    ToolbarModule,
     ButtonModule,
     DialogModule,
     InputTextModule,
@@ -37,7 +31,9 @@ interface DebitCard {
     ConfirmPopupModule,
     ToastModule,
     DropdownModule,
-    CreditCardNumberPipe
+    CreditCardNumberPipe,
+    ToolbarModule,
+    UppercaseTextPipe
   ],
   templateUrl: './debit-cards.component.html',
   styleUrl: './debit-cards.component.scss',
@@ -59,13 +55,15 @@ export class DebitCardsComponent implements OnInit {
   ngOnInit(): void {
     this.requestForm = this.fb.group({
       cardholderName: ['', Validators.required],
-      nationalID: ['', Validators.required],
-      address: ['', Validators.required],
       tiedAccount: [null, Validators.required]
     });
 
     this.bankingDataService.accounts$.subscribe(accounts => {
       this.accounts = accounts;
+    });
+
+    this.bankingDataService.debitCards$.subscribe(debitCards => {
+      this.debitCards = debitCards;
     });
   }
 
@@ -104,16 +102,24 @@ export class DebitCardsComponent implements OnInit {
     const tiedAccount = this.requestForm.get('tiedAccount')?.value.number;
 
     const newCard: DebitCard = {
+      id: this.generateId(),
       cardNumber: this.generateCardNumber(),
       cardholderName: cardholderName,
-      validUntil: this.generateValidUntilDate(),
-      tiedAccount: tiedAccount
+      expirationDate: this.generateValidUntilDate(),
+      cvv: this.generateCvv(),
+      status: 'Active',
+      dailyLimit: 1000, // Default daily limit
+      linkedAccountNumber: tiedAccount
     };
 
-    this.debitCards.push(newCard);
+    this.bankingDataService.addDebitCard(newCard);
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Debit card request submitted!' });
     this.showRequestDialog = false;
     this.requestForm.reset();
+  }
+
+  generateId(): string {
+    return Math.random().toString(36).substring(2, 9);
   }
 
   generateCardNumber(): string {
@@ -130,5 +136,22 @@ export class DebitCardsComponent implements OnInit {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear().toString().slice(-2);
     return `${month}/${year}`;
+  }
+
+  generateCvv(): string {
+    return Math.floor(100 + Math.random() * 900).toString();
+  }
+
+  getStatusSeverity(status: string): "success" | "warn" | "danger" | "info" {
+    switch (status) {
+      case 'Active':
+        return 'success';
+      case 'Inactive':
+        return 'warn';
+      case 'Blocked':
+        return 'danger';
+      default:
+        return 'info';
+    }
   }
 }

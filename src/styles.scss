@@ -172,6 +172,13 @@ body .p-datatable {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     border: 1px solid var(--surface-border);
     
+    .p-error {
+      color: #dc3545;
+      font-size: 0.85rem;
+      margin-top: 0.35rem;
+      display: block;
+}
+
     .p-dialog-header {
       padding: 1.5rem;
       border-bottom: 1px solid var(--surface-border);
@@ -357,3 +364,8 @@ body .p-radiobutton .p-radiobutton-box.p-highlight .p-radiobutton-icon {
       font-weight: 500 !important;
     }
   }
+
+
+.p-steps{
+  padding-bottom: 1.5rem;
+}

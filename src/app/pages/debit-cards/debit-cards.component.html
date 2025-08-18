@@ -19,7 +19,7 @@
   </p-toolbar>
 
   <div class="debit-cards-grid">
-    <div class="debit-card-wrapper" *ngFor="let card of debitCards">
+    <div *ngFor="let card of debitCards" class="debit-card-wrapper">
       <p-card styleClass="debit-card">
         <ng-template pTemplate="header">
           <div class="card-header">
@@ -27,7 +27,10 @@
               <i class="pi pi-credit-card"></i>
               <span>Debit Card</span>
             </div>
-            <p-tag value="Active" severity="success"></p-tag>
+            <p-tag
+              [value]="card.status"
+              [severity]="getStatusSeverity(card.status)"
+            ></p-tag>
           </div>
         </ng-template>
 
@@ -35,17 +38,23 @@
           <div class="card-number">
             {{ card.cardNumber | creditCardNumber }}
           </div>
-          <div class="card-holder">
-            <span class="label">Cardholder Name</span>
-            <span class="value">{{ card.cardholderName }}</span>
+
+          <div class="card-details">
+            <div class="card-holder">
+              <span class="label">Cardholder Name</span>
+              <span class="value">{{
+                card.cardholderName | uppercaseText
+              }}</span>
+            </div>
+            <div class="valid-until">
+              <span class="label">Valid Until</span>
+              <span class="value">{{ card.expirationDate }}</span>
+            </div>
           </div>
-          <div class="valid-until">
-            <span class="label">Valid Until</span>
-            <span class="value">{{ card.validUntil }}</span>
-          </div>
-          <div class="tied-account">
-            <span class="label">Tied to Account</span>
-            <span class="value">{{ card.tiedAccount }}</span>
+
+          <div class="linked-account">
+            <span class="label">Linked Account</span>
+            <span class="value">{{ card.linkedAccountNumber }}</span>
           </div>
         </div>
       </p-card>
@@ -57,6 +66,8 @@
     [(visible)]="showRequestDialog"
     [modal]="true"
     [style]="{ width: '450px' }"
+    [draggable]="false"
+    [resizable]="false"
   >
     <form [formGroup]="requestForm" (ngSubmit)="confirmRequest($event)">
       <div class="p-fluid">
@@ -75,23 +86,6 @@
               requestForm.get('cardholderName')!.touched
             "
             >Cardholder Name is required.</small
-          >
-        </div>
-        <div class="field mb-3">
-          <label for="NationalID">National ID Number</label>
-          <input
-            id="NationalID"
-            type="text"
-            pInputText
-            formControlName="nationalID"
-          />
-          <small
-            class="p-error"
-            *ngIf="
-              requestForm.get('nationalID')!.invalid &&
-              requestForm.get('nationalID')!.touched
-            "
-            >National ID Number is required.</small
           >
         </div>
         <div class="field mb-3">
@@ -141,14 +135,6 @@
         </div>
       </div>
       <div class="p-dialog-footer">
-        <button
-          pButton
-          type="button"
-          label="Cancel"
-          icon="pi pi-times"
-          class="p-button-text"
-          (click)="showRequestDialog = false"
-        ></button>
         <button
           pButton
           type="submit"

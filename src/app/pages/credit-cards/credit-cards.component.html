@@ -1,1 +1,75 @@
-<p>credit-cards works!</p>
+<div class="credit-cards-page">
+  <p-toast></p-toast>
+  <p-confirmPopup></p-confirmPopup>
+
+  <div class="header">
+    <h1>Credit Cards</h1>
+    <p>Manage your credit cards.</p>
+  </div>
+
+  <p-toolbar styleClass="mb-4">
+    <div class="p-toolbar-group-end">
+      <button
+        pButton
+        label="Request Credit Card"
+        icon="pi pi-plus"
+        (click)="redirectToRequestNewCard()"
+      ></button>
+    </div>
+  </p-toolbar>
+
+  <div class="credit-cards-grid">
+    <div *ngFor="let card of creditCards" class="credit-card-wrapper">
+      <p-card styleClass="credit-card">
+        <ng-template pTemplate="header">
+          <div class="card-header">
+            <div class="card-type">
+              <i class="pi pi-credit-card"></i>
+              <span>{{ card.cardType }}</span>
+            </div>
+            <p-tag
+              [value]="card.status"
+              [severity]="getStatusSeverity(card.status)"
+            ></p-tag>
+          </div>
+        </ng-template>
+
+        <div class="card-content">
+          <div class="card-number">
+            {{ card.cardNumber | creditCardNumber }}
+          </div>
+
+          <div class="card-details">
+            <div class="card-holder">
+              <span class="label">Cardholder Name</span>
+              <span class="value">{{
+                card.cardholderName | uppercaseText
+              }}</span>
+            </div>
+            <div class="valid-until">
+              <span class="label">Valid Until</span>
+              <span class="value">{{ card.expirationDate }}</span>
+            </div>
+          </div>
+
+          <div class="linked-account">
+            <span class="label">Linked Account</span>
+            <span class="value">{{ card.linkedAccountNumber }}</span>
+          </div>
+
+          <div class="p-card-footer p-d-flex p-jc-end">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-eye"
+              pTooltip="View Transactions"
+              (click)="viewTransactions(card.linkedAccountNumber)"
+              id="ViewTransactions"
+              class="p-button-sm"
+            ></button>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

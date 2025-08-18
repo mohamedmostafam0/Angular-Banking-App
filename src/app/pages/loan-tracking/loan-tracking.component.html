@@ -8,14 +8,29 @@
     <div class="p-fluid">
       <div class="field mb-3">
         <label for="loan">Select a Loan</label>
-        <p-dropdown id="loan" [(ngModel)]="selectedLoan" [options]="loans" placeholder="Select a loan" optionLabel="id" (onChange)="onLoanChange()"></p-dropdown>
+        <p-dropdown
+          id="loan"
+          [(ngModel)]="selectedLoan"
+          [options]="loans"
+          placeholder="Select a loan"
+          optionLabel="id"
+          (onChange)="onLoanChange()"
+        ></p-dropdown>
       </div>
     </div>
 
     <div *ngIf="selectedLoan">
-      <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
+      <p-timeline
+        [value]="events"
+        align="alternate"
+        styleClass="customized-timeline"
+        layout="horizontal"
+      >
         <ng-template pTemplate="marker" let-event>
-          <span class="custom-marker p-shadow-2" [style.backgroundColor]="event.color">
+          <span
+            class="custom-marker p-shadow-2"
+            [style.backgroundColor]="event.color"
+          >
             <i [class]="event.icon"></i>
           </span>
         </ng-template>

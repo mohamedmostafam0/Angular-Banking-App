@@ -1,0 +1,187 @@
+<div class="request-credit-card-page">
+  <div class="header">
+    <h1>Request a Credit Card</h1>
+    <p>Complete the following steps to apply for a new credit card.</p>
+  </div>
+
+  <p-steps
+    [model]="steps"
+    [(activeIndex)]="activeIndex"
+    [readonly]="true"
+    styleClass="p-mb-4"
+  ></p-steps>
+
+  <p-card styleClass="form-card">
+    <p-splitter [panelSizes]="[30, 70]" styleClass="p-mt-4">
+      <ng-template pTemplate>
+        <div class="instructions">
+          <h3>{{ steps[activeIndex].label }}</h3>
+          <p>{{ steps[activeIndex].data.instructions }}</p>
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="form-container">
+          <div [ngSwitch]="activeIndex">
+            <!-- Step 1: Card Type -->
+            <div *ngSwitchCase="0">
+              <h4>Select Card Type</h4>
+              <p-carousel [value]="cardTypes" [numVisible]="3" [numScroll]="1">
+                <ng-template let-card pTemplate="item">
+                  <div
+                    class="card-type-item"
+                    [class.selected]="card === selectedCardType"
+                    (click)="selectedCardType = card"
+                  >
+                    <img
+                      [src]="card.image"
+                      [alt]="card.name"
+                      class="card-image"
+                    />
+                    <h5>{{ card.name }}</h5>
+                  </div>
+                </ng-template>
+              </p-carousel>
+              <div class="field mb-3">
+                <p-checkbox
+                  name="terms"
+                  value="accepted"
+                  [(ngModel)]="termsAccepted"
+                ></p-checkbox>
+                <label for="terms">I accept the terms and conditions</label>
+              </div>
+            </div>
+
+            <!-- Step 2: Employment & Income -->
+            <div *ngSwitchCase="1">
+              <div class="p-fluid p-formgrid p-grid">
+                <div class="field mb-3">
+                  <label for="employmentStatus">Employment Status</label>
+                  <p-dropdown
+                    id="employmentStatus"
+                    [options]="employmentStasuses"
+                    placeholder="Select a status"
+                  ></p-dropdown>
+                </div>
+                <div class="field mb-3">
+                  <label for="employerName">Employer Name</label>
+                  <input id="employerName" type="text" pInputText />
+                </div>
+                <div class="field mb-3">
+                  <label for="occupation">Occupation / Job Title</label>
+                  <input id="occupation" type="text" pInputText />
+                </div>
+                <div class="field mb-3">
+                  <label for="income">Monthly Income</label>
+                  <input id="income" type="text" pInputText />
+                </div>
+                <div class="field mb-3">
+                  <label for="otherIncome">Other Income Sources</label>
+                  <input id="otherIncome" type="text" pInputText />
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Card Info (Name on Card and Link to Account) -->
+            <div *ngSwitchCase="2" [formGroup]="requestForm">
+              <h4>Card Information</h4>
+              <div class="p-field">
+                <label for="cardName">Name to be printed on the card</label>
+                <input
+                  id="cardName"
+                  type="text"
+                  pInputText
+                  formControlName="cardholderName"
+                />
+              </div>
+              <div class="p-field">
+                <label for="account">Link to Account</label>
+                <p-dropdown
+                  id="account"
+                  [options]="accounts"
+                  formControlName="selectedAccount"
+                  placeholder="Select an account"
+                  optionLabel="number"
+                  [showClear]="true"
+                  (onChange)="selectedAccount = $event.value"
+                ></p-dropdown>
+              </div>
+            </div>
+
+            <!-- Step 4: Book Your Visit -->
+            <div *ngSwitchCase="3">
+              <h4>Book Your Visit</h4>
+              <div class="p-field">
+                <label for="branch"
+                  >Where would you like to sign your papers?</label
+                >
+                <p-dropdown
+                  id="branch"
+                  [options]="branches"
+                  placeholder="Select a branch"
+                ></p-dropdown>
+              </div>
+              <div class="p-d-flex p-jc-between p-mt-4">
+                <p-button
+                  label="Deliver to my location"
+                  (onClick)="goToDeliveryStep()"
+                ></p-button>
+              </div>
+            </div>
+
+            <!-- Step 5: Confirmation -->
+            <div *ngSwitchCase="4">
+              <h4>Confirmation & Summary</h4>
+              <p>Please review your application details before submitting.</p>
+              <div class="summary-details">
+                <h5>Selected Card Type: {{ selectedCardType?.name }}</h5>
+                <h5>
+                  Cardholder Name:
+                  {{ requestForm.get("cardholderName")?.value }}
+                </h5>
+                <h5>Linked Account: {{ selectedAccount?.number }}</h5>
+                <!-- Add more summary details as needed -->
+              </div>
+              <div class="p-d-flex p-jc-end p-mt-4">
+                <p-button
+                  label="Submit"
+                  (onClick)="submitApplication()"
+                ></p-button>
+              </div>
+            </div>
+
+            <!-- Step 6: Delivery Address (This step is now dynamic) -->
+            <div *ngSwitchCase="5">
+              <h4>Delivery Address</h4>
+              <div class="p-field">
+                <label for="address">Enter your address</label>
+                <input id="address" type="text" pInputText />
+              </div>
+            </div>
+          </div>
+
+          <div class="p-d-flex p-jc-between p-mt-4">
+            <p-button
+              label="Back"
+              (onClick)="prevStep()"
+              *ngIf="activeIndex !== 0"
+              [style]="{
+                'background-color': '#273239',
+                'border-color': '#273239'
+              }"
+            ></p-button>
+            <p-button
+              label="Next"
+              (onClick)="nextStep()"
+              [disabled]="
+                activeIndex === steps.length - 1 ||
+                (activeIndex === 0 && (!termsAccepted || !selectedCardType)) ||
+                (activeIndex === 2 && !requestForm.valid)
+              "
+            ></p-button>
+          </div>
+        </div>
+      </ng-template>
+    </p-splitter>
+    <p-toast></p-toast>
+  </p-card>
+</div>

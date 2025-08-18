@@ -102,3 +102,24 @@
 .p-message {
   margin-bottom: 1.5rem;
 }
+
+
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+
+::ng-deep .p-steps-item-active .p-steps-item-label{
+  color: var(--p-steps-item-label-color) !important;
+}
+
+
+::ng-deep .p-steps-item-active .p-steps-item-number {
+  background-color: var(--primary-color) !important;
+  color: var(--white) !important;
+}

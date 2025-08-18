@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+
 import { Transaction, TransactionType } from '../interfaces/Transaction.interface';
 import { ScheduledReport } from '../interfaces/ScheduledReport.interface';
 import { ExchangeRatesResponse } from '../interfaces/ExchangeRates.interface';
 import { Account } from '../interfaces/Account.interface';
+import { Loan } from '../interfaces/Loan.interface';
+import { DebitCard } from '../interfaces/DebitCard.interface';
+import { CreditCard } from '../interfaces/CreditCard.interface';
+
 import { MessageService } from 'primeng/api';
 import { environment } from '../../environments/environment';
-import { Loan } from '../interfaces/Loan.interface';
 
 interface CachedRates {
   timestamp: number;
@@ -23,16 +27,22 @@ export class BankingDataService {
   private readonly TRANSACTIONS_KEY = 'banking_transactions';
   private readonly REPORTS_KEY = 'banking_scheduled_reports';
   private readonly LOANS_KEY = 'banking_loans';
+  private readonly DEBIT_CARDS_KEY = 'banking_debit_cards';
+  private readonly CREDIT_CARDS_KEY = 'banking_credit_cards';
 
   private accountsSubject = new BehaviorSubject<Account[]>([]);
   private transactionsSubject = new BehaviorSubject<Transaction[]>([]);
   private scheduledReportsSubject = new BehaviorSubject<ScheduledReport[]>([]);
   private loansSubject = new BehaviorSubject<Loan[]>([]);
+  private debitCardsSubject = new BehaviorSubject<DebitCard[]>([]);
+  private creditCardsSubject = new BehaviorSubject<CreditCard[]>([]);
 
   accounts$ = this.accountsSubject.asObservable();
   transactions$ = this.transactionsSubject.asObservable();
   scheduledReports$ = this.scheduledReportsSubject.asObservable();
   loans$ = this.loansSubject.asObservable();
+  debitCards$ = this.debitCardsSubject.asObservable();
+  creditCards$ = this.creditCardsSubject.asObservable();
 
   private apiKey = environment.openExchangeRatesApiKey;
   private baseUrl = environment.openExchangeRatesApiUrl;
@@ -57,6 +67,8 @@ export class BankingDataService {
     this.loadTransactions();
     this.loadScheduledReports();
     this.loadLoans();
+    this.loadDebitCards();
+    this.loadCreditCards();
   }
 
   private loadLoans() {
@@ -89,6 +101,70 @@ export class BankingDataService {
 
   getLoans() {
     return this.loansSubject.getValue();
+  }
+
+  private loadDebitCards() {
+    try {
+      const savedDebitCards = localStorage.getItem(this.DEBIT_CARDS_KEY);
+      if (savedDebitCards) {
+        this.debitCardsSubject.next(JSON.parse(savedDebitCards));
+      } else {
+        this.debitCardsSubject.next([]);
+      }
+    } catch (e) {
+      console.error('Error loading debit cards from localStorage:', e);
+    }
+  }
+
+  private saveDebitCards() {
+    try {
+      localStorage.setItem(this.DEBIT_CARDS_KEY, JSON.stringify(this.debitCardsSubject.getValue()));
+    } catch (e) {
+      console.error('Error saving debit cards to localStorage:', e);
+    }
+  }
+
+  getDebitCards() {
+    return this.debitCardsSubject.getValue();
+  }
+
+  addDebitCard(card: DebitCard) {
+    const cards = this.getDebitCards();
+    cards.push(card);
+    this.debitCardsSubject.next(cards);
+    this.saveDebitCards();
+  }
+
+  private loadCreditCards() {
+    try {
+      const savedCreditCards = localStorage.getItem(this.CREDIT_CARDS_KEY);
+      if (savedCreditCards) {
+        this.creditCardsSubject.next(JSON.parse(savedCreditCards));
+      } else {
+        this.creditCardsSubject.next([]);
+      }
+    } catch (e) {
+      console.error('Error loading credit cards from localStorage:', e);
+    }
+  }
+
+  private saveCreditCards() {
+    try {
+      localStorage.setItem(this.CREDIT_CARDS_KEY, JSON.stringify(this.creditCardsSubject.getValue()));
+    } catch (e) {
+      console.error('Error saving credit cards to localStorage:', e);
+    }
+  }
+
+  getCreditCards() {
+    return this.creditCardsSubject.getValue();
+  }
+
+  addCreditCard(card: CreditCard) {
+    const cards = this.getCreditCards();
+    cards.push(card);
+    this.creditCardsSubject.next(cards);
+    this.saveCreditCards();
   }
 
   private loadAccounts() {
@@ -663,4 +739,8 @@ export class BankingDataService {
     }
   }
 
+  getUser() {
+    // This is a mock user. In a real app, you would get this from your auth service.
+    return { name: 'mohamed mostafa' };
+  }
 }

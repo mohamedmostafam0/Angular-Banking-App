@@ -10,8 +10,9 @@
 
 
 
-::ng-deep .p-splitterpanel-nested{
+#RequestCreditCardPage ::ng-deep .p-splitterpanel-nested{
   justify-content: start !important;
+  display: block !important;
 }
 
 .field {
@@ -39,7 +40,6 @@
     ::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown {
       background-color: var(--white) !important;
       width: 100% !important;
-
     }
 
     ::ng-deep .p-datatable .p-datatable-tbody > tr {
@@ -137,3 +137,5 @@
   background-color: var(--primary-color) !important;
   color: var(--white) !important;
 }
+
+

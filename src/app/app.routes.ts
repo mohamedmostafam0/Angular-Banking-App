@@ -22,6 +22,7 @@ import { LoanApplicationComponent } from './pages/loan-application/loan-applicat
 import { LoanTrackingComponent } from './pages/loan-tracking/loan-tracking.component';
 import { CreditCardsComponent } from './pages/credit-cards/credit-cards.component';
 import { DebitCardsComponent } from './pages/debit-cards/debit-cards.component';
+import { RequestCreditCardComponent } from './pages/request-credit-card/request-credit-card.component';
 
 
 export const routes: Routes = [
@@ -58,7 +59,8 @@ export const routes: Routes = [
       { path: 'loan-tracking', component: LoanTrackingComponent, title: 'Loan Tracking' },
       { path: 'card-management', children: [
         { path: 'credit-cards', component: CreditCardsComponent, title: 'Credit Cards' },
-        { path: 'debit-cards', component: DebitCardsComponent, title: 'Debit Cards' }
+        { path: 'debit-cards', component: DebitCardsComponent, title: 'Debit Cards' },
+        { path: 'request-credit-card', component: RequestCreditCardComponent, title: 'Request Credit Card' }
       ]},
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
     ]

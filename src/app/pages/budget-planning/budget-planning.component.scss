@@ -1,5 +1,4 @@
 :host {
-
     display: block;
     padding: 1.5rem;
     background-color: #fff;
@@ -163,4 +162,8 @@
   border-color: #fff !important;
   background-color: var(--surface-card) !important;
   color: var(--text-color) !important;
+}
+
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
 }

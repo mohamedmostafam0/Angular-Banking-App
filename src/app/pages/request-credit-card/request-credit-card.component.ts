@@ -1,0 +1,196 @@
+
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { StepsModule } from 'primeng/steps';
+import { CardModule } from 'primeng/card';
+import { SplitterModule } from 'primeng/splitter';
+import { CarouselModule } from 'primeng/carousel';
+import { CheckboxModule } from 'primeng/checkbox';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { MessagesModule } from 'primeng/messages';
+import { MessageService } from 'primeng/api';
+import { BankingDataService } from '../../services/banking-data.service';
+import { ToastModule } from 'primeng/toast';
+import { CreditCard } from '../../interfaces/CreditCard.interface';
+import { Account } from '../../interfaces/Account.interface';
+
+@Component({
+  selector: 'app-request-credit-card',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    StepsModule,
+    CardModule,
+    SplitterModule,
+    CarouselModule,
+    CheckboxModule,
+    DropdownModule,
+    InputTextModule,
+    ButtonModule,
+    ToastModule
+  ],
+  templateUrl: './request-credit-card.component.html',
+  styleUrls: ['./request-credit-card.component.scss'],
+  providers: [MessageService]
+})
+export class RequestCreditCardComponent implements OnInit {
+  steps: any[];
+  activeIndex: number = 0;
+  cardTypes: any[];
+  employmentStasuses: any[];
+  branches: any[];
+  termsAccepted: boolean = false;
+  selectedCardType: any;
+  accounts: Account[] = [];
+  selectedAccount: Account | undefined;
+  requestForm: FormGroup;
+
+  constructor(
+    private messageService: MessageService,
+    private bankingData: BankingDataService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {
+    this.steps = [
+      {
+        label: 'Card Type',
+        data: { instructions: 'Choose the type of credit card that best suits your needs.' }
+      },
+      {
+        label: 'Employment & Income',
+        data: { instructions: 'Provide your employment and income details to help us process your application.' }
+      },
+      {
+        label: 'Card Info',
+        data: { instructions: 'Enter the name as you would like it to appear on your card and link an account.' }
+      },
+      {
+        label: 'Book Your Visit',
+        data: { instructions: 'Choose a branch to sign your papers or have them delivered to your location.' }
+      },
+      {
+        label: 'Confirmation',
+        data: { instructions: 'Review your application details before submitting.' }
+      }
+    ];
+
+    this.cardTypes = [
+      { name: 'Classic', image: 'assets/ClassicCard.webp' },
+      { name: 'Platinum', image: 'assets/PlatinumCard.webp' },
+      { name: 'Signature', image: 'assets/SignatureCard.webp' },
+      { name: 'Gold', image: 'assets/GoldCard.webp' },
+    ];
+
+    this.employmentStasuses = [
+      { label: 'Employed', value: 'employed' },
+      { label: 'Self-Employed', value: 'self-employed' },
+      { label: 'Student', value: 'student' },
+      { label: 'Unemployed', value: 'unemployed' },
+      { label: 'Retired', value: 'retired' }
+    ];
+
+    this.branches = [
+      { label: 'Main Branch', value: 'main' },
+      { label: 'Downtown Branch', value: 'downtown' },
+      { label: 'Uptown Branch', value: 'uptown' },
+      { label: 'East Branch', value: 'east' },
+      { label: 'West Branch', value: 'west' }
+    ];
+
+    this.requestForm = this.fb.group({
+      cardholderName: ['', Validators.required],
+      selectedAccount: [null, Validators.required]
+    });
+  }
+
+  ngOnInit(): void {
+    this.accounts = this.bankingData.getAccounts();
+  }
+
+  nextStep() {
+    if (this.activeIndex === 0) {
+      if (!this.selectedCardType) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please select a card type.' });
+        return;
+      }
+      if (!this.termsAccepted) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please accept the terms and conditions.' });
+        return;
+      }
+    } else if (this.activeIndex === 2) { // Card Info step
+      if (!this.requestForm.valid) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please enter cardholder name and select an account.' });
+        return;
+      }
+    }
+
+    if (this.activeIndex < this.steps.length - 1) {
+      this.activeIndex++;
+    }
+  }
+
+  prevStep() {
+    if (this.activeIndex > 0) {
+      this.activeIndex--;
+    }
+  }
+
+  goToDeliveryStep() {
+    this.activeIndex = 5;
+  }
+
+  submitApplication() {
+    if (!this.selectedAccount) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please select an account to link the card to.' });
+      return;
+    }
+
+    const newCard: CreditCard = {
+      id: Math.random().toString(36).substring(2, 9),
+      cardNumber: this.generateCardNumber(),
+      cardholderName: this.requestForm.value.cardholderName,
+      expirationDate: this.generateExpiryDate(),
+      cvv: this.generateCVV(),
+      status: 'Pending',
+      linkedAccountNumber: this.selectedAccount.number,
+      cardType: this.selectedCardType.name
+    };
+
+    this.bankingData.addCreditCard(newCard);
+
+    this.messageService.add({ 
+      severity: 'success', 
+      summary: 'Success', 
+      detail: 'Credit card requested successfully' 
+    });
+
+    setTimeout(() => {
+      this.router.navigate(['/card-management/credit-cards']);
+    }, 2000);
+  }
+
+  generateCardNumber(): string {
+    return Array.from({ length: 4 }, () =>
+      Math.floor(1000 + Math.random() * 9000).toString()
+    ).join(' ');
+  }
+
+  generateExpiryDate(): string {
+    const today = new Date();
+    const expiryYear = today.getFullYear() + 5;
+    const expiryMonth = today.getMonth() + 1;
+    return `${expiryMonth.toString().padStart(2, '0')}/${expiryYear
+      .toString()
+      .slice(-2)}`;
+  }
+
+  generateCVV(): string {
+    return Math.floor(100 + Math.random() * 900).toString();
+  }
+} 

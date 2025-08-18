@@ -1,12 +1,146 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { BankingDataService } from '../../services/banking-data.service';
+import { CreditCard } from '../../interfaces/CreditCard.interface';
+import { Account } from '../../interfaces/Account.interface';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ToolbarModule } from 'primeng/toolbar';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { TooltipModule } from 'primeng/tooltip';
+import { CreditCardNumberPipe } from '../../pipes/credit-card-number.pipe';
+import { UppercaseTextPipe } from '../../pipes/uppercase-text.pipe';
 
 @Component({
   selector: 'app-credit-cards',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+    ButtonModule,
+    CardModule,
+    TagModule,
+    ToastModule,
+    ConfirmPopupModule,
+    ToolbarModule,
+    DialogModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    DropdownModule,
+    CreditCardNumberPipe,
+    UppercaseTextPipe,
+    TooltipModule,
+  ],
   templateUrl: './credit-cards.component.html',
-  styleUrl: './credit-cards.component.scss'
+  styleUrls: ['./credit-cards.component.scss'],
+  providers: [ConfirmationService, MessageService],
 })
-export class CreditCardsComponent {
+export class CreditCardsComponent implements OnInit {
+  creditCards: CreditCard[] = [];
+  accounts: Account[] = [];
+  showRequestDialog = false;
+  requestForm: FormGroup;
 
+  constructor(
+    private bankingDataService: BankingDataService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private fb: FormBuilder,
+    private router: Router
+  ) {
+    this.requestForm = this.fb.group({
+      cardholderName: ['', Validators.required],
+      nationalID: ['', Validators.required],
+      address: ['', Validators.required],
+      tiedAccount: [null, Validators.required],
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadCreditCards();
+    this.loadAccounts();
+  }
+
+  loadCreditCards(): void {
+    this.creditCards = this.bankingDataService.getCreditCards();
+  }
+
+  loadAccounts(): void {
+    this.accounts = this.bankingDataService.getAccounts();
+  }
+
+  getStatusSeverity(status: string): 'success' | 'warn' | 'danger' {
+    switch (status) {
+      case 'Active':
+        return 'success';
+      case 'Pending':
+        return 'warn';
+      case 'Blocked':
+        return 'danger';
+      default:
+        return 'warn';
+    }
+  }
+
+  getAccountDetails(accountNumber: string): Account | undefined {
+    return this.accounts.find((acc) => acc.number === accountNumber);
+  }
+
+  formatCurrency(balance: number, currency: string): string {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency,
+    }).format(balance);
+  }
+
+  onAccountSelect(account: Account): void {
+    if (account) {
+      this.requestForm.patchValue({
+        cardholderName: this.bankingDataService.getUser().name,
+      });
+    }
+  }
+
+  
+
+  
+
+  generateCardNumber(): string {
+    return Array.from({ length: 4 }, () =>
+      Math.floor(1000 + Math.random() * 9000).toString()
+    ).join(' ');
+  }
+
+  generateExpiryDate(): string {
+    const today = new Date();
+    const expiryYear = today.getFullYear() + 5;
+    const expiryMonth = today.getMonth() + 1;
+    return `${expiryMonth.toString().padStart(2, '0')}/${expiryYear
+      .toString()
+      .slice(-2)}`;
+  }
+
+  generateCVV(): string {
+    return Math.floor(100 + Math.random() * 900).toString();
+  }
+
+  redirectToRequestNewCard(): void {
+    this.router.navigate(['/card-management/request-credit-card']);
+  }
+
+  viewTransactions(accountNumber: string): void {
+    this.router.navigate(['/transactions'], { queryParams: { account: accountNumber } });
+  }
 }

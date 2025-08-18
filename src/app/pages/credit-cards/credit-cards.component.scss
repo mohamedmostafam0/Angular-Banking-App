@@ -1,0 +1,160 @@
+/* Main Container */
+:host {
+  display: block;
+  padding: 1.5rem;
+  background-color: #fff;
+}
+
+/* Credit Cards Grid */
+.credit-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Exactly 2 cards per row */
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+
+  /* Responsive breakpoints */
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr; /* Single column on smaller screens */
+    gap: 1rem;
+  }
+}
+
+/* Credit Card */
+::ng-deep .credit-card {
+  border-radius: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  ::ng-deep &:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
+
+  .p-card-body {
+    padding: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+
+    .card-type {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      color: #6c757d;
+
+      i {
+        font-size: 1.25rem;
+        color: #2c3e50;
+      }
+    }
+  }
+
+  .card-number {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .card-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .card-holder, .valid-until {
+    .label {
+      font-size: 0.8rem;
+      color: #6c757d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+    }
+
+    .value {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #495057;
+    }
+  }
+
+  .linked-account {
+    margin-top: auto;
+    border-top: 1px solid #e9ecef;
+    padding-top: 1rem;
+
+    .label {
+      font-size: 0.8rem;
+      color: #6c757d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+    }
+
+    .value {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #495057;
+    }
+  }
+}
+
+/* Status Tags */
+::ng-deep .p-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 50px;
+
+  &.p-tag-success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  &.p-tag-warning {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  &.p-tag-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+}
+
+
+::ng-deep .p-toolbar{
+  border: transparent !important;
+  justify-content: end !important;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .header p {
+    font-size: 1rem;
+  }
+}
+
+
+::ng-deep .p-card-footer{
+  justify-content: end !important;
+  display: flex !important; 
+  
+}

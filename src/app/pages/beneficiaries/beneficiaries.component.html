@@ -4,22 +4,18 @@
     <p>Please fill in the details below.</p>
   </div>
 
-  <p-steps
-    [model]="steps"
-    [(activeIndex)]="activeIndex"
-    [readonly]="false"
-  ></p-steps>
+  <p-steps [model]="steps" [readonly]="false"></p-steps>
 
   <p-card>
     <form [formGroup]="beneficiaryForm" (ngSubmit)="saveBeneficiary()">
       <p-splitter [panelSizes]="[35, 65]">
         <ng-template pTemplate="form">
           <div class="flex align-items-center h-full">
-          <div class="instructions">
-            <h2>{{ instructions[activeIndex].title }}</h2>
-            <h4>{{ instructions[activeIndex].description }}</h4>
+            <div class="instructions">
+              <h2>{{ instructions[activeIndex].title }}</h2>
+              <h4>{{ instructions[activeIndex].description }}</h4>
+            </div>
           </div>
-        </div>
         </ng-template>
         <ng-template pTemplate>
           <div *ngIf="activeIndex === 0">

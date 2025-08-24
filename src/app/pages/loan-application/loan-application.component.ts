@@ -73,10 +73,7 @@ export class LoanApplicationComponent implements OnInit {
   ) {
     this.instructions = [
       { label: 'Loan Details', title: 'Loan Details', description: 'Please provide the details of the loan you are applying for.' },
-      { label: 'Personal Information', title: 'Personal Information', description: 'Please provide your personal details.' },
-      { label: 'Branch Information', title: 'Branch Information', description: 'Please provide your branch information.' },
       { label: 'Document Upload', title: 'Document Upload', description: "In this step we'll use your camera to scan your National ID, and on a later step we'll use your front camera to capture selfie photo, please prepare your national ID and follow the below instructions." },
-      { label: 'Employment Information', title: 'Employment Information', description: 'Please provide your employment details.' },
       { label: 'Eligibility', title: 'Eligibility', description: 'Congratulations! Your request has been initially approved for Platinum Card' },
       { label: 'Paperwork Details', title: 'Paperwork Details', description: 'Choose how to submit your paperwork.' },
       { label: 'Confirmation', title: 'Confirmation', description: 'Please review your application details before submitting.' }
@@ -105,46 +102,7 @@ export class LoanApplicationComponent implements OnInit {
 
     this.currencies = this.bankingDataService.getSupportedCurrencies().map(c => ({ label: c, value: c }));
 
-    this.egyptianCities = [
-      { label: 'Cairo', value: 'cairo' },
-      { label: 'Alexandria', value: 'alexandria' },
-      { label: 'Giza', value: 'giza' },
-      { label: 'Shubra El-Kheima', value: 'shubra' },
-      { label: 'Port Said', value: 'port_said' },
-      { label: 'Suez', value: 'suez' },
-      { label: 'Luxor', value: 'luxor' },
-      { label: 'al-Mansura', value: 'mansura' },
-      { label: 'Tanta', value: 'tanta' },
-      { label: 'Asyut', value: 'asyut' },
-      { label: 'Ismailia', value: 'ismailia' },
-      { label: 'Faiyum', value: 'faiyum' },
-      { label: 'Zagazig', value: 'zagazig' },
-      { label: 'Aswan', value: 'aswan' },
-      { label: 'Damietta', value: 'damietta' },
-      { label: 'Damanhur', value: 'damanhur' },
-      { label: 'al-Minya', value: 'minya' },
-      { label: 'Beni Suef', value: 'beni_suef' },
-      { label: 'Qena', value: 'qena' },
-      { label: 'Sohag', value: 'sohag' },
-      { label: 'Hurghada', value: 'hurghada' },
-      { label: '6th of October City', value: '6th_october' },
-      { label: 'Shibin El Kom', value: 'shibin_el_kom' },
-      { label: 'Banha', value: 'banha' },
-      { label: 'Kafr el-Sheikh', value: 'kafr_el_sheikh' },
-      { label: 'Arish', value: 'arish' },
-      { label: 'Mallawi', value: 'mallawi' },
-      { label: '10th of Ramadan City', value: '10th_ramadan' },
-      { label: 'Bilbais', value: 'bilbais' },
-      { label: 'Marsa Matruh', value: 'marsa_matruh' },
-      { label: 'Idfu', value: 'idfu' },
-      { label: 'Mit Ghamr', value: 'mit_ghamr' },
-      { label: 'Al-Hamidiyya', value: 'al_hamidiyya' },
-      { label: 'Qalyub', value: 'qalyub' },
-      { label: 'Abu Kabir', value: 'abu_kabir' },
-      { label: 'Girga', value: 'girga' },
-      { label: 'Akhmim', value: 'akhmim' },
-      { label: 'Matareya', value: 'matareya' }
-  ];
+    this.egyptianCities = [];
 
   this.branches = [
     { label: 'Main Branch', value: 'main' },
@@ -154,26 +112,11 @@ export class LoanApplicationComponent implements OnInit {
     { label: 'Maadi Branch', value: 'maadi' }
 ];
 
-this.employmentStatusOptions = [
-  { label: 'Employed', value: 'employed' },
-  { label: 'Self-employed', value: 'self-employed' },
-  { label: 'Unemployed', value: 'unemployed' },
-  { label: 'Student', value: 'student' }
-];
+this.employmentStatusOptions = [];
 
-this.professionCategoryOptions = [
-  { label: 'Healthcare', value: 'healthcare' },
-  { label: 'IT', value: 'it' },
-  { label: 'Finance', value: 'finance' },
-  { label: 'Education', value: 'education' },
-  { label: 'Other', value: 'other' }
-];
+this.professionCategoryOptions = [];
 
-this.salaryTransferTypeOptions = [
-  { label: 'Bank Transfer', value: 'bank_transfer' },
-  { label: 'Check', value: 'check' },
-  { label: 'Cash', value: 'cash' }
-];
+this.salaryTransferTypeOptions = [];
   }
   ngOnInit() {
     this.loanApplicationForm = this.fb.group({
@@ -182,21 +125,8 @@ this.salaryTransferTypeOptions = [
       amount: [null, [Validators.required, Validators.min(1)]],
       currency: [null, Validators.required],
       tenor: [null, Validators.required],
-      mobileNumber: ['', Validators.required],
-      nationalId: ['', Validators.required],
-      city: [null, Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      branch: [null, Validators.required],
       documents: [null, Validators.required],
       agreeToTerms: [false, Validators.requiredTrue],
-      employmentStatus: [null, Validators.required],
-      companyName: ['', Validators.required],
-      companyAddress: ['', Validators.required],
-      professionCategory: [null, Validators.required],
-      hiringDate: [null, Validators.required],
-      salaryTransferType: [null, Validators.required],
-      monthlyIncome: [null, [Validators.required, Validators.min(0)]],
-      monthlyIncomeCurrency: [null, Validators.required],
       visitAddress: [''],
       visitDate: [null],
       paperworkBranch: [null]
@@ -236,23 +166,17 @@ this.salaryTransferTypeOptions = [
       case 0:
         return this.loanApplicationForm.get('loanType')!.valid && this.loanApplicationForm.get('program')!.valid && this.loanApplicationForm.get('amount')!.valid && this.loanApplicationForm.get('currency')!.valid && this.loanApplicationForm.get('tenor')!.valid;
       case 1:
-        return this.loanApplicationForm.get('mobileNumber')!.valid && this.loanApplicationForm.get('nationalId')!.valid && this.loanApplicationForm.get('city')!.valid;
-      case 2:
-        return this.loanApplicationForm.get('email')!.valid && this.loanApplicationForm.get('branch')!.valid;
-      case 3:
         return this.loanApplicationForm.get('documents')!.valid;
-      case 4:
-        return this.loanApplicationForm.get('employmentStatus')!.valid && this.loanApplicationForm.get('companyName')!.valid && this.loanApplicationForm.get('companyAddress')!.valid && this.loanApplicationForm.get('professionCategory')!.valid && this.loanApplicationForm.get('hiringDate')!.valid && this.loanApplicationForm.get('salaryTransferType')!.valid && this.loanApplicationForm.get('monthlyIncome')!.valid;
-      case 5:
+      case 2:
         return true;
-      case 6:
+      case 3:
         if (this.paperworkChoice === 'branch') {
           return this.loanApplicationForm.get('paperworkBranch')!.valid;
         } else if (this.paperworkChoice === 'home') {
           return this.loanApplicationForm.get('visitAddress')!.valid && this.loanApplicationForm.get('visitDate')!.valid;
         }
         return false;
-      case 7:
+      case 4:
         return this.loanApplicationForm.get('agreeToTerms')!.valid;
       default:
         return true;

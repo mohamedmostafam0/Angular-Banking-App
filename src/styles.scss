@@ -430,3 +430,8 @@ body .p-radiobutton .p-radiobutton-box.p-highlight .p-radiobutton-icon {
   }
 }
 
+
+.p-radiobutton-checked .p-radiobutton-box{
+  border-color: var(--primary-color) !important;
+  background-color: var(--primary-color) !important;
+}

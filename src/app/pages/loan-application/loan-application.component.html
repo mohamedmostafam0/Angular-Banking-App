@@ -149,154 +149,6 @@
               </div>
 
               <div *ngIf="activeIndex === 1">
-                <div class="p-fluid">
-                  <div class="field mb-3">
-                    <label for="mobileNumber" class="col-12 md:col-4"
-                      >Mobile Number</label
-                    >
-                    <div class="col-12 md:col-8">
-                      <input
-                        id="mobileNumber"
-                        type="text"
-                        pInputText
-                        formControlName="mobileNumber"
-                        placeholder="Enter your mobile number"
-                      />
-                      <small
-                        class="p-error"
-                        *ngIf="
-                          loanApplicationForm.get('mobileNumber')!.invalid &&
-                          loanApplicationForm.get('mobileNumber')!.touched
-                        "
-                        >Mobile number is required.</small
-                      >
-                    </div>
-                  </div>
-                  <div class="field mb-3">
-                    <label for="nationalId" class="col-12 md:col-4"
-                      >National ID</label
-                    >
-                    <div class="col-12 md:col-8">
-                      <input
-                        id="nationalId"
-                        type="text"
-                        pInputText
-                        formControlName="nationalId"
-                        placeholder="Enter your national ID"
-                      />
-                      <small
-                        class="p-error"
-                        *ngIf="
-                          loanApplicationForm.get('nationalId')!.invalid &&
-                          loanApplicationForm.get('nationalId')!.touched
-                        "
-                        >National ID is required.</small
-                      >
-                    </div>
-                  </div>
-                  <div class="field mb-3">
-                    <label for="city" class="col-12 md:col-4">City</label>
-                    <div class="col-12 md:col-8">
-                      <p-dropdown
-                        id="city"
-                        [options]="egyptianCities"
-                        formControlName="city"
-                        placeholder="Select a city"
-                        appendTo="body"
-                      ></p-dropdown>
-                      <small
-                        class="p-error"
-                        *ngIf="
-                          loanApplicationForm.get('city')!.invalid &&
-                          loanApplicationForm.get('city')!.touched
-                        "
-                        >City is required.</small
-                      >
-                    </div>
-                  </div>
-                </div>
-                <div class="buttons-div">
-                  <p-button
-                    label="Back"
-                    (onClick)="prevStep()"
-                    [style]="{
-                      'background-color': '#273239',
-                      'border-color': '#273239'
-                    }"
-                  ></p-button>
-                  <p-button
-                    label="Next"
-                    (click)="nextStep()"
-                    [disabled]="!isStepValid()"
-                    class="nextBtn"
-                    styleClass="nextButton w-full"
-                  ></p-button>
-                </div>
-              </div>
-
-              <div *ngIf="activeIndex === 2">
-                <div class="p-fluid">
-                  <div class="field mb-3">
-                    <label for="email" class="col-12 md:col-4">Email</label>
-                    <div class="col-12 md:col-8">
-                      <input
-                        id="email"
-                        type="email"
-                        pInputText
-                        formControlName="email"
-                        placeholder="Enter your email"
-                      />
-                      <small
-                        class="p-error"
-                        *ngIf="
-                          loanApplicationForm.get('email')!.invalid &&
-                          loanApplicationForm.get('email')!.touched
-                        "
-                        >Enter a valid email.</small
-                      >
-                    </div>
-                  </div>
-                  <div class="field mb-3">
-                    <label for="branch" class="col-12 md:col-4">Branch</label>
-                    <div class="col-12 md:col-8">
-                      <p-dropdown
-                        id="branch"
-                        [options]="branches"
-                        formControlName="branch"
-                        placeholder="Select a branch"
-                        appendTo="body"
-                      ></p-dropdown>
-                      <small
-                        class="p-error"
-                        *ngIf="
-                          loanApplicationForm.get('branch')!.invalid &&
-                          loanApplicationForm.get('branch')!.touched
-                        "
-                        >Branch is required.</small
-                      >
-                    </div>
-                  </div>
-                </div>
-                <div class="buttons-div">
-                  <p-button
-                    label="Back"
-                    (onClick)="prevStep()"
-                    [style]="{
-                      'background-color': '#273239',
-                      'border-color': '#273239'
-                    }"
-                  ></p-button>
-                  <p-button
-                    label="Next"
-                    (click)="nextStep()"
-                    [disabled]="!isStepValid()"
-                    class="nextBtn"
-                    styleClass="nextButton w-full"
-                  ></p-button>
-                </div>
-              </div>
-
-              <div *ngIf="activeIndex === 3">
                 <p-fileUpload
                   name="documents[]"
                   (onUpload)="onUpload($event)"
@@ -334,111 +186,13 @@
                 </div>
               </div>
 
-              <div *ngIf="activeIndex === 4">
+              <div *ngIf="activeIndex === 2">
                 <div class="p-fluid">
                   <div class="field mb-3">
-                    <label for="employmentStatus">Employment Status</label>
-                    <p-dropdown
-                      id="employmentStatus"
-                      [options]="employmentStatusOptions"
-                      formControlName="employmentStatus"
-                      placeholder="Select Status"
-                    ></p-dropdown>
-                  </div>
-                  <div class="field mb-3">
-                    <label for="companyName">Company Name</label>
-                    <input
-                      id="companyName"
-                      type="text"
-                      pInputText
-                      formControlName="companyName"
-                      placeholder="Enter your company name"
-                    />
-                  </div>
-                  <div class="field mb-3">
-                    <label for="companyAddress">Company Address</label>
-                    <input
-                      id="companyAddress"
-                      type="text"
-                      pInputText
-                      formControlName="companyAddress"
-                      placeholder="Enter your company address"
-                    />
-                  </div>
-                  <div class="field mb-3">
-                    <label for="professionCategory">Profession Category</label>
-                    <p-dropdown
-                      id="professionCategory"
-                      [options]="professionCategoryOptions"
-                      formControlName="professionCategory"
-                      placeholder="Select Category"
-                    ></p-dropdown>
-                  </div>
-                  <div class="field mb-3">
-                    <label for="hiringDate">Hiring Date</label>
-                    <p-inputGroup>
-                      <p-inputGroupAddon
-                        ><i class="pi pi-calendar"></i
-                      ></p-inputGroupAddon>
-                      <p-calendar
-                        id="hiringDate"
-                        formControlName="hiringDate"
-                        appendTo="body"
-                        placeholder="Select your hiring date"
-                        class="w-full"
-                      ></p-calendar>
-                    </p-inputGroup>
-                  </div>
-                  <div class="field mb-3">
-                    <label for="salaryTransferType">Salary Transfer Type</label>
-                    <p-dropdown
-                      id="salaryTransferType"
-                      [options]="salaryTransferTypeOptions"
-                      formControlName="salaryTransferType"
-                      placeholder="Select Type"
-                    ></p-dropdown>
-                  </div>
-                  <div class="field mb-3">
-                    <label for="monthlyIncome">Monthly Income</label>
-                    <p-inputGroup>
-                      <p-dropdown
-                        id="monthlyIncomeCurrency"
-                        [options]="currencies"
-                        formControlName="monthlyIncomeCurrency"
-                        placeholder="Currency"
-                      ></p-dropdown>
-                      <p-inputNumber
-                        id="monthlyIncome"
-                        formControlName="monthlyIncome"
-                        placeholder="Enter your monthly income"
-                        appendTo="body"
-                      ></p-inputNumber>
-                    </p-inputGroup>
-                  </div>
-                </div>
-                <div class="buttons-div">
-                  <p-button
-                    label="Back"
-                    (onClick)="prevStep()"
-                    [style]="{
-                      'background-color': '#273239',
-                      'border-color': '#273239'
-                    }"
-                  ></p-button>
-                  <p-button
-                    label="Next"
-                    (click)="nextStep()"
-                    [disabled]="!isStepValid()"
-                    class="nextBtn"
-                    styleClass="nextButton w-full"
-                  ></p-button>
-                </div>
-              </div>
-
-              <div *ngIf="activeIndex === 5">
-                <div class="p-fluid">
-                  <div class="field mb-3">
-                    <p>Congratulations! Your request has been initially approved for Platinum Card</p>
+                    <p>
+                      Congratulations! Your request has been initially approved
+                      for Platinum Card
+                    </p>
                   </div>
                 </div>
                 <div class="buttons-div">
@@ -459,17 +213,27 @@
                 </div>
               </div>
 
-              <div *ngIf="activeIndex === 6">
-                <div class="p-grid">
+              <div *ngIf="activeIndex === 3">
+                <div class="p-grid paperwork-options" *ngIf="!paperworkChoice">
                   <div class="p-col-12 p-md-6">
-                    <div class="card-option" (click)="selectPaperworkOption('branch')">
+                    <div
+                      class="card-option"
+                      (click)="selectPaperworkOption('branch')"
+                      [class.selected]="paperworkChoice === 'branch'"
+                    >
+                      <img src="assets/BranchVisit.png" alt="Branch Visit" />
                       <div class="card-content">
                         <p>Branch Visit</p>
                       </div>
                     </div>
                   </div>
                   <div class="p-col-12 p-md-6">
-                    <div class="card-option" (click)="selectPaperworkOption('home')">
+                    <div
+                      class="card-option"
+                      (click)="selectPaperworkOption('home')"
+                      [class.selected]="paperworkChoice === 'home'"
+                    >
+                      <img src="assets/HomeVisit.png" alt="Home Visit" />
                       <div class="card-content">
                         <p>Home Visit</p>
                       </div>
@@ -520,25 +284,25 @@
                   </p-card>
                 </div>
                 <div class="buttons-div">
-                    <p-button
-                      label="Back"
-                      (onClick)="prevStep()"
-                      [style]="{
-                        'background-color': '#273239',
-                        'border-color': '#273239'
-                      }"
-                    ></p-button>
-                    <p-button
-                      label="Next"
-                      (click)="nextStep()"
-                      [disabled]="!isStepValid()"
-                      class="nextBtn"
-                      styleClass="nextButton w-full"
-                    ></p-button>
-                  </div>
+                  <p-button
+                    label="Back"
+                    (onClick)="prevStep()"
+                    [style]="{
+                      'background-color': '#273239',
+                      'border-color': '#273239'
+                    }"
+                  ></p-button>
+                  <p-button
+                    label="Next"
+                    (click)="nextStep()"
+                    [disabled]="!isStepValid()"
+                    class="nextBtn"
+                    styleClass="nextButton w-full"
+                  ></p-button>
+                </div>
               </div>
 
-              <div *ngIf="activeIndex === 7">
+              <div *ngIf="activeIndex === 4">
                 <h3>Review Your Application</h3>
                 <div class="p-fluid">
                   <div class="p-grid">
@@ -587,120 +351,6 @@
                           }}
                           months</span
                         >
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-grid">
-                    <div class="p-col-12 p-md-6">
-                      <div class="field mb-3">
-                        <label>Mobile Number:</label>
-                        <span>{{
-                          loanApplicationForm.get("mobileNumber")!.value
-                        }}</span>
-                      </div>
-                    </div>
-                    <div class="p-col-12 p-md-6">
-                      <div class="field mb-3">
-                        <label>National ID:</label>
-                        <span>{{
-                          loanApplicationForm.get("nationalId")!.value
-                        }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-grid">
-                    <div class="p-col-12 p-md-6">
-                      <div class="field mb-3">
-                        <label>City:</label>
-                        <span>{{
-                          loanApplicationForm.get("city")!.value
-                        }}</span>
-                      </div>
-                    </div>
-                    <div class="p-col-12 p-md-6">
-                      <div class="field mb-3">
-                        <label>Branch:</label>
-                        <span>{{
-                          loanApplicationForm.get("branch")!.value
-                        }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-grid">
-                    <div class="p-col-12">
-                      <div class="field mb-3">
-                        <label>Email:</label>
-                        <span>{{
-                          loanApplicationForm.get("email")!.value
-                        }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-grid">
-                    <div class="p-col-12 p-md-6">
-                      <div class="field mb-3">
-                        <label>Employment Status:</label>
-                        <span>{{
-                          loanApplicationForm.get("employmentStatus")!.value
-                        }}</span>
-                      </div>
-                    </div>
-                    <div class="p-col-12 p-md-6">
-                      <div class="field mb-3">
-                        <label>Profession Category:</label>
-                        <span>{{
-                          loanApplicationForm.get("professionCategory")!.value
-                        }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-grid">
-                    <div class="p-col-12">
-                      <div class="field mb-3">
-                        <label>Company Name:</label>
-                        <span>{{
-                          loanApplicationForm.get("companyName")!.value
-                        }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-grid">
-                    <div class="p-col-12">
-                      <div class="field mb-3">
-                        <label>Company Address:</label>
-                        <span>{{
-                          loanApplicationForm.get("companyAddress")!.value
-                        }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-grid">
-                    <div class="p-col-12 p-md-6">
-                      <div class="field mb-3">
-                        <label>Hiring Date:</label>
-                        <span>{{
-                          loanApplicationForm.get("hiringDate")!.value
-                            | date : "shortDate"
-                        }}</span>
-                      </div>
-                    </div>
-                    <div class="p-col-12 p-md-6">
-                      <div class="field mb-3">
-                        <label>Salary Transfer Type:</label>
-                        <span>{{
-                          loanApplicationForm.get("salaryTransferType")!.value
-                        }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-grid">
-                    <div class="p-col-12">
-                      <div class="field mb-3">
-                        <label>Monthly Income:</label>
-                        <span>{{
-                          loanApplicationForm.get("monthlyIncome")!.value
-                            | currency : "EGP"
-                        }}</span>
                       </div>
                     </div>
                   </div>

@@ -1,8 +1,8 @@
 :host {
-    display: block;
-    padding: 1.5rem;
-    background-color: #fff;
-  }
+  display: block;
+  padding: 1.5rem;
+  background-color: #fff;
+}
 
 .transfer-page {
 
@@ -51,32 +51,45 @@
   background-color: var(--primary-color) !important;
   color: var(--white) !important;
 }
-  .header {
-    margin-bottom: 2rem;
-    h1 {
-      font-size: 2rem;
-      font-weight: bold;
-    }
-    p {
-      color: var(--text-color-secondary);
-    }
-  }
 
-  .p-splitter {
+.p-splitter {
     border: none;
   }
 
   .instructions {
+    background-color: var(--surface-card);
     padding-right: 2rem;
-    h2 {
-      font-size: 1.5rem;
-      font-weight: bold;
+    border-color: var(--surface-card);
+    
+    h4 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--text-color-secondary);
+    }
+
+    p {
+      color: var(--text-color-secondary);
+      line-height: 1.6;
       margin-bottom: 1rem;
     }
-    h4 {
-      line-height: 1.5;
+
+    ul {
+      list-style-position: inside;
+      padding-left: 0;
+      color: var(--text-color-secondary);
+
+      li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+
+        strong {
+          color: var(--text-color-secondary);
+          font-weight: 600;
+        }
+      }
     }
   }
+
 
   .transfer-form {
     width: 100%;
@@ -95,6 +108,11 @@
     }
   }
 
+  .paperwork-options {
+    display: flex;
+    justify-content: space-around;
+  }
+
   .card-option {
     border: 1px solid #dee2e6;
     border-radius: 6px;
@@ -103,7 +121,18 @@
     text-align: center;
     transition: all 0.2s;
 
+    img {
+      width: 100%;
+      max-width: 150px;
+      margin-bottom: 1rem;
+    }
+
     &:hover {
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    &.selected {
       border-color: #007bff;
       box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
@@ -132,5 +161,27 @@
   background-color: transparent !important;
   border: none !important;
 }
+}
 
+
+::ng-deep .p-button:not(:disabled):hover{
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+}
+
+.transfer-page[_ngcontent-ng-c3415682849] .card-option[_ngcontent-ng-c3415682849]{
+  border: transparent !important;
+
+  &:hover {
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
+
+
+body .p-card{
+
+  background-color: transparent!important;
+  border: none !important;
 }

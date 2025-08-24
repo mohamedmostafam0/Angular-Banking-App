@@ -1,11 +1,11 @@
-<div class="request-credit-card-page">
+<div id="reqCredit" class="request-credit-card-page">
   <div class="header">
     <h1>Request a Credit Card</h1>
     <p>Complete the following steps to apply for a new credit card.</p>
   </div>
 
   <p-steps
-    [model]="steps"
+    [model]="instructions"
     [(activeIndex)]="activeIndex"
     [readonly]="true"
     styleClass="p-mb-4"
@@ -15,8 +15,8 @@
     <p-splitter [panelSizes]="[30, 70]" styleClass="p-mt-4">
       <ng-template pTemplate>
         <div class="instructions">
-          <h3>{{ steps[activeIndex].label }}</h3>
-          <p>{{ steps[activeIndex].data.instructions }}</p>
+          <h2>{{ instructions[activeIndex].title }}</h2>
+          <h4>{{ instructions[activeIndex].description }}</h4>
         </div>
       </ng-template>
       <ng-template pTemplate>
@@ -120,7 +120,7 @@
                   placeholder="Select a branch"
                 ></p-dropdown>
               </div>
-              <div class="p-d-flex p-jc-between p-mt-4">
+              <div class="flex pt-6 gap-x-3">
                 <p-button
                   label="Deliver to my location"
                   (onClick)="goToDeliveryStep()"
@@ -159,7 +159,7 @@
             </div>
           </div>
 
-          <div class="p-d-flex p-jc-between p-mt-4">
+          <div class="buttons-div">
             <p-button
               label="Back"
               (onClick)="prevStep()"
@@ -173,10 +173,12 @@
               label="Next"
               (onClick)="nextStep()"
               [disabled]="
-                activeIndex === steps.length - 1 ||
+                activeIndex === instructions.length - 1 ||
                 (activeIndex === 0 && (!termsAccepted || !selectedCardType)) ||
                 (activeIndex === 2 && !requestForm.valid)
               "
+              class="nextBtn"
+              styleClass="nextButton w-full"
             ></p-button>
           </div>
         </div>

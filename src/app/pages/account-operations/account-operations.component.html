@@ -171,15 +171,6 @@
     <ng-template pTemplate="footer">
       <button
         pButton
-        type="button"
-        label="Cancel"
-        icon="pi pi-times"
-        class="p-button-text"
-        (click)="closeDialog()"
-        [disabled]="processing"
-      ></button>
-      <button
-        pButton
         type="submit"
         [label]="
           (operationType === 'deposit' ? 'Deposit' : 'Withdraw') +

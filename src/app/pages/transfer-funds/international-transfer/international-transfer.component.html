@@ -295,21 +295,23 @@
                 </div>
               </div>
 
-              <div class="flex justify-content-between mt-3">
+              <div class="buttons-div">
                 <p-button
-                  label="Previous"
-                  icon="pi pi-arrow-left"
-                  (click)="prevStep()"
-                  [disabled]="activeIndex === 0"
-                  styleClass="p-button-secondary"
+                  label="Back"
+                  (onClick)="prevStep()"
+                  *ngIf="activeIndex !== 0"
+                  [style]="{
+                    'background-color': '#273239',
+                    'border-color': '#273239'
+                  }"
                 ></p-button>
                 <p-button
                   *ngIf="activeIndex < steps.length - 1"
                   label="Next"
-                  icon="pi pi-arrow-right"
-                  iconPos="right"
-                  (click)="nextStep()"
+                  (onClick)="nextStep()"
                   [disabled]="!isCurrentStepValid()"
+                  class="nextBtn"
+                  styleClass="nextButton w-full"
                 ></p-button>
                 <p-button
                   *ngIf="activeIndex === steps.length - 1"
@@ -318,6 +320,8 @@
                   icon="pi pi-check"
                   (click)="initiateTransfer()"
                   [disabled]="transferForm.invalid"
+                  class="nextBtn"
+                  styleClass="nextButton w-full"
                 ></p-button>
               </div>
             </form>

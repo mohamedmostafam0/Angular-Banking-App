@@ -139,3 +139,10 @@
   background-color: var(--surface-card) !important;
   color: var(--text-color) !important;
 }
+
+
+::ng-deep .p-button:not(:disabled):hover{
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+}
+

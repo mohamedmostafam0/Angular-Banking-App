@@ -64,7 +64,9 @@ export class ScheduleReportsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    console.log('ngOnInit called');
     this.accountsSubscription = this.bankingDataService.accounts$.subscribe(data => {
+      console.log('Accounts data:', data);
       this.accountOptions = [
         { label: 'All Accounts', value: null },
         ...data.map(acc => ({ label: acc.number, value: acc.number }))
@@ -72,11 +74,13 @@ export class ScheduleReportsComponent implements OnInit, OnDestroy {
     });
 
     this.transactionsSubscription = this.bankingDataService.transactions$.subscribe(data => {
+      console.log('Transactions data:', data);
       this.prepareChartData(data);
     });
   }
 
   prepareChartData(transactions: Transaction[]) {
+    console.log('prepareChartData called with:', transactions);
     let filteredTransactions = transactions;
     if (this.selectedReportAccount) {
       filteredTransactions = transactions.filter(t => t.accountNumber === this.selectedReportAccount);
@@ -139,6 +143,7 @@ export class ScheduleReportsComponent implements OnInit, OnDestroy {
   }
 
   onAccountChange(event: any) {
+    console.log('onAccountChange called with:', event);
     this.selectedReportAccount = event.value;
     this.bankingDataService.transactions$.subscribe(data => {
       this.prepareChartData(data);
@@ -146,6 +151,7 @@ export class ScheduleReportsComponent implements OnInit, OnDestroy {
   }
 
   scheduleReport() {
+    console.log('scheduleReport called');
     if (!this.selectedReportAccount) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please select an account for the report.' });
       return;

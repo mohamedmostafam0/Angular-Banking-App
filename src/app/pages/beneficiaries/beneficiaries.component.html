@@ -15,11 +15,11 @@
       <p-splitter [panelSizes]="[35, 65]">
         <ng-template pTemplate="form">
           <div class="flex align-items-center h-full">
-            <div class="instructions">
-              <h4>{{ instructions[activeIndex].title }}</h4>
-              <p>{{ instructions[activeIndex].description }}</p>
-            </div>
+          <div class="instructions">
+            <h2>{{ instructions[activeIndex].title }}</h2>
+            <h4>{{ instructions[activeIndex].description }}</h4>
           </div>
+        </div>
         </ng-template>
         <ng-template pTemplate>
           <div *ngIf="activeIndex === 0">
@@ -42,12 +42,12 @@
                 <label>International</label>
               </div>
             </div>
-            <div class="stepper-buttons flex pt-6 justify-end">
+            <div class="buttons-div">
               <p-button
                 label="Next"
-                icon="pi pi-arrow-right"
-                iconPos="right"
                 (click)="nextStep()"
+                class="nextBtn"
+                styleClass="nextButton w-full"
               ></p-button>
             </div>
           </div>
@@ -90,28 +90,21 @@
                 ></p-dropdown>
               </div>
             </div>
-            <div class="stepper-buttons flex pt-6">
-              <div class="flex">
-                <p-button
-                  label="Back"
-                  icon="pi pi-arrow-left"
-                  (click)="prevStep()"
-                  severity="secondary"
-                  styleClass="p-mr-2"
-                ></p-button>
-                <p-button
-                  label="Cancel"
-                  icon="pi pi-times"
-                  (click)="cancel()"
-                  severity="danger"
-                ></p-button>
-              </div>
+            <div class="buttons-div">
+              <p-button
+                label="Back"
+                (onClick)="prevStep()"
+                [style]="{
+                  'background-color': '#273239',
+                  'border-color': '#273239'
+                }"
+              ></p-button>
               <p-button
                 label="Next"
-                icon="pi pi-arrow-right"
-                iconPos="right"
                 (click)="nextStep()"
                 [disabled]="!isStepValid(1)"
+                class="nextBtn"
+                styleClass="nextButton w-full"
               ></p-button>
             </div>
           </div>
@@ -185,28 +178,21 @@
                 </div>
               </div>
             </div>
-            <div class="stepper-buttons flex pt-6">
-              <div class="flex">
-                <p-button
-                  label="Back"
-                  icon="pi pi-arrow-left"
-                  (click)="prevStep()"
-                  severity="secondary"
-                  styleClass="p-mr-2"
-                ></p-button>
-                <p-button
-                  label="Cancel"
-                  icon="pi pi-times"
-                  (click)="cancel()"
-                  severity="danger"
-                ></p-button>
-              </div>
+            <div class="buttons-div">
+              <p-button
+                label="Back"
+                (onClick)="prevStep()"
+                [style]="{
+                  'background-color': '#273239',
+                  'border-color': '#273239'
+                }"
+              ></p-button>
               <p-button
                 label="Next"
-                icon="pi pi-arrow-right"
-                iconPos="right"
                 (click)="nextStep()"
                 [disabled]="!isStepValid(2)"
+                class="nextBtn"
+                styleClass="nextButton w-full"
               ></p-button>
             </div>
           </div>
@@ -243,28 +229,21 @@
                 />
               </div>
             </div>
-            <div class="stepper-buttons flex pt-6">
-              <div class="flex">
-                <p-button
-                  label="Back"
-                  icon="pi pi-arrow-left"
-                  (click)="prevStep()"
-                  severity="secondary"
-                  styleClass="p-mr-2"
-                ></p-button>
-                <p-button
-                  label="Cancel"
-                  icon="pi pi-times"
-                  (click)="cancel()"
-                  severity="danger"
-                ></p-button>
-              </div>
+            <div class="buttons-div">
+              <p-button
+                label="Back"
+                (onClick)="prevStep()"
+                [style]="{
+                  'background-color': '#273239',
+                  'border-color': '#273239'
+                }"
+              ></p-button>
               <p-button
                 label="Next"
-                icon="pi pi-arrow-right"
-                iconPos="right"
                 (click)="nextStep()"
                 [disabled]="!isStepValid(3)"
+                class="nextBtn"
+                styleClass="nextButton w-full"
               ></p-button>
             </div>
           </div>
@@ -353,26 +332,21 @@
                 </ng-container>
               </div>
             </div>
-            <div class="stepper-buttons flex pt-6">
-              <div class="flex">
-                <p-button
-                  label="Back"
-                  icon="pi pi-arrow-left"
-                  (click)="prevStep()"
-                  severity="secondary"
-                  styleClass="p-mr-2"
-                ></p-button>
-                <p-button
-                  label="Cancel"
-                  icon="pi pi-times"
-                  (click)="cancel()"
-                  severity="danger"
-                ></p-button>
-              </div>
+            <div class="buttons-div">
+              <p-button
+                label="Back"
+                (onClick)="prevStep()"
+                [style]="{
+                  'background-color': '#273239',
+                  'border-color': '#273239'
+                }"
+              ></p-button>
               <p-button
                 label="Save"
                 (click)="saveBeneficiary()"
                 [disabled]="beneficiaryForm.invalid"
+                class="nextBtn"
+                styleClass="nextButton w-full"
               ></p-button>
             </div>
           </div>

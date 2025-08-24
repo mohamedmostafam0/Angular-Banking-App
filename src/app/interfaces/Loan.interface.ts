@@ -1,14 +1,23 @@
 export interface Loan {
   id: string;
-  name: string;
-  email: string;
-  phone: string;
-  employer: string;
-  income: number;
+  status: number; // This will be the activeIndex of the steps
+  loanType: string;
+  program: string;
   amount: number;
   currency: 'USD' | 'EUR' | 'EGP' | 'AED' | 'SAR';
-  purpose: string;
-  loanTerm: number;
-  collateral: string;
-  status: number; // This will be the activeIndex of the steps
+  tenor: number;
+  mobileNumber: string;
+  nationalId: string;
+  city: string;
+  email: string;
+  branch: string;
+  documents: any[];
+  agreeToTerms: boolean;
+  employmentStatus: string;
+  companyName: string;
+  companyAddress: string;
+  professionCategory: string;
+  hiringDate: Date;
+  salaryTransferType: string;
+  monthlyIncome: number;
 }

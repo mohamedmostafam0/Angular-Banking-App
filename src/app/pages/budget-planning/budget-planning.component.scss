@@ -167,3 +167,9 @@
 .p-select:not(.p-disabled).p-focus{
   border-color: var(--primary-color);
 }
+
+
+::ng-deep .p-button:not(:disabled):hover{
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+}

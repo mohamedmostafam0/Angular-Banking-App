@@ -12,9 +12,36 @@
   }
 
   .instructions {
-    padding: 1rem;
-    h3 {
-      margin-top: 0;
+    background-color: var(--surface-card);
+    padding-right: 2rem;
+    border-color: var(--surface-card);
+    
+    h4 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--text-color-secondary);
+    }
+
+    p {
+      color: var(--text-color-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style-position: inside;
+      padding-left: 0;
+      color: var(--text-color-secondary);
+
+      li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+
+        strong {
+          color: var(--text-color-secondary);
+          font-weight: 600;
+        }
+      }
     }
   }
 
@@ -129,3 +156,26 @@
   justify-content: start !important;
 }
 
+// Buttons container
+::ng-deep .buttons-div {
+  display: flex !important;
+  
+  gap: 0.625rem !important; // 10px
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+// Next button styles
+#reqCredit {
+  ::ng-deep {
+    .nextButton,
+    p-button.nextBtn {
+      display: block !important;
+      width: 100% !important;
+      
+      button {
+        width: 100% !important;
+      }
+    }
+  }
+}

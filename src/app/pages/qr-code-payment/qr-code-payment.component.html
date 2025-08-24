@@ -63,6 +63,8 @@
                   label="Generate QR Code"
                   (click)="generateQrCode()"
                   icon="pi pi-qrcode"
+                  class="p-element button-login p-button p-component"
+                  [disabled]="!selectedAccount || !transferType"
                 ></p-button>
               </div>
 

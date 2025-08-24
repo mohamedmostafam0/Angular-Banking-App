@@ -46,7 +46,7 @@
                 [responsiveOptions]="responsiveOptions"
               >
                 <ng-template let-utility pTemplate="item">
-                  <div class="utility-item">
+                  <div class="utility-item" (click)="selectUtility(utility)">
                     <div class="utility-item-content">
                       <div class="mb-3 text-center">
                         <img

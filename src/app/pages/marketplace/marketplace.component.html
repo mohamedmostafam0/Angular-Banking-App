@@ -51,7 +51,7 @@
                       <i
                         *ngIf="!utility.logo"
                         [class]="'pi ' + utility.icon"
-                        style="font-size: 3rem;"
+                        style="font-size: 3rem"
                       ></i>
                     </div>
                     <div class="text-center">
@@ -125,8 +125,9 @@
       pButton
       type="button"
       label="Confirm Payment"
-      icon="pi pi-check"
       (click)="payBill()"
+      [disabled]="!selectedAccount"
+      appendTo="body"
     ></button>
   </ng-template>
 </p-dialog>

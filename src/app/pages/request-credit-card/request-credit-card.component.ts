@@ -40,7 +40,7 @@ import { Account } from '../../interfaces/Account.interface';
   providers: [MessageService]
 })
 export class RequestCreditCardComponent implements OnInit {
-  steps: any[];
+  instructions: any[];
   activeIndex: number = 0;
   cardTypes: any[];
   employmentStasuses: any[];
@@ -57,26 +57,31 @@ export class RequestCreditCardComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder
   ) {
-    this.steps = [
+    this.instructions = [
       {
         label: 'Card Type',
-        data: { instructions: 'Choose the type of credit card that best suits your needs.' }
+        title: 'Card Type',
+        description: 'Choose the type of credit card that best suits your needs.'
       },
       {
         label: 'Employment & Income',
-        data: { instructions: 'Provide your employment and income details to help us process your application.' }
+        title: 'Employment & Income',
+        description: 'Provide your employment and income details to help us process your application.'
       },
       {
         label: 'Card Info',
-        data: { instructions: 'Enter the name as you would like it to appear on your card and link an account.' }
+        title: 'Card Info',
+        description: 'Enter the name as you would like it to appear on your card and link an account.'
       },
       {
         label: 'Book Your Visit',
-        data: { instructions: 'Choose a branch to sign your papers or have them delivered to your location.' }
+        title: 'Book Your Visit',
+        description: 'Choose a branch to sign your papers or have them delivered to your location.'
       },
       {
         label: 'Confirmation',
-        data: { instructions: 'Review your application details before submitting.' }
+        title: 'Confirmation',
+        description: 'Review your application details before submitting.'
       }
     ];
 
@@ -130,7 +135,7 @@ export class RequestCreditCardComponent implements OnInit {
       }
     }
 
-    if (this.activeIndex < this.steps.length - 1) {
+    if (this.activeIndex < this.instructions.length - 1) {
       this.activeIndex++;
     }
   }

@@ -63,11 +63,28 @@
                 </div>
               </div>
 
+              <div class="charts-container mt-5">
+                <div class="chart-card">
+                  <h5>Spending by Category</h5>
+                  <p-chart #spendingByCategoryChart type="pie" [data]="spendingByCategoryData"></p-chart>
+                </div>
+                <div class="chart-card">
+                  <h5>Balance Trend</h5>
+                  <p-chart #balanceTrendChart type="line" [data]="balanceTrendData"></p-chart>
+                </div>
+                <div class="chart-card">
+                  <h5>Cashflow</h5>
+                  <p-chart #cashflowChart type="bar" [data]="cashflowData"></p-chart>
+                </div>
+              </div>
+
               <div class="flex mt-3">
                 <p-button
                   label="Schedule Report"
                   icon="pi pi-calendar-plus"
+                  class="'p-element button-login p-button p-component"
                   (onClick)="scheduleReport()"
+                  [disabled]="!selectedReportAccount || !reportDay"
                 >
                 </p-button>
               </div>

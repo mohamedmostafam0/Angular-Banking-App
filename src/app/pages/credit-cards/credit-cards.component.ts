@@ -21,6 +21,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { TooltipModule } from 'primeng/tooltip';
+import { DividerModule } from 'primeng/divider';
 import { CreditCardNumberPipe } from '../../pipes/credit-card-number.pipe';
 import { UppercaseTextPipe } from '../../pipes/uppercase-text.pipe';
 
@@ -42,6 +43,7 @@ import { UppercaseTextPipe } from '../../pipes/uppercase-text.pipe';
     CreditCardNumberPipe,
     UppercaseTextPipe,
     TooltipModule,
+    DividerModule,
   ],
   templateUrl: './credit-cards.component.html',
   styleUrls: ['./credit-cards.component.scss'],
@@ -49,6 +51,9 @@ import { UppercaseTextPipe } from '../../pipes/uppercase-text.pipe';
 })
 export class CreditCardsComponent implements OnInit {
   creditCards: CreditCard[] = [];
+  activeCards: CreditCard[] = [];
+  pendingCards: CreditCard[] = [];
+  inactiveCards: CreditCard[] = [];
   accounts: Account[] = [];
   showRequestDialog = false;
   requestForm: FormGroup;
@@ -75,6 +80,30 @@ export class CreditCardsComponent implements OnInit {
 
   loadCreditCards(): void {
     this.creditCards = this.bankingDataService.getCreditCards();
+    this.creditCards.push({
+      id: 'dummy-active-1',
+      cardNumber: '1111 2222 3333 4444',
+      cardholderName: 'John Doe',
+      expirationDate: '12/28',
+      cvv: '123',
+      status: 'Active',
+      linkedAccountNumber: '1000000001',
+      cardType: 'Visa'
+    });
+    this.creditCards.push({
+      id: 'dummy-inactive-1',
+      cardNumber: '5555 6666 7777 8888',
+      cardholderName: 'Jane Smith',
+      expirationDate: '06/25',
+      cvv: '456',
+      status: 'Blocked',
+      linkedAccountNumber: '1000000002',
+      cardType: 'Mastercard'
+    });
+
+    this.activeCards = this.creditCards.filter(c => c.status === 'Active');
+    this.pendingCards = this.creditCards.filter(c => c.status === 'Pending');
+    this.inactiveCards = this.creditCards.filter(c => c.status === 'Blocked');
   }
 
   loadAccounts(): void {

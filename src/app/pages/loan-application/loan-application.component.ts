@@ -16,6 +16,10 @@ import { BankingDataService } from '../../services/banking-data.service';
 import { Loan } from '../../interfaces/Loan.interface';
 import { Router } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CheckboxModule } from 'primeng/checkbox';
+import { CalendarModule } from 'primeng/calendar';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 @Component({
   selector: 'app-loan-application',
@@ -32,7 +36,11 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     ToastModule,
     SplitterModule,
     DropdownModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    CheckboxModule,
+    CalendarModule,
+    InputGroupModule,
+    InputGroupAddonModule
   ],
   templateUrl: './loan-application.component.html',
   styleUrls: ['./loan-application.component.scss'],
@@ -40,12 +48,21 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 })
 export class LoanApplicationComponent implements OnInit {
   loanApplicationForm!: FormGroup;
-  steps!: MenuItem[];
+  
   activeIndex = 0;
   uploadedFiles: any[] = [];
   instructions: any[];
-  loanPurposes: any[];
-  supportedCurrencies: string[];
+  paperworkChoice: string | null = null;
+  
+  egyptianCities: any[];
+  branches: any[];
+  employmentStatusOptions: any[];
+  professionCategoryOptions: any[];
+  salaryTransferTypeOptions: any[];
+  loanTypes: any[];
+  programs: any[];
+  tenors: any[];
+  currencies: any[];
 
   constructor(
     private fb: FormBuilder,
@@ -55,42 +72,137 @@ export class LoanApplicationComponent implements OnInit {
     private router: Router
   ) {
     this.instructions = [
-      { title: 'Personal Information', description: 'Please provide your personal details.' },
-      { title: 'Employment Details', description: 'Please provide your employment information.' },
-      { title: 'Loan Details', description: 'Please provide the details of the loan you are applying for.' },
-      { title: 'Document Upload', description: 'Please upload the required documents in PDF format.' }
+      { label: 'Loan Details', title: 'Loan Details', description: 'Please provide the details of the loan you are applying for.' },
+      { label: 'Personal Information', title: 'Personal Information', description: 'Please provide your personal details.' },
+      { label: 'Branch Information', title: 'Branch Information', description: 'Please provide your branch information.' },
+      { label: 'Document Upload', title: 'Document Upload', description: "In this step we'll use your camera to scan your National ID, and on a later step we'll use your front camera to capture selfie photo, please prepare your national ID and follow the below instructions." },
+      { label: 'Employment Information', title: 'Employment Information', description: 'Please provide your employment details.' },
+      { label: 'Eligibility', title: 'Eligibility', description: 'Congratulations! Your request has been initially approved for Platinum Card' },
+      { label: 'Paperwork Details', title: 'Paperwork Details', description: 'Choose how to submit your paperwork.' },
+      { label: 'Confirmation', title: 'Confirmation', description: 'Please review your application details before submitting.' }
     ];
+    
 
-    this.loanPurposes = [
+    this.loanTypes = [
       { label: 'Personal Loan', value: 'personal' },
-      { label: 'Home Loan', value: 'home' },
       { label: 'Car Loan', value: 'car' },
-      { label: 'Business Loan', value: 'business' },
-      { label: 'Other', value: 'other' }
+      { label: 'Home Loan', value: 'home' }
     ];
 
-    this.supportedCurrencies = ['USD' , 'EUR' , 'EGP' , 'AED' , 'SAR'];
+    this.programs = [
+      { label: 'Standard Program', value: 'standard' },
+      { label: 'Premium Program', value: 'premium' }
+    ];
+
+    this.tenors = [
+      { label: '6 Months', value: 6 },
+      { label: '12 Months', value: 12 },
+      { label: '24 Months', value: 24 },
+      { label: '36 Months', value: 36 },
+      { label: '48 Months', value: 48 },
+      { label: '60 Months', value: 60 }
+    ];
+
+    this.currencies = this.bankingDataService.getSupportedCurrencies().map(c => ({ label: c, value: c }));
+
+    this.egyptianCities = [
+      { label: 'Cairo', value: 'cairo' },
+      { label: 'Alexandria', value: 'alexandria' },
+      { label: 'Giza', value: 'giza' },
+      { label: 'Shubra El-Kheima', value: 'shubra' },
+      { label: 'Port Said', value: 'port_said' },
+      { label: 'Suez', value: 'suez' },
+      { label: 'Luxor', value: 'luxor' },
+      { label: 'al-Mansura', value: 'mansura' },
+      { label: 'Tanta', value: 'tanta' },
+      { label: 'Asyut', value: 'asyut' },
+      { label: 'Ismailia', value: 'ismailia' },
+      { label: 'Faiyum', value: 'faiyum' },
+      { label: 'Zagazig', value: 'zagazig' },
+      { label: 'Aswan', value: 'aswan' },
+      { label: 'Damietta', value: 'damietta' },
+      { label: 'Damanhur', value: 'damanhur' },
+      { label: 'al-Minya', value: 'minya' },
+      { label: 'Beni Suef', value: 'beni_suef' },
+      { label: 'Qena', value: 'qena' },
+      { label: 'Sohag', value: 'sohag' },
+      { label: 'Hurghada', value: 'hurghada' },
+      { label: '6th of October City', value: '6th_october' },
+      { label: 'Shibin El Kom', value: 'shibin_el_kom' },
+      { label: 'Banha', value: 'banha' },
+      { label: 'Kafr el-Sheikh', value: 'kafr_el_sheikh' },
+      { label: 'Arish', value: 'arish' },
+      { label: 'Mallawi', value: 'mallawi' },
+      { label: '10th of Ramadan City', value: '10th_ramadan' },
+      { label: 'Bilbais', value: 'bilbais' },
+      { label: 'Marsa Matruh', value: 'marsa_matruh' },
+      { label: 'Idfu', value: 'idfu' },
+      { label: 'Mit Ghamr', value: 'mit_ghamr' },
+      { label: 'Al-Hamidiyya', value: 'al_hamidiyya' },
+      { label: 'Qalyub', value: 'qalyub' },
+      { label: 'Abu Kabir', value: 'abu_kabir' },
+      { label: 'Girga', value: 'girga' },
+      { label: 'Akhmim', value: 'akhmim' },
+      { label: 'Matareya', value: 'matareya' }
+  ];
+
+  this.branches = [
+    { label: 'Main Branch', value: 'main' },
+    { label: 'Downtown Branch', value: 'downtown' },
+    { label: 'Heliopolis Branch', value: 'heliopolis' },
+    { label: 'Nasr City Branch', value: 'nasr_city' },
+    { label: 'Maadi Branch', value: 'maadi' }
+];
+
+this.employmentStatusOptions = [
+  { label: 'Employed', value: 'employed' },
+  { label: 'Self-employed', value: 'self-employed' },
+  { label: 'Unemployed', value: 'unemployed' },
+  { label: 'Student', value: 'student' }
+];
+
+this.professionCategoryOptions = [
+  { label: 'Healthcare', value: 'healthcare' },
+  { label: 'IT', value: 'it' },
+  { label: 'Finance', value: 'finance' },
+  { label: 'Education', value: 'education' },
+  { label: 'Other', value: 'other' }
+];
+
+this.salaryTransferTypeOptions = [
+  { label: 'Bank Transfer', value: 'bank_transfer' },
+  { label: 'Check', value: 'check' },
+  { label: 'Cash', value: 'cash' }
+];
   }
   ngOnInit() {
     this.loanApplicationForm = this.fb.group({
-      name: ['', Validators.required],
+      loanType: [null, Validators.required],
+      program: [null, Validators.required],
+      amount: [null, [Validators.required, Validators.min(1)]],
+      currency: [null, Validators.required],
+      tenor: [null, Validators.required],
+      mobileNumber: ['', Validators.required],
+      nationalId: ['', Validators.required],
+      city: [null, Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
-      employer: ['', Validators.required],
-      income: [null, [Validators.required, Validators.min(0)]],
-      amount: [null, [Validators.required, Validators.min(1000)]],
-      currency: ['USD', Validators.required],
-      purpose: [null, Validators.required],
-      loanTerm: [null, [Validators.required, Validators.min(6)]],
-      collateral: ['']
+      branch: [null, Validators.required],
+      documents: [null, Validators.required],
+      agreeToTerms: [false, Validators.requiredTrue],
+      employmentStatus: [null, Validators.required],
+      companyName: ['', Validators.required],
+      companyAddress: ['', Validators.required],
+      professionCategory: [null, Validators.required],
+      hiringDate: [null, Validators.required],
+      salaryTransferType: [null, Validators.required],
+      monthlyIncome: [null, [Validators.required, Validators.min(0)]],
+      monthlyIncomeCurrency: [null, Validators.required],
+      visitAddress: [''],
+      visitDate: [null],
+      paperworkBranch: [null]
     });
 
-    this.steps = [
-      { label: 'Personal Information' },
-      { label: 'Employment Details' },
-      { label: 'Loan Details' },
-      { label: 'Document Upload' }
-    ];
+    
   }
 
   nextStep() {
@@ -103,14 +215,45 @@ export class LoanApplicationComponent implements OnInit {
     this.activeIndex--;
   }
 
+  selectPaperworkOption(option: string) {
+    this.paperworkChoice = option;
+    if (option === 'branch') {
+      this.loanApplicationForm.get('visitAddress')!.clearValidators();
+      this.loanApplicationForm.get('visitDate')!.clearValidators();
+      this.loanApplicationForm.get('paperworkBranch')!.setValidators([Validators.required]);
+    } else if (option === 'home') {
+      this.loanApplicationForm.get('paperworkBranch')!.clearValidators();
+      this.loanApplicationForm.get('visitAddress')!.setValidators([Validators.required]);
+      this.loanApplicationForm.get('visitDate')!.setValidators([Validators.required]);
+    }
+    this.loanApplicationForm.get('visitAddress')!.updateValueAndValidity();
+    this.loanApplicationForm.get('visitDate')!.updateValueAndValidity();
+    this.loanApplicationForm.get('paperworkBranch')!.updateValueAndValidity();
+  }
+
   isStepValid(): boolean {
     switch (this.activeIndex) {
       case 0:
-        return this.loanApplicationForm.get('name')!.valid && this.loanApplicationForm.get('email')!.valid && this.loanApplicationForm.get('phone')!.valid;
+        return this.loanApplicationForm.get('loanType')!.valid && this.loanApplicationForm.get('program')!.valid && this.loanApplicationForm.get('amount')!.valid && this.loanApplicationForm.get('currency')!.valid && this.loanApplicationForm.get('tenor')!.valid;
       case 1:
-        return this.loanApplicationForm.get('employer')!.valid && this.loanApplicationForm.get('income')!.valid;
+        return this.loanApplicationForm.get('mobileNumber')!.valid && this.loanApplicationForm.get('nationalId')!.valid && this.loanApplicationForm.get('city')!.valid;
       case 2:
-        return this.loanApplicationForm.get('amount')!.valid && this.loanApplicationForm.get('purpose')!.valid && this.loanApplicationForm.get('loanTerm')!.valid;
+        return this.loanApplicationForm.get('email')!.valid && this.loanApplicationForm.get('branch')!.valid;
+      case 3:
+        return this.loanApplicationForm.get('documents')!.valid;
+      case 4:
+        return this.loanApplicationForm.get('employmentStatus')!.valid && this.loanApplicationForm.get('companyName')!.valid && this.loanApplicationForm.get('companyAddress')!.valid && this.loanApplicationForm.get('professionCategory')!.valid && this.loanApplicationForm.get('hiringDate')!.valid && this.loanApplicationForm.get('salaryTransferType')!.valid && this.loanApplicationForm.get('monthlyIncome')!.valid;
+      case 5:
+        return true;
+      case 6:
+        if (this.paperworkChoice === 'branch') {
+          return this.loanApplicationForm.get('paperworkBranch')!.valid;
+        } else if (this.paperworkChoice === 'home') {
+          return this.loanApplicationForm.get('visitAddress')!.valid && this.loanApplicationForm.get('visitDate')!.valid;
+        }
+        return false;
+      case 7:
+        return this.loanApplicationForm.get('agreeToTerms')!.valid;
       default:
         return true;
     }
@@ -120,6 +263,7 @@ export class LoanApplicationComponent implements OnInit {
     for (const file of event.files) {
       this.uploadedFiles.push(file);
     }
+    this.loanApplicationForm.patchValue({ documents: this.uploadedFiles });
     this.messageService.add({ severity: 'info', summary: 'File Uploaded', detail: '' });
   }
 

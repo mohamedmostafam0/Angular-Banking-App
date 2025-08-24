@@ -101,6 +101,7 @@
             filterBy="number"
             [autoDisplayFirst]="false"
             (onChange)="onAccountSelect($event.value)"
+            appendTo="body"
           >
             <ng-template let-account pTemplate="selectedItem">
               <div class="selected-account">

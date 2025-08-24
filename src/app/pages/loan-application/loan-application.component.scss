@@ -4,6 +4,10 @@
     background-color: #fff;
   }
 
+.transfer-page {
+
+
+  
 ::ng-deep .p-splitter{
     background-color: var(--surface-card) !important;
     border-color: var(--surface-card) !important;
@@ -27,7 +31,7 @@
     width: 100% !important;
   }
 
-
+  
   .p-select:not(.p-disabled).p-focus{
   border-color: var(--primary-color);
 }
@@ -47,7 +51,71 @@
   background-color: var(--primary-color) !important;
   color: var(--white) !important;
 }
-  
+  .header {
+    margin-bottom: 2rem;
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    p {
+      color: var(--text-color-secondary);
+    }
+  }
+
+  .p-splitter {
+    border: none;
+  }
+
+  .instructions {
+    padding-right: 2rem;
+    h2 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    h4 {
+      line-height: 1.5;
+    }
+  }
+
+  .transfer-form {
+    width: 100%;
+    .p-fluid .p-field {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .buttons-div {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+
+    .nextBtn {
+      margin-left: 1rem;
+    }
+  }
+
+  .card-option {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .card-content {
+      p {
+        margin: 0;
+        font-weight: bold;
+      }
+    }
+  }
+
 
 .field {
   width: 100%;
@@ -63,4 +131,6 @@
 ::ng-deep .p-fileupload-advanced {
   background-color: transparent !important;
   border: none !important;
+}
+
 }

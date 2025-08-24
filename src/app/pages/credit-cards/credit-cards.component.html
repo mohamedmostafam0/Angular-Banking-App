@@ -18,8 +18,136 @@
     </div>
   </p-toolbar>
 
+  <p-divider align="left">
+    <div class="p-d-inline-flex p-ai-center">
+      <i class="pi pi-check-circle p-mr-2"></i>
+      <b>Active</b>
+    </div>
+  </p-divider>
   <div class="credit-cards-grid">
-    <div *ngFor="let card of creditCards" class="credit-card-wrapper">
+    <div *ngFor="let card of activeCards" class="credit-card-wrapper">
+      <p-card styleClass="credit-card">
+        <ng-template pTemplate="header">
+          <div class="card-header">
+            <div class="card-type">
+              <i class="pi pi-credit-card"></i>
+              <span>{{ card.cardType }}</span>
+            </div>
+            <p-tag
+              [value]="card.status"
+              [severity]="getStatusSeverity(card.status)"
+            ></p-tag>
+          </div>
+        </ng-template>
+
+        <div class="card-content">
+          <div class="card-number">
+            {{ card.cardNumber | creditCardNumber }}
+          </div>
+
+          <div class="card-details">
+            <div class="card-holder">
+              <span class="label">Cardholder Name</span>
+              <span class="value">{{
+                card.cardholderName | uppercaseText
+              }}</span>
+            </div>
+            <div class="valid-until">
+              <span class="label">Valid Until</span>
+              <span class="value">{{ card.expirationDate }}</span>
+            </div>
+          </div>
+
+          <div class="linked-account">
+            <span class="label">Linked Account</span>
+            <span class="value">{{ card.linkedAccountNumber }}</span>
+          </div>
+
+          <div class="p-card-footer p-d-flex p-jc-end">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-eye"
+              pTooltip="View Transactions"
+              (click)="viewTransactions(card.linkedAccountNumber)"
+              id="ViewTransactions"
+              class="p-button-sm"
+            ></button>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <p-divider align="left">
+    <div class="p-d-inline-flex p-ai-center">
+      <i class="pi pi-spin pi-spinner p-mr-2"></i>
+      <b>Pending</b>
+    </div>
+  </p-divider>
+  <div class="credit-cards-grid">
+    <div *ngFor="let card of pendingCards" class="credit-card-wrapper">
+      <p-card styleClass="credit-card">
+        <ng-template pTemplate="header">
+          <div class="card-header">
+            <div class="card-type">
+              <i class="pi pi-credit-card"></i>
+              <span>{{ card.cardType }}</span>
+            </div>
+            <p-tag
+              [value]="card.status"
+              [severity]="getStatusSeverity(card.status)"
+            ></p-tag>
+          </div>
+        </ng-template>
+
+        <div class="card-content">
+          <div class="card-number">
+            {{ card.cardNumber | creditCardNumber }}
+          </div>
+
+          <div class="card-details">
+            <div class="card-holder">
+              <span class="label">Cardholder Name</span>
+              <span class="value">{{
+                card.cardholderName | uppercaseText
+              }}</span>
+            </div>
+            <div class="valid-until">
+              <span class="label">Valid Until</span>
+              <span class="value">{{ card.expirationDate }}</span>
+            </div>
+          </div>
+
+          <div class="linked-account">
+            <span class="label">Linked Account</span>
+            <span class="value">{{ card.linkedAccountNumber }}</span>
+          </div>
+
+          <div class="p-card-footer p-d-flex p-jc-end">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-eye"
+              pTooltip="View Transactions"
+              (click)="viewTransactions(card.linkedAccountNumber)"
+              id="ViewTransactions"
+              class="p-button-sm"
+            ></button>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <p-divider align="left">
+    <div class="p-d-inline-flex p-ai-center">
+      <i class="pi pi-ban p-mr-2"></i>
+      <b>Inactive</b>
+    </div>
+  </p-divider>
+  <div class="credit-cards-grid">
+    <div *ngFor="let card of inactiveCards" class="credit-card-wrapper">
       <p-card styleClass="credit-card">
         <ng-template pTemplate="header">
           <div class="card-header">

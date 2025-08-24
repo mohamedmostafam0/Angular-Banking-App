@@ -52,6 +52,7 @@ export class BeneficiariesComponent implements OnInit {
   steps!: MenuItem[];
   supportedCurrencies: string[] = [];
   instructions: any[];
+  
 
   isStepValid(step: number): boolean {
     switch (step) {

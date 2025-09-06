@@ -21,6 +21,9 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
+import { DialogModule } from 'primeng/dialog';
+import { TooltipModule } from 'primeng/tooltip';
+
 @Component({
   selector: 'app-loan-application',
   standalone: true,
@@ -40,7 +43,9 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     CheckboxModule,
     CalendarModule,
     InputGroupModule,
-    InputGroupAddonModule
+    InputGroupAddonModule,
+    TooltipModule,
+    DialogModule
   ],
   templateUrl: './loan-application.component.html',
   styleUrls: ['./loan-application.component.scss'],
@@ -48,6 +53,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 })
 export class LoanApplicationComponent implements OnInit {
   loanApplicationForm!: FormGroup;
+  displayTermsDialog = false;
   
   activeIndex = 0;
   uploadedFiles: any[] = [];
@@ -191,6 +197,11 @@ this.salaryTransferTypeOptions = [];
     this.messageService.add({ severity: 'info', summary: 'File Uploaded', detail: '' });
   }
 
+  onSelect(event: any) {
+    this.uploadedFiles = event.files;
+    this.loanApplicationForm.patchValue({ documents: this.uploadedFiles });
+  }
+
   onSubmit() {
     if (this.loanApplicationForm.valid) {
       this.confirmationService.confirm({
@@ -224,4 +235,10 @@ this.salaryTransferTypeOptions = [];
       return v.toString(16);
     });
   }
+
+  showTermsDialog() {
+    this.displayTermsDialog = true;
+  }
 }
+
+

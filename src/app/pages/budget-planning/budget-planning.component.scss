@@ -1,17 +1,17 @@
 :host {
-    display: block;
+    display: grid;
     padding: 1.5rem;
     background-color: #fff;
   }
   
   ::ng-deep .p-splitter {
-    background: transparent;
-    border: none;
+    background: transparent !important;
+    border: none !important;
   }
   ::ng-deep .p-splitter-gutter {
-    background-color: var(--surface-card);
-    pointer-events: none;
-    cursor: default;
+    background-color: var(--surface-card) !important;
+    pointer-events: none !important;
+    cursor: default !important;
   }
 
   
@@ -46,10 +46,6 @@
     }
   }
 
-  .budget-form .p-button {
-    width: 100%;
-    justify-content: center;
-  }
 
   .usage-bar {
     display: inline-block;
@@ -169,7 +165,43 @@
 }
 
 
-::ng-deep .p-button:not(:disabled):hover{
+::ng-deep .SetBudgetButton.p-button:not(:disabled):hover{
   background-color: var(--primary-dark) !important;
   border-color: var(--primary-dark) !important;
+}
+
+.grid{
+  display: block;
+  width: 100%;
+
+}
+
+
+
+::ng-deep .p-select-overlay {
+  width: 100% !important;
+}
+
+
+  .buttons-div {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+
+
+      .ReviewBtn {
+        display: block !important;
+        width: 100% !important;
+        
+        button {
+          width: 100% !important;
+        }
+      }
+  }
+
+
+  
+::ng-deep .p-button { 
+  padding: 1rem 1.5rem !important;  /* top-bottom | left-right */
+  font-size: 1rem !important;       /* adjust text size if needed */
 }

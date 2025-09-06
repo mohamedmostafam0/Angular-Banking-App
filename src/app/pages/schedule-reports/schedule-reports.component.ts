@@ -140,12 +140,19 @@ export class ScheduleReportsComponent implements OnInit, OnDestroy {
         }
       ]
     };
+
+    console.log('spendingByCategoryData:', this.spendingByCategoryData);
+    console.log('balanceTrendData:', this.balanceTrendData);
+    console.log('cashflowData:', this.cashflowData);
   }
 
   onAccountChange(event: any) {
-    console.log('onAccountChange called with:', event);
     this.selectedReportAccount = event.value;
-    this.bankingDataService.transactions$.subscribe(data => {
+    // Unsubscribe from previous subscription if it exists
+    if (this.transactionsSubscription) {
+      this.transactionsSubscription.unsubscribe();
+    }
+    this.transactionsSubscription = this.bankingDataService.transactions$.subscribe(data => {
       this.prepareChartData(data);
     });
   }

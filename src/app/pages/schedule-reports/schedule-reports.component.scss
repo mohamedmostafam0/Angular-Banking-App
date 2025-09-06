@@ -1,4 +1,4 @@
-.transfer-page {
+.ScheduleReports {
   padding: 2rem;
   background-color: var(white);
   min-height: 100%;
@@ -8,57 +8,8 @@
   }
 }
 
-.p-select:not(.p-disabled).p-focus{
-  border-color: var(--primary-color);
-}
 
-::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
-{
-  border-color: #fff !important;
-  background-color: var(--surface-card) !important;
-}
-
-
-::ng-deep .p-splitterpanel-nested{
-  justify-content: start !important;
-}
-
-.field {
-  width: 100%;
-  margin-bottom: 1.5rem;
-  label {
-    display: block;
-    text-align: left;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-  }
-}
-
-
-
-::ng-deep .p-splitter {
-  background: transparent !important;
-  border: none !important;
-
-}
-::ng-deep .p-splitter-gutter {
-  background-color: var(--surface-card) !important;
-  pointer-events: none;
-  cursor: default;
-}
-  :host {
-
-    ::ng-deep .p-datatable .p-datatable-tbody > tr {
-      background: var(--surface-card);
-    }
-  
-  }
-
-  ::ng-deep .p-button {
-    width: 100%;
-    justify-content: center;
-  }
-  .instructions {
+.instructions {
     background-color: var(--surface-card);
     padding-right: 2rem;
     border-color: var(--surface-card);
@@ -92,42 +43,76 @@
     }
   }
 
-:host ::ng-deep .p-card .p-card-body {
-  padding-top: 0;
+::ng-deep .p-splitterpanel-nested{
+  justify-content: start !important;
 }
 
-:host ::ng-deep .p-card .p-card-content {
-  padding-top: 0;
-}
 
-.beneficiary-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-
-  .p-chip {
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-
-    &:hover {
-      background-color: var(--text-color-secondary);
-      color: var(--primary-color-text);
+  :host {
+    ::ng-deep .p-splitter {
+      background: transparent;
+      border: none;
     }
-  }
-}
-
-.no-beneficiaries-msg {
-  font-style: italic;
-  color: var(--text-color-secondary);
-  padding: 0.5rem 0;
-}
+    ::ng-deep .p-splitter-gutter {
+      background-color: var(--surface-card);
+      pointer-events: none;
+      cursor: default;
+    }
 
     ::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown {
       background-color: var(--white) !important;
       width: 100% !important;
     }
 
-::ng-deep.ng-star-inserted{
-  width: 100% !important;
+    ::ng-deep .p-datatable .p-datatable-tbody > tr {
+      background: var(--surface-card);
+    }
+  
+  }
+
+
+
+  ::ng-deep .nextAction.p-button:not(:disabled):hover{
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+}
+
+  .buttons-div {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+
+      .ReviewBtn {
+        display: block !important;
+        width: 100% !important;
+        
+        button {
+          width: 100% !important;
+        }
+      }
+  }
+
+
+::ng-deep .p-button { 
+  padding: 1rem 1.5rem !important;  /* top-bottom | left-right */
+  font-size: 1rem !important;       /* adjust text size if needed */
+}
+  
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+
+  ::ng-deep .p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color) !important;
+  color: var(--black) !important;
+}
+
+#ScheduleReports ::ng-deep .p-select-option.p-select-option-selected.p-focus,#ScheduleReports ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+  color: var(--text-color) !important;
 }

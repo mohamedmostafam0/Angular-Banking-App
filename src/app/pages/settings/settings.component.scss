@@ -1,15 +1,108 @@
-:host {
-    display: block;
-    padding: 1.5rem;
-    background-color: #fff;
+.settings-page {
+  padding: 2rem;  
+  background-color: var(white);
+  min-height: 100%;
+
+  .header {
+    margin-bottom: 2rem;
+  }
+
 }
 
-.settings-card {
-  background-color: #f1f3f5;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+:host ::ng-deep .p-splitter {
+  border: none;
+  background: var(--surface-card) !important;
+}
+
+:host ::ng-deep .p-splitter-gutter {
+  display: none;
+}
+
+.user-info {
+  text-align: center;
   padding: 2rem;
-  height: 80vh; /* Adjust this value as needed */
-  display: flex;
-  flex-direction: column;
+  background-color: #f8f9fa;
+  border-right: 1px solid #dee2e6;
+  height: 100%;
+}
+
+:host {
+    ::ng-deep .p-splitter {
+      background: transparent;
+      border: none;
+    }
+    ::ng-deep .p-splitter-gutter {
+      background-color: var(--surface-card);
+      pointer-events: none;
+      cursor: default;
+    }
+
+    ::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown, ::ng-deep .p-password {
+      background-color: var(--surface-card) !important;
+      width: 100% !important;
+    }
+
+    ::ng-deep .p-datatable .p-datatable-tbody > tr {
+      background: var(--surface-card);
+    }
+  
+  }
+
+::ng-deep .p-accordionpanel > .p-accordionheader{
+  background-color: var(--surface-card) !important; 
+}
+
+::ng-deep .p-accordionpanel{
+  border-color: var(--surface-card) !important;
+}
+::ng-deep .p-card{
+  padding: 0rem !important;
+  border-radius: 0rem !important;
+  // border: solid !important;
+  background-color: white !important;
+}
+
+
+::ng-deep .p-accordioncontent {
+  padding: 0rem !important;
+  background-color: white !important;
+    border: 1 px var(--surface-card) !important;
+}
+
+::ng-deep .p-accordioncontent-content{
+  padding: 0rem !important; 
+  background-color: white !important;
+  border-radius: 0rem !important;
+  border-color: var(--surface-card) !important;
+
+}
+
+::ng-deep .p-card-body{
+   padding: 1rem !important;
+ 
+}
+
+
+::ng-deep .p-button:not(:disabled):hover{
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+}
+  
+
+::ng-deep .p-accordion{
+  width: 100% !important; 
+  border-color: var(--surface-card) !important;
+}
+
+
+
+.field {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  label {
+    display: block;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
 }

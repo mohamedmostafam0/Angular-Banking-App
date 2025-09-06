@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<div class="transfer-page">
+<div class="Qr-code-page">
   <div class="header">
     <h1>QR Code Payment</h1>
     <p>Generate a QR code to receive payments.</p>
@@ -36,7 +36,7 @@
       </ng-template>
       <ng-template pTemplate>
         <div class="flex align-items-center h-full" style="width: 100%">
-          <div class="col-12 flex">
+          <div class="col-12">
             <div class="p-fluid">
               <div class="field mb-3">
                 <label for="account">Account</label>
@@ -58,12 +58,12 @@
                   name="transferType"
                 ></p-dropdown>
               </div>
-              <div class="flex mt-3">
+              <div class="mt-3">
                 <p-button
                   label="Generate QR Code"
                   (click)="generateQrCode()"
                   icon="pi pi-qrcode"
-                  class="p-element button-login p-button p-component"
+                  styleClass="w-full"
                   [disabled]="!selectedAccount || !transferType"
                 ></p-button>
               </div>
@@ -75,7 +75,8 @@
                   icon="pi pi-share-alt"
                   (click)="shareQrCode(qrCodeEl)"
                   [disabled]="!qrdata"
-                  styleClass="p-button-secondary mt-2"
+                  class="ReviewBtn"
+                  styleClass="nextAction w-full"
                 ></p-button>
               </div>
             </div>

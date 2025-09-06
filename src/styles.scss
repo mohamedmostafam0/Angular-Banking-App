@@ -1,6 +1,7 @@
 /* PrimeNG Core CSS */
 @import "primeicons/primeicons.css";
 @import "./styles/overlays.scss";
+@import "primeflex/primeflex.min.css";
 
 /* Global Variables */
 :root {
@@ -9,7 +10,7 @@
   --primary-dark: #003a6e;
   --border-color: #dee2e6;
   --bg-color: #fff;
-  --surface-card: #ededf1;
+  --surface-card: #f4f5f5;
   --text-color: #212529;
   --text-color-secondary: #6c757d;
   --white: #ffffff;
@@ -53,13 +54,13 @@ h1, h2, h3, h4, h5, h6 {
 body .p-card {
   background-color: var(--surface-card);  
   color: var(--text-color);
-  border-radius: 12px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  // border: 1px solid var(--border-color);
   padding: 1.5rem;
 }
 
 /* Button */
+
 body .p-button {
   font-weight: 600;
   border-radius: 8px;
@@ -67,6 +68,7 @@ body .p-button {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
   color: #fff;
+  
 
   &:hover {
     background-color: var(--primary-dark);
@@ -75,6 +77,31 @@ body .p-button {
     box-shadow: var(--shadow-md);
   }
 }
+
+
+::ng-deep .p-button {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: var(--white) !important;
+  padding: 0.75rem 1.25rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: background-color 0.2s, border-color 0.2s !important;
+  width: 100% !important;
+
+  &:hover {
+    background-color: var(--primary-700) !important;
+    border-color: var(--primary-700) !important;
+  }
+
+  &:disabled {
+    background-color: var(--surface-d) !important;
+    border-color: var(--surface-d) !important;
+    color: var(--text-color-secondary) !important;
+    cursor: not-allowed !important;
+  }
+}
+
 
 body .p-button.p-button-outlined {
   background-color: var(--primary-color);
@@ -396,27 +423,6 @@ body .p-radiobutton .p-radiobutton-box.p-highlight .p-radiobutton-icon {
     background-color: var(--surface-card);
 }
 
-::ng-deep .p-button {
-  background-color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
-  color: var(--white) !important;
-  padding: 0.75rem 1.25rem !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  transition: background-color 0.2s, border-color 0.2s !important;
-
-  &:hover {
-    background-color: var(--primary-700) !important;
-    border-color: var(--primary-700) !important;
-  }
-
-  &:disabled {
-    background-color: var(--surface-d) !important;
-    border-color: var(--surface-d) !important;
-    color: var(--text-color-secondary) !important;
-    cursor: not-allowed !important;
-  }
-}
 
 
 ::ng-deep .p-button.p-button-secondary {
@@ -434,4 +440,40 @@ body .p-radiobutton .p-radiobutton-box.p-highlight .p-radiobutton-icon {
 .p-radiobutton-checked .p-radiobutton-box{
   border-color: var(--primary-color) !important;
   background-color: var(--primary-color) !important;
+}
+
+
+
+.buttons-div {
+  display: flex !important;
+  gap: 0.625rem !important; 
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+
+#reqCredit {
+  ::ng-deep {
+    .nextButton,
+    p-button.nextBtn {
+      display: block !important;
+      width: 100% !important;
+      
+      button {
+        width: 100% !important;
+      }
+    }
+  }
+}
+
+
+
+::ng-deep .p-carousel-indicator-active .p-carousel-indicator-button{
+  background-color: var(--primary-color) !important;
+} 
+
+
+
+::ng-deep .p-select-overlay {
+  width: 100% !important;
 }

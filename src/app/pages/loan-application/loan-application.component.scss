@@ -4,11 +4,9 @@
   background-color: #fff;
 }
 
-.transfer-page {
+.loan-application {
 
-
-  
-::ng-deep .p-splitter{
+  ::ng-deep .p-splitter{
     background-color: var(--surface-card) !important;
     border-color: var(--surface-card) !important;
 }
@@ -58,7 +56,6 @@
 
   .instructions {
     background-color: var(--surface-card);
-    padding-right: 2rem;
     border-color: var(--surface-card);
     
     h4 {
@@ -103,8 +100,15 @@
     justify-content: flex-end;
     margin-top: 2rem;
 
+
     .nextBtn {
+      display: block !important;
+      width: 100% !important;
       margin-left: 1rem;
+      
+      button {
+        width: 100% !important;
+      }
     }
   }
 
@@ -148,40 +152,151 @@
 
 .field {
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.2 rem;
   label {
     display: block;
     text-align: left;
-    margin-bottom: 0.5rem;
     font-weight: 500;
+    margin-bottom: 0rem;
   }
 }
 
 ::ng-deep .p-fileupload-advanced {
   background-color: transparent !important;
-  border: none !important;
+  border: 12px !important;
+  // padding-top: 10px !important;
 }
 }
 
 
-::ng-deep .p-button:not(:disabled):hover{
+::ng-deep .nextAction.p-button:not(:disabled):hover{
   background-color: var(--primary-dark) !important;
   border-color: var(--primary-dark) !important;
 }
 
-.transfer-page[_ngcontent-ng-c3415682849] .card-option[_ngcontent-ng-c3415682849]{
-  border: transparent !important;
+// .loan-application[_ngcontent-ng-c3415682849] .card-option[_ngcontent-ng-c3415682849]{
+//   border: transparent !important;
 
-  &:hover {
-    border-color: transparent !important;
-    box-shadow: none !important;
-  }
+//   &:hover {
+//     border-color: transparent !important;
+//     box-shadow: none !important;
+//   }
+// }
+
+
+
+::ng-deep .p-card{
+
+  border: var(--surface-card) !important;
 }
 
 
 
-body .p-card{
+.upload-card {
+  background: var(--surface-card);
+  border: 1px solid #dfe3e7;   // light gray border like in the Arabic UI
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 
-  background-color: transparent!important;
-  border: none !important;
+  
+  ::ng-deep .p-fileupload > * {
+    width: 100% !important;
+  }
+
+  ::ng-deep .p-fileupload-header{
+    background: #f1f3f4 !important;
+    border-bottom: 6px solid var(--primary-color) !important;
+    object-fit: contain !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  ::ng-deep .p-fileupload-content{
+    background-color: var(--white) !important; 
+    padding: 30px !important;  
+ 
+  }
+
+    /* If this is in a component stylesheet, add ::ng-deep for PrimeNG host */
+  ::ng-deep .upload-bar {
+    display: block;
+    justify-content: space-between !important;
+    width: 100% !important;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    flex-direction: row !important;
+  }
+
+}
+
+.Scanned-Document{
+  text-align: center;
+  padding-bottom: 5px;  
+  
+}
+
+::ng-deep .p-button.scan-btn{
+  font-size: 14px !important;
+}
+
+
+// Next button styles
+
+::ng-deep .p-fileupload-file-info{
+  flex-direction: row !important;
+}
+
+::ng-deep .upload-bar.p-fileupload,
+::ng-deep .upload-bar .p-fileupload-buttonbar,
+::ng-deep .upload-bar .p-fileupload-content {
+  width: 100%;
+}
+
+/* Ensure the custom header row spans all available space in the button bar */
+::ng-deep .upload-bar .p-fileupload-buttonbar > .w-full {
+  flex: 1 1 auto;
+  min-width: 0;
+} 
+
+/* Optional: ensure the outer card doesn’t constrain width */
+.upload-card { width: 100%; } 
+
+
+
+::ng-deep .p-card-body{
+  height: 100% !important;
+}
+
+
+::ng-deep .p-select-overlay {
+  width: 100% !important;
+}
+
+
+    h4 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--text-color-secondary);
+    }
+
+    ::ng-deep .p-button {
+  padding: 1rem 1.5rem !important;  /* top-bottom | left-right */
+  font-size: 1rem !important;       /* adjust text size if needed */
+}
+
+.bold-text {
+  font-weight: 500;
+}
+
+label[for="agreeToTerms"] a {
+  color: var(--primary-color);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+::ng-deep .p-checkbox-checked .p-checkbox-box{
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
 }

@@ -8,7 +8,7 @@
   <p-card>
     <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
       <ng-template pTemplate="form">
-        <div class="flex align-items-center h-full">
+        <div class="flex h-full">
           <div class="instructions">
             <h2>Instructions for Domestic Transfer</h2>
             <h4>Follow these steps to complete a domestic fund transfer</h4>
@@ -35,7 +35,7 @@
       </ng-template>
       <ng-template pTemplate>
         <div class="flex align-items-center h-full" style="width: 100%">
-          <div class="col-12 flex">
+          <div class="col-12">
             <form
               class="transfer-form"
               [formGroup]="transferForm"
@@ -77,10 +77,8 @@
                 </div>
 
                 <div class="field mb-3">
-                  <label for="toAccount" class="col-12 md:col-4"
-                    >To Account</label
-                  >
-                  <div class="col-12 md:col-8">
+                  <label for="toAccount" class="col-12">To Account</label>
+                  <div class="col-12">
                     <input
                       pInputText
                       id="toAccount"
@@ -92,8 +90,8 @@
                 </div>
 
                 <div class="field mb-3">
-                  <label for="amount" class="col-12 md:col-4">Amount</label>
-                  <div class="col-12 md:col-8">
+                  <label for="amount" class="col-12">Amount</label>
+                  <div class="col-12">
                     <p-inputNumber
                       inputId="amount"
                       formControlName="amount"
@@ -105,8 +103,8 @@
                   </div>
                 </div>
                 <div class="field mb-3">
-                  <label for="currency" class="col-12 md:col-4">Currency</label>
-                  <div class="col-12 md:col-8">
+                  <label for="currency" class="col-12">Currency</label>
+                  <div class="col-12">
                     <p-dropdown
                       inputId="currency"
                       [options]="supportedCurrencies"
@@ -118,11 +116,13 @@
                 </div>
               </div>
 
-              <div class="flex mt-3">
+              <div class="buttons-div">
                 <p-button
                   label="Review Transfer"
                   type="submit"
                   [disabled]="transferForm.invalid"
+                  class="ReviewBtn"
+                  styleClass="nextAction w-full"
                 >
                 </p-button>
               </div>

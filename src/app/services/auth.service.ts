@@ -104,18 +104,6 @@ export class AuthService implements OnDestroy {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  /**
-   * Get the current user information
-   * @returns User object with name and other details
-   */
-  getUser(): { name: string } | null {
-    if (!this.isAuthenticated()) {
-      return null;
-    }
-    return {
-      name: this.username || 'User'
-    };
-  }
 
   logout() {
     this.clearSession();

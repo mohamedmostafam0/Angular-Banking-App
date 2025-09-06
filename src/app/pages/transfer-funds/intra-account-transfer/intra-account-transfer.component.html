@@ -11,7 +11,7 @@
   <p-card>
     <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
       <ng-template pTemplate="form">
-        <div class="flex align-items-center h-full">
+        <div class="flex h-full">
           <div class="instructions">
             <h2>Instructions for Intra-Account Transfer</h2>
             <h4>
@@ -41,7 +41,7 @@
       </ng-template>
       <ng-template pTemplate>
         <div class="flex align-items-center h-full" style="width: 100%">
-          <div class="col-12 flex">
+          <div class="col-12">
             <form
               class="transfer-form"
               [formGroup]="transferForm"
@@ -96,10 +96,12 @@
                 </div>
               </div>
 
-              <div class="flex mt-3">
+              <div class="buttons-div">
                 <p-button
                   label="Review Transfer"
                   type="submit"
+                  class="ReviewBtn"
+                  styleClass="nextAction w-full"
                   [disabled]="transferForm.invalid"
                 >
                 </p-button>

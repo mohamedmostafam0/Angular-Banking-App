@@ -1,4 +1,4 @@
-.transfer-page {
+.Qr-code-page {
   padding: 2rem;
   background-color: var(white);
   min-height: 100%;
@@ -6,7 +6,36 @@
   .header {
     margin-bottom: 2rem;
   }
+
+
+
 }
+
+//   :host ::ng-deep .button-login.p-button {
+//   background-color: var(--primary-color) !important;
+//   border-color: var(--primary-color) !important;
+//   color: var(--white) !important;
+//   padding: 0.75rem 1.25rem !important;
+//   border-radius: 8px !important;
+//   font-weight: 600 !important;
+//   transition: background-color 0.2s, border-color 0.2s !important;
+//   width: 100% !important;
+
+
+//   &:disabled {
+//     background-color: var(--surface-d) !important;
+//     border-color: var(--surface-d) !important;
+//     color: var(--text-color-secondary) !important;
+//     cursor: not-allowed !important;
+//   }
+// }
+
+// :host ::ng-deep .button-login.p-button:hover {
+//   background-color: var(--primary-dark) !important;
+//   border-color: var(--primary-dark) !important;
+// }
+
+
 
 .p-select:not(.p-disabled).p-focus{
   border-color: var(--primary-color);
@@ -59,10 +88,7 @@
   
   }
 
-  ::ng-deep .p-button {
-    width: 100%;
-    justify-content: center;
-  }
+  
   .instructions {
     background-color: var(--surface-card);
     padding-right: 2rem;
@@ -128,10 +154,22 @@
   padding: 0.5rem 0;
 }
 
-.qr-code-container {
-  margin-top: 2rem;
-  text-align: center;
-}
+
+  .buttons-div {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+
+
+      .ReviewBtn {
+        display: block !important;
+        width: 100% !important;
+        
+        button {
+          width: 100% !important;
+        }
+      }
+  }
 
 ::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
 {
@@ -144,5 +182,11 @@
 ::ng-deep .p-button:not(:disabled):hover{
   background-color: var(--primary-dark) !important;
   border-color: var(--primary-dark) !important;
+}
+
+
+::ng-deep .p-button { 
+  padding: 1rem 1.5rem !important;  /* top-bottom | left-right */
+  font-size: 1rem !important;       /* adjust text size if needed */
 }
 

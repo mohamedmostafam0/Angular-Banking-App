@@ -1,0 +1,157 @@
+:host {
+    display: block;
+    padding: 1.5rem;
+    background-color: #fff;
+}
+
+::ng-deep .p-splitter {
+      background: transparent !important;
+      border: none !important;
+    }
+    ::ng-deep .p-splitter-gutter {
+      background-color: var(--surface-card) !important  ;
+      pointer-events: none;
+      cursor: default;
+    }
+
+
+    ::ng-deep .p-splitterpanel-nested{
+      justify-content: start !important;
+      display: block !important;
+    }
+
+    .p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+::ng-deep .p-steps-item-active .p-steps-item-label{
+  color: var(--p-steps-item-label-color) !important;
+}
+
+
+
+::ng-deep .field {
+  width: 100% !important;
+  margin-bottom: 1.5rem !important;
+  ::ng-deep label {
+    display: block !important;
+    text-align: left !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 500 !important;
+  }
+}
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+.p-fluid .field > div {
+  width: 100%;
+}
+
+.p-button {
+  margin-top: 1rem;
+}
+
+
+.p-toast {
+  z-index: 9999;
+}
+
+
+
+  ::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown .p-calendar{
+    background-color: var(--white) !important;
+    width: 100% !important;
+  }
+
+  ::ng-deep .p-dropdown {
+    width: 100% !important;
+  }
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+
+.p-grid{
+    display: flex;
+}
+
+
+
+::ng-deep .p-button { 
+  padding: 1rem 1.5rem !important;  /* top-bottom | left-right */
+  font-size: 1rem !important;       /* adjust text size if needed */
+}
+
+
+
+  .buttons-div {
+    display: flex;
+    justify-content: flex-end;
+
+
+    .SubmitBtn {
+      display: block !important;
+      width: 100% !important;
+        
+      button {
+        width: 100% !important;
+      }
+    }
+  }
+
+
+
+.utility-item {
+    border: 1px solid #e9ecef;
+    border-radius: 3px;
+    margin: .3rem;
+    text-align: center;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+::ng-deep .p-button:not(:disabled):hover{
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+  color: var(--white) !important;
+}
+
+::ng-deep .p-carousel-indicator-active .p-carousel-indicator-button{
+    background-color: var(--primary-color) !important;
+}
+
+  .instructions {
+    background-color: var(--surface-card);
+    padding-right: 2rem;
+    border-color: var(--surface-card);
+    
+    h4 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--text-color-secondary);
+    }
+
+    p {
+      color: var(--text-color-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style-position: inside;
+      padding-left: 0;
+      color: var(--text-color-secondary);
+
+      li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+
+        strong {
+          color: var(--text-color-secondary);
+          font-weight: 600;
+        }
+      }
+    }
+  }

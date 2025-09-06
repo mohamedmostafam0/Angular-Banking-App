@@ -7,10 +7,7 @@
 ::ng-deep .p-splitter{  
   background-color: var(--surface-card) !important;
 }
-.p-card {
-  max-width: 800px;
-  margin: 0 auto;
-}
+
 
 .step-content {
   padding: 2rem 0;
@@ -68,9 +65,6 @@
   margin-top: 1rem;
 }
 
-.p-card {
-  margin-top: 20px;
-}
 
 .p-toast {
   z-index: 9999;
@@ -78,14 +72,6 @@
 
 .p-fluid .field {
   margin-bottom: 1.5rem;
-}
-
-
-
-
-.p-button {
-  width: auto;
-  min-width: 150px;
 }
 
 
@@ -106,6 +92,7 @@
     background-color: var(--surface-card);
     padding-right: 2rem;
     border-color: var(--surface-card);
+    align-items: stretch;
     
     h4 {
       margin-bottom: 1rem;
@@ -192,3 +179,27 @@
   background-color: var(--primary-dark) !important;
   border-color: var(--primary-dark) !important;
 }
+
+::ng-deep .p-button { 
+  padding: 1rem 1.5rem !important;  /* top-bottom | left-right */
+  font-size: 1rem !important;       /* adjust text size if needed */
+}
+
+
+
+  .buttons-div {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+
+
+    .nextBtn {
+      display: block !important;
+      width: 100% !important;
+      margin-left: 1rem;
+      
+      button {
+        width: 100% !important;
+      }
+    }
+  }

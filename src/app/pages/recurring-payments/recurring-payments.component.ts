@@ -12,8 +12,12 @@ import { ToastModule } from 'primeng/toast';
 import { CarouselModule } from 'primeng/carousel';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToolbarModule } from 'primeng/toolbar';
+
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
+import { BankingDataService } from '../../services/banking-data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-recurring-payments',
@@ -33,51 +37,24 @@ import { DialogModule } from 'primeng/dialog';
     CarouselModule,
     InputTextModule,
     ConfirmDialogModule,
-    DialogModule
+    DialogModule,
+    ToolbarModule 
   ],
   templateUrl: './recurring-payments.component.html',
   styleUrls: ['./recurring-payments.component.scss'],
   providers: [ConfirmationService, MessageService]
 })
 export class RecurringPaymentsComponent implements OnInit {
-  recurringPaymentForm: any;
   editPaymentForm: any;
   frequencies: any[] = [];
   recurringPayments: any[] = [];
-  utilities: any[] = [];
-  responsiveOptions: any[];
   displayEditDialog: boolean = false;
   selectedPayment: any;
 
-  constructor(private fb: FormBuilder, private confirmationService: ConfirmationService, private messageService: MessageService) {
-    this.responsiveOptions = [
-      {
-          breakpoint: '1024px',
-          numVisible: 3,
-          numScroll: 3
-      },
-      {
-          breakpoint: '768px',
-          numVisible: 2,
-          numScroll: 2
-      },
-      {
-          breakpoint: '560px',
-          numVisible: 1,
-          numScroll: 1
-      }
-  ];
+  constructor(private fb: FormBuilder, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router, private bankingDataService: BankingDataService) {
   }
 
   ngOnInit() {
-    this.recurringPaymentForm = this.fb.group({
-      selectedUtility: [null, Validators.required],
-      amount: [null, [Validators.required, Validators.min(1)]],
-      frequency: [null, Validators.required],
-      startDate: [null, Validators.required],
-      endDate: [null]
-    });
-
     this.editPaymentForm = this.fb.group({
       selectedUtility: [null, Validators.required],
       amount: [null, [Validators.required, Validators.min(1)]],
@@ -92,42 +69,13 @@ export class RecurringPaymentsComponent implements OnInit {
       { label: 'Yearly', value: 'yearly' }
     ];
 
-    this.utilities = [
-      { name: 'Electricity', icon: 'pi-bolt' },
-      { name: 'Water', logo: 'assets/water.svg' },
-      { name: 'Gas', logo: 'assets/gas.svg' },
-      { name: 'Internet', icon: 'pi-wifi' },
-      { name: 'Phone', icon: 'pi-phone' }
-    ];
-
-    this.recurringPayments = [
-      {
-        selectedUtility: 'Electricity',
-        amount: 100,
-        frequency: 'Monthly',
-        startDate: new Date('2025-09-01'),
-        endDate: new Date('2026-09-01')
-      },
-      {
-        selectedUtility: 'Water',
-        amount: 50,
-        frequency: 'Weekly',
-        startDate: new Date('2025-08-15'),
-        endDate: undefined
-      }
-    ];
+    this.bankingDataService.recurringPayments$.subscribe(payments => {
+      this.recurringPayments = payments;
+    });
   }
 
-  selectUtility(utility: any) {
-    this.recurringPaymentForm.get('selectedUtility')?.setValue(utility.name);
-  }
-
-  schedulePayment() {
-    if (this.recurringPaymentForm.valid) {
-      this.recurringPayments.push(this.recurringPaymentForm.value);
-      this.recurringPaymentForm.reset();
-      this.messageService.add({severity:'success', summary: 'Success', detail: 'Payment scheduled successfully'});
-    }
+  navigateToAddPayment() {
+    this.router.navigate(['/add-new-payment']);
   }
 
   editPayment(payment: any) {
@@ -138,10 +86,15 @@ export class RecurringPaymentsComponent implements OnInit {
 
   savePayment() {
     if (this.editPaymentForm.valid) {
-      const index = this.recurringPayments.indexOf(this.selectedPayment);
-      this.recurringPayments[index] = this.editPaymentForm.value;
-      this.displayEditDialog = false;
-      this.messageService.add({severity:'success', summary: 'Success', detail: 'Payment updated successfully'});
+      const updatedPayment = this.editPaymentForm.value;
+      const index = this.recurringPayments.findIndex(p => p === this.selectedPayment);
+      if (index > -1) {
+        const payments = [...this.recurringPayments];
+        payments[index] = updatedPayment;
+        this.bankingDataService.setRecurringPayments(payments);
+        this.displayEditDialog = false;
+        this.messageService.add({severity:'success', summary: 'Success', detail: 'Payment updated successfully'});
+      }
     }
   }
 
@@ -151,7 +104,8 @@ export class RecurringPaymentsComponent implements OnInit {
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-            this.recurringPayments = this.recurringPayments.filter(p => p !== payment);
+            const payments = this.recurringPayments.filter(p => p !== payment);
+            this.bankingDataService.setRecurringPayments(payments);
             this.messageService.add({severity:'success', summary: 'Success', detail: 'Payment deleted successfully'});
         }
     });

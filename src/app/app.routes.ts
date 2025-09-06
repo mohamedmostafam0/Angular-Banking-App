@@ -90,10 +90,15 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/view-beneficiaries/view-beneficiaries.component').then(m => m.ViewBeneficiariesComponent), 
         title: 'View Beneficiaries' 
       },
-      { 
+      {
         path: 'recurring-payments', 
         loadComponent: () => import('./pages/recurring-payments/recurring-payments.component').then(m => m.RecurringPaymentsComponent), 
         title: 'Recurring Payments' 
+      },
+      {
+        path: 'add-new-payment',
+        loadComponent: () => import('./pages/add-new-payment/add-new-payment.component').then(m => m.AddNewPaymentComponent),
+        title: 'Add New Payment'
       },
       { 
         path: 'marketplace', 

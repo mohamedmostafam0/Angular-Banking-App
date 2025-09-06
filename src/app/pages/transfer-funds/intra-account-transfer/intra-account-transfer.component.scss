@@ -134,3 +134,29 @@
   background-color: var(--primary-dark) !important;
   border-color: var(--primary-dark) !important;
 }
+
+
+
+::ng-deep .p-button { 
+  padding: 1rem 1.5rem !important;  /* top-bottom | left-right */
+  font-size: 1rem !important;       /* adjust text size if needed */
+}
+
+
+
+  .buttons-div {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+
+
+    .ReviewBtn {
+      display: block !important;
+      width: 100% !important;
+      margin-left: 1rem;
+      
+      button {
+        width: 100% !important;
+      }
+    }
+  }

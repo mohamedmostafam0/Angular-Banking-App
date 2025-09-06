@@ -18,6 +18,8 @@ import { ToastModule } from 'primeng/toast';
 import { CreditCard } from '../../interfaces/CreditCard.interface';
 import { Account } from '../../interfaces/Account.interface';
 
+import { DialogModule } from 'primeng/dialog';
+
 @Component({
   selector: 'app-request-credit-card',
   standalone: true,
@@ -33,7 +35,8 @@ import { Account } from '../../interfaces/Account.interface';
     DropdownModule,
     InputTextModule,
     ButtonModule,
-    ToastModule
+    ToastModule,
+    DialogModule
   ],
   templateUrl: './request-credit-card.component.html',
   styleUrls: ['./request-credit-card.component.scss'],
@@ -50,6 +53,7 @@ export class RequestCreditCardComponent implements OnInit {
   accounts: Account[] = [];
   selectedAccount: Account | undefined;
   requestForm: FormGroup;
+  displayTermsDialog: boolean = false;
 
   constructor(
     private messageService: MessageService,
@@ -109,8 +113,17 @@ export class RequestCreditCardComponent implements OnInit {
     ];
 
     this.requestForm = this.fb.group({
+      cardType: [null, Validators.required],
+      employmentStatus: [null, Validators.required],
+      employerName: ['', Validators.required],
+      occupation: ['', Validators.required],
+      income: [null, Validators.required],
+      otherIncome: [''],
       cardholderName: ['', Validators.required],
-      selectedAccount: [null, Validators.required]
+      selectedAccount: [null, Validators.required],
+      branch: [null, Validators.required],
+      deliveryAddress: [''],
+      termsAccepted: [false, Validators.requiredTrue]
     });
   }
 
@@ -118,25 +131,30 @@ export class RequestCreditCardComponent implements OnInit {
     this.accounts = this.bankingData.getAccounts();
   }
 
-  nextStep() {
-    if (this.activeIndex === 0) {
-      if (!this.selectedCardType) {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please select a card type.' });
-        return;
-      }
-      if (!this.termsAccepted) {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please accept the terms and conditions.' });
-        return;
-      }
-    } else if (this.activeIndex === 2) { // Card Info step
-      if (!this.requestForm.valid) {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please enter cardholder name and select an account.' });
-        return;
-      }
-    }
+  showTermsDialog() {
+    this.displayTermsDialog = true;
+  }
 
-    if (this.activeIndex < this.instructions.length - 1) {
+  nextStep() {
+    if (this.isStepValid()) {
       this.activeIndex++;
+    }
+  }
+
+  isStepValid(): boolean {
+    switch (this.activeIndex) {
+      case 0:
+        return this.requestForm.get('cardType')!.valid;
+      case 1:
+        return this.requestForm.get('employmentStatus')!.valid && this.requestForm.get('employerName')!.valid && this.requestForm.get('occupation')!.valid && this.requestForm.get('income')!.valid;
+      case 2:
+        return this.requestForm.get('cardholderName')!.valid && this.requestForm.get('selectedAccount')!.valid;
+      case 3:
+        return this.requestForm.get('branch')!.valid || this.requestForm.get('deliveryAddress')!.valid;
+      case 4:
+        return this.requestForm.get('termsAccepted')!.valid;
+      default:
+        return true;
     }
   }
 
@@ -151,6 +169,11 @@ export class RequestCreditCardComponent implements OnInit {
   }
 
   submitApplication() {
+    if (!this.requestForm.get('termsAccepted')?.value) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please accept the terms and conditions.' });
+      return;
+    }
+
     if (!this.selectedAccount) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please select an account to link the card to.' });
       return;

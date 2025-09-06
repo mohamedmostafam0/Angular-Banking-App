@@ -1,0 +1,150 @@
+<p-toast></p-toast>
+<div class="transfer-page">
+  <div class="header">
+    <h1>Schedule a new Payment</h1>
+    <p>Schedule and manage your recurring payments.</p>
+  </div>
+
+  <p-card>
+    <p-splitter styleClass="mb-5  " [panelSizes]="[35, 65]">
+      <ng-template pTemplate="form">
+        <div class="h-full">
+          <div class="instructions">
+            <h2>Instructions for Recurring Payments</h2>
+            <h4>Follow these steps to schedule a recurring payment.</h4>
+            <ul>
+              <li>
+                <strong>Select Utility:</strong> Choose the utility you want to
+                pay for from the carousel.
+              </li>
+              <li>
+                <strong>Enter Amount:</strong> Specify the amount for each
+                payment.
+              </li>
+              <li>
+                <strong>Set Frequency and Dates:</strong> Select how often the
+                payment should occur and the start and end dates.
+              </li>
+              <li>
+                <strong>Review and Confirm:</strong> Click "Schedule Payment" to
+                set up the recurring payment.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="align-items-center h-full" style="width: 100%">
+          <div class="col-12">
+            <div class="carousel-container">
+              <p-carousel
+                [value]="utilities"
+                [numVisible]="3"
+                [numScroll]="1"
+                [responsiveOptions]="responsiveOptions"
+              >
+                <ng-template let-utility pTemplate="item">
+                  <div class="utility-item" (click)="selectUtility(utility)">
+                    <div class="utility-item-content">
+                      <div class="mb-3 text-center">
+                        <img
+                          *ngIf="utility.logo"
+                          [src]="utility.logo"
+                          [alt]="utility.name"
+                          class="product-image"
+                        />
+                        <i
+                          *ngIf="!utility.logo"
+                          [class]="'pi ' + utility.icon"
+                          style="font-size: 3rem"
+                        ></i>
+                      </div>
+                      <div class="text-center">
+                        <h4 class="mb-1">{{ utility.name }}</h4>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-carousel>
+            </div>
+            <form
+              [formGroup]="recurringPaymentForm"
+              (ngSubmit)="schedulePayment()"
+              class="mt-5"
+              styleClass="SetPaymentButton"
+            >
+              <div class="p-fluid">
+                <div class="field">
+                  <label for="selectedUtility">Selected Utility</label>
+                  <input
+                    id="selectedUtility"
+                    type="text"
+                    pInputText
+                    formControlName="selectedUtility"
+                    [readonly]="true"
+                    placeholder="Select a utility from the carousel"
+                  />
+                </div>
+                <div class="field">
+                  <label for="amount">Amount</label>
+                  <p-inputNumber
+                    id="amount"
+                    formControlName="amount"
+                    mode="currency"
+                    [currency]="recurringPaymentForm.get('currency').value || 'USD'"
+                    locale="en-US"
+                  ></p-inputNumber>
+                </div>
+                <div class="field">
+                  <label for="currency">Currency</label>
+                  <p-dropdown
+                    id="currency"
+                    [options]="currencies"
+                    formControlName="currency"
+                    placeholder="Select a currency"
+                  ></p-dropdown>
+                </div>
+                <div class="field">
+                  <label for="frequency">Frequency</label>
+                  <p-dropdown
+                    id="frequency"
+                    [options]="frequencies"
+                    formControlName="frequency"
+                    placeholder="Select a frequency"
+                  ></p-dropdown>
+                </div>
+                <div class="p-grid">
+                  <div class="field p-col-6">
+                    <label for="startDate">Start Date</label>
+                    <p-calendar
+                      id="startDate"
+                      formControlName="startDate"
+                      [showIcon]="true"
+                    ></p-calendar>
+                  </div>
+                  <div class="field p-col-6">
+                    <label for="endDate">End Date (Optional)</label>
+                    <p-calendar
+                      id="endDate"
+                      formControlName="endDate"
+                      [showIcon]="true"
+                    ></p-calendar>
+                  </div>
+                </div>
+                <div class="buttons-div">
+                  <p-button
+                    type="submit"
+                    label="Schedule Payment"
+                    [disabled]="recurringPaymentForm.invalid"
+                    class="SubmitBtn"
+                    styleClass="nextAction w-full"
+                  ></p-button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </ng-template>
+    </p-splitter>
+  </p-card>
+</div>

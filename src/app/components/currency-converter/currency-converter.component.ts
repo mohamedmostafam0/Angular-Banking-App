@@ -129,6 +129,7 @@ export class CurrencyConverterComponent implements OnInit {
         fromCurrency: toCurrency,
         toCurrency: fromCurrency
       });
+      this.convert();
     }
   }
 

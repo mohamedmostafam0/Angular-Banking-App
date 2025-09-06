@@ -22,13 +22,14 @@
   <!-- New section for the form and button -->
 
   <div class="grid">
-    <div class="col-12 lg:col-5">
+    <div class="col-12">
       <p-card header="Manage Budgets" styleClass="h-full">
         <div class="flex justify-content-between align-items-center mb-3">
           <p-button
             [label]="showBudgetForm ? 'Hide Budget Form' : 'Set/Update Budget'"
             [icon]="showBudgetForm ? 'pi pi-angle-up' : 'pi pi-plus'"
             (onClick)="toggleBudgetForm()"
+            styleClass="SetBudgetButton"
           ></p-button>
         </div>
 
@@ -73,6 +74,7 @@
                     class="budget-form"
                     [formGroup]="budgetForm"
                     (ngSubmit)="saveBudget()"
+                    style="width: 100%"
                   >
                     <div class="p-fluid">
                       <div class="field mb-3">
@@ -82,8 +84,8 @@
                           [options]="categories"
                           formControlName="category"
                           placeholder="Select a category"
-                          [filter]="true"
                           filterBy="label"
+                          appendTo="body"
                         ></p-dropdown>
                       </div>
                       <div class="field mb-3">
@@ -103,15 +105,19 @@
                           [options]="supportedCurrencies"
                           formControlName="currency"
                           placeholder="Select a currency"
+                          styleClass="w-full"
+                          appendTo="body"
                         ></p-dropdown>
                       </div>
                     </div>
-                    <div class="flex mt-3">
+                    <div class="buttons-div">
                       <p-button
                         label="Save Budget"
                         type="submit"
-                        icon="pi pi-check"
+                        styleClass="w-full"
                         [disabled]="budgetForm.invalid"
+                        class="ReviewBtn"
+                        styleClass="nextAction w-full"
                       ></p-button>
                     </div>
                   </form>
@@ -173,7 +179,7 @@
       </p-card>
     </div>
 
-    <div class="col-12 lg:col-7">
+    <div class="col-12">
       <p-card
         header="Budget vs. Spending for {{ selectedAccount?.number }}"
         styleClass="h-full"

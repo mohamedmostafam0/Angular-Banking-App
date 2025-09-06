@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { BankingDataService } from '../../services/banking-data.service';
+import { AuthService } from '../../services/auth.service';
 import { CreditCard } from '../../interfaces/CreditCard.interface';
 import { Account } from '../../interfaces/Account.interface';
 import {
@@ -63,7 +64,8 @@ export class CreditCardsComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.requestForm = this.fb.group({
       cardholderName: ['', Validators.required],
@@ -137,7 +139,7 @@ export class CreditCardsComponent implements OnInit {
   onAccountSelect(account: Account): void {
     if (account) {
       this.requestForm.patchValue({
-        cardholderName: this.bankingDataService.getUser().name,
+        cardholderName: this.authService.getUserName(),
       });
     }
   }

@@ -9,6 +9,10 @@ import { ButtonModule } from 'primeng/button';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TableModule } from 'primeng/table';
 
+import { SplitterModule } from 'primeng/splitter';
+
+import { AuthService } from '../../services/auth.service';
+
 @Component({
   selector: 'app-settings',
   standalone: true,
@@ -21,7 +25,8 @@ import { TableModule } from 'primeng/table';
     PasswordModule,
     ButtonModule,
     InputSwitchModule,
-    TableModule
+    TableModule,
+    SplitterModule
   ],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
@@ -45,8 +50,12 @@ export class SettingsComponent implements OnInit {
   };
 
   auditLog: any[] = [];
+  username: string = '';
+
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
+    this.username = this.authService.getUserName();
     this.auditLog = [
       {
         action: 'Logged In',

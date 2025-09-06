@@ -131,3 +131,36 @@
   background-color: var(--primary-dark) !important;
   border-color: var(--primary-dark) !important;
 }
+
+
+.col-12{
+padding: 0 !important;
+}
+
+
+::ng-deep .nextAction.p-button:not(:disabled):hover{
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+}
+
+  .buttons-div {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+
+
+      .ReviewBtn {
+        display: block !important;
+        width: 100% !important;
+        
+        button {
+          width: 100% !important;
+        }
+      }
+  }
+
+
+::ng-deep .p-button { 
+  padding: 1rem 1.5rem !important;  /* top-bottom | left-right */
+  font-size: 1rem !important;       /* adjust text size if needed */
+}

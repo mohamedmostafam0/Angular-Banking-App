@@ -1,39 +1,37 @@
 /* Main Container */
 :host {
   display: block;
-  padding: 1.5rem;
-  background-color: #fff;
 }
 
-/* Credit Cards Grid */
-.credit-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Exactly 2 cards per row */
+/* Debit Cards Grid */
+.debit-cards-grid {
+  display: flex;
+  flex-wrap: wrap;
   gap: 1.5rem;
   margin-top: 1.5rem;
-
-  /* Responsive breakpoints */
-  @media (max-width: 1200px) {
-    grid-template-columns: 1fr; /* Single column on smaller screens */
-    gap: 1rem;
-  }
+  justify-content: flex-start; 
 }
 
-/* Credit Card */
-::ng-deep .credit-card {
+/* Debit Card */
+::ng-deep .debit-card {
   border-radius: 10px;
   transition: transform 0.2s, box-shadow 0.2s;
   height: 100%;
   display: flex;
   flex-direction: column;
+    min-width: 500px; /* Minimum width for the card */
+
 
   ::ng-deep &:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   }
 
+  .p-card-header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
 
   .p-card-body {
-    padding: 1.5rem;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -135,31 +133,47 @@
 }
 
 
-::ng-deep .p-toolbar{
+      ::ng-deep .p-field {
+        margin-bottom: 1.5rem !important;
+        
+        ::ng-deep label {
+          display: block !important;
+          margin-bottom: 0.5rem !important;
+          font-weight: 500 !important;
+          color: var(--text-color) !important;
+        }
+      }
+
+
+      ::ng-deep .p-toolbar{
   border: transparent !important;
   justify-content: end !important;
 }
 
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .header h1 {
-    font-size: 2rem;
-  }
-  
-  .header p {
-    font-size: 1rem;
-  }
-}
-
-
-::ng-deep .p-card-footer{
-  justify-content: end !important;
-  display: flex !important; 
-  
-}
-
 ::ng-deep .p-button:not(:disabled):hover{
   background-color: var(--primary-dark) !important;
   border-color: var(--primary-dark) !important;
+}
+
+
+::ng-deep .p-dropdown {
+      background-color: var(--white) !important;
+      width: 100% !important;
+    } 
+
+
+
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+
+.p-dropdown{
+  margin-bottom: 10px !important;
 }

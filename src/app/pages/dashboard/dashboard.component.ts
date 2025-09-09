@@ -12,10 +12,22 @@ import { ChartModule } from 'primeng/chart';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
+import { DragDropModule } from 'primeng/dragdrop';
+import { TooltipModule } from 'primeng/tooltip';
+import { TieredMenuModule } from 'primeng/tieredmenu';
+import { MenuItem } from 'primeng/api';
 
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { RecurringPaymentsWidgetComponent } from '../../components/recurring-payments-widget/recurring-payments-widget.component';
+import { DomesticTransferWidgetComponent } from '../../components/domestic-transfer-widget/domestic-transfer-widget.component';
+import { InternationalTransferWidgetComponent } from '../../components/international-transfer-widget/international-transfer-widget.component';
+import { IntraAccountTransferWidgetComponent } from '../../components/intra-account-transfer-widget/intra-account-transfer-widget.component';
+import { WithinBankTransferWidgetComponent } from '../../components/within-bank-transfer-widget/within-bank-transfer-widget.component';
+import { CreditCardWidgetComponent } from '../../components/credit-card-widget/credit-card-widget.component';
+import { DebitCardWidgetComponent } from '../../components/debit-card-widget/debit-card-widget.component';
+import { MarketplaceWidgetComponent } from '../../components/marketplace-widget/marketplace-widget.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,7 +43,18 @@ import { FormsModule } from '@angular/forms';
     DropdownModule,
     InputNumberModule,
     ToastModule,
-    FormsModule
+    FormsModule,
+    DragDropModule,
+    RecurringPaymentsWidgetComponent,
+    TooltipModule,
+    TieredMenuModule,
+    DomesticTransferWidgetComponent,
+    InternationalTransferWidgetComponent,
+    IntraAccountTransferWidgetComponent,
+    WithinBankTransferWidgetComponent,
+    CreditCardWidgetComponent,
+    DebitCardWidgetComponent,
+    MarketplaceWidgetComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
@@ -52,9 +75,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
   balanceTrendData: any;
   cashflowData: any;
 
-
   accountOptions: any[] = [];
   selectedAccountForBalanceTrend: string | null = null;
+
+  widgets: any[] = [
+    { name: 'Credit Cards', component: 'app-credit-card-widget' },
+    { name: 'Debit Cards', component: 'app-debit-card-widget' },
+    { name: 'New Recurring Payment', component: 'app-recurring-payments-widget' },
+    { name: 'Domestic Transfer', component: 'app-domestic-transfer-widget' },
+    { name: 'International Transfer', component: 'ap~p-international-transfer-widget' },
+    { name: 'Intra-Account Transfer', component: 'app-intra-account-transfer-widget' },
+    { name: 'Within-Bank Transfer', component: 'app-within-bank-transfer-widget' },
+    { name: 'Cash-flow Waterfall', component: 'cash-flow-waterfall-chart' },
+    { name: 'Marketplace', component: 'app-marketplace-widget' }
+  ];
+  dashboardItems: any[] = [];
+  rearrangeMode = false;
+  draggedItem: any = null;
+  dragOverItem: any = null;
+  menuItems!: MenuItem[];
 
   private transactionsSubscription: Subscription | undefined;
   private accountsSubscription: Subscription | undefined;
@@ -65,7 +104,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-      this.accountsSubscription = this.bankingDataService.accounts$.subscribe(data => {
+    this.loadDashboardState();
+    this.buildMenuItems();
+
+    this.accountsSubscription = this.bankingDataService.accounts$.subscribe(data => {
       this.accounts$ = of(data);
       this.accountOptions = [
         { label: 'All Accounts', value: null },
@@ -74,11 +116,60 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
 
     this.transactionsSubscription = this.bankingDataService.transactions$.subscribe(data => {
-      // this.transactions$ = of(data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5));
       this.prepareChartData(data);
     });
 
     this.username = this.authService.getUserName();
+  }
+
+  buildMenuItems(): void {
+    const availableWidgets = this.widgets.filter(widget => 
+      !this.dashboardItems.some(item => item.component === widget.component)
+    );
+
+    const quickTransferItems = availableWidgets
+      .filter(w => w.component.includes('-transfer'))
+      .map(w => ({ label: w.name, command: () => this.addNewWidget(w) }));
+
+    const otherItems = availableWidgets
+      .filter(w => !w.component.includes('-transfer'))
+      .map(w => ({ label: w.name, command: () => this.addNewWidget(w) }));
+
+    this.menuItems = [
+      {
+        label: 'Add Widget',
+        icon: 'pi pi-plus',
+        items: [
+          {
+            label: 'Quick Transfer',
+            items: quickTransferItems
+          },
+          ...otherItems
+        ]
+      },
+      {
+        label: 'Rearrange Widgets',
+        icon: 'pi pi-sort-amount-down',
+        command: () => this.toggleRearrange()
+      }
+    ];
+  }
+
+  loadDashboardState() {
+    const savedState = localStorage.getItem('dashboardState');
+    if (savedState) {
+      this.dashboardItems = JSON.parse(savedState);
+    } else {
+      this.dashboardItems = [
+        { name: 'Spending by Category', component: 'spending-by-category-chart' },
+        { name: 'Balance Trend', component: 'balance-trend-chart' },
+        { name: 'Cash-flow Waterfall', component: 'cash-flow-waterfall-chart' }
+      ];
+    }
+  }
+
+  saveDashboardState() {
+    localStorage.setItem('dashboardState', JSON.stringify(this.dashboardItems));
   }
 
   prepareChartData(transactions: Transaction[]) {
@@ -150,6 +241,62 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  addNewWidget(widget: any) {
+    if (widget) {
+      if (!this.dashboardItems.find(item => item.component === widget.component)) {
+        // Reset isNew flag for all items
+        this.dashboardItems.forEach(item => item.isNew = false);
+        const newWidget = { ...widget, isNew: true };
+        this.dashboardItems.push(newWidget);
+        this.rearrangeMode = true;
+        this.saveDashboardState();
+        this.buildMenuItems();
+      }
+    }
+  }
+
+  removeWidget(widget: any) {
+    this.dashboardItems = this.dashboardItems.filter(item => item !== widget);
+    this.saveDashboardState();
+    this.buildMenuItems();
+  }
+
+  toggleRearrange() {
+    this.rearrangeMode = !this.rearrangeMode;
+    if (!this.rearrangeMode) {
+      // Reset isNew flag for all items when done rearranging
+      this.dashboardItems.forEach(item => item.isNew = false);
+    }
+  }
+
+  onDragStart(item: any) {
+    this.draggedItem = item;
+    // When dragging starts, the item is no longer "new" in terms of the tooltip
+    if (item.isNew) {
+      item.isNew = false;
+    }
+  }
+
+  onDrop(droppedOnItem: any) {
+    if (this.draggedItem) {
+      const draggedItemIndex = this.dashboardItems.indexOf(this.draggedItem);
+      const droppedOnItemIndex = this.dashboardItems.indexOf(droppedOnItem);
+      
+      [this.dashboardItems[draggedItemIndex], this.dashboardItems[droppedOnItemIndex]] = [this.dashboardItems[droppedOnItemIndex], this.dashboardItems[draggedItemIndex]];
+
+      this.draggedItem = null;
+      this.dragOverItem = null;
+      this.saveDashboardState();
+    }
+  }
+
+  onDragEnter(item: any) {
+    this.dragOverItem = item;
+  }
+
+  onDragLeave() {
+    this.dragOverItem = null;
+  }
 
   ngOnDestroy(): void {
     if (this.transactionsSubscription) {

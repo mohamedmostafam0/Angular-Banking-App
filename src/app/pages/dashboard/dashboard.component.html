@@ -17,31 +17,88 @@
         [showClear]="true"
       ></p-dropdown>
     </div>
+    <div class="p-field mb-3">
+      <p-button
+        #btn
+        icon="pi pi-bars"
+        (click)="menu.toggle($event)"
+        label="Edit Dashboard"
+      ></p-button>
+      <p-tieredmenu #menu [model]="menuItems" [popup]="true"></p-tieredmenu>
+      <p-button
+        *ngIf="rearrangeMode"
+        label="Done Rearranging"
+        (click)="toggleRearrange()"
+        class="ml-2"
+      ></p-button>
+    </div>
   </div>
 
   <div class="dashboard-analytics-reporting">
-    <div class="grid">
-      <div class="col-12 md:col-6">
-        <p-card header="Spending by Category">
-          <p-chart
-            type="doughnut"
-            [data]="spendingByCategoryData"
-            #spendingByCategoryChart
-          ></p-chart>
-        </p-card>
-      </div>
-      <div class="col-12 md:col-6">
-        <p-card header="Balance Trend">
-          <p-chart
-            type="line"
-            [data]="balanceTrendData"
-            #balanceTrendChart
-          ></p-chart>
-        </p-card>
-      </div>
-      <div class="col-12 md:col-6">
-        <p-card header="Cash-flow Waterfall">
-          <p-chart type="bar" [data]="cashflowData" #cashflowChart></p-chart>
+    <div class="flex gap-3 flex-wrap">
+      <div
+        *ngFor="let item of dashboardItems; let i = index"
+        [pDraggable]="rearrangeMode ? 'items' : undefined"
+        [pDraggableDisabled]="!rearrangeMode"
+        (onDragStart)="onDragStart(item)"
+        [pDroppable]="rearrangeMode ? 'items' : undefined"
+        (onDrop)="onDrop(item)"
+        (onDragEnter)="onDragEnter(item)"
+        (onDragLeave)="onDragLeave()"
+        [ngClass]="{ 'drag-over': item === dragOverItem }"
+        class="widget-container"
+      >
+        <p-card [header]="item.name" styleClass="p-card-relative">
+          <button
+            *ngIf="rearrangeMode"
+            pButton
+            pRipple
+            type="button"
+            icon="pi pi-minus"
+            class="p-button-rounded p-button-danger p-button-text remove-widget-button"
+            (click)="removeWidget(item)"
+          ></button>
+          <ng-container [ngSwitch]="item.component">
+            <app-credit-card-widget
+              *ngSwitchCase="'app-credit-card-widget'"
+            ></app-credit-card-widget>
+            <app-debit-card-widget
+              *ngSwitchCase="'app-debit-card-widget'"
+            ></app-debit-card-widget>
+            <app-recurring-payments-widget
+              *ngSwitchCase="'app-recurring-payments-widget'"
+            ></app-recurring-payments-widget>
+            <app-domestic-transfer-widget
+              *ngSwitchCase="'app-domestic-transfer-widget'"
+            ></app-domestic-transfer-widget>
+            <app-international-transfer-widget
+              *ngSwitchCase="'app-international-transfer-widget'"
+            ></app-international-transfer-widget>
+            <app-intra-account-transfer-widget
+              *ngSwitchCase="'app-intra-account-transfer-widget'"
+            ></app-intra-account-transfer-widget>
+            <app-within-bank-transfer-widget
+              *ngSwitchCase="'app-within-bank-transfer-widget'"
+            ></app-within-bank-transfer-widget>
+            <p-chart
+              *ngSwitchCase="'spending-by-category-chart'"
+              type="doughnut"
+              [data]="spendingByCategoryData"
+            ></p-chart>
+            <p-chart
+              *ngSwitchCase="'balance-trend-chart'"
+              type="line"
+              [data]="balanceTrendData"
+            ></p-chart>
+            <p-chart
+              *ngSwitchCase="'cash-flow-waterfall-chart'"
+              type="bar"
+              [data]="cashflowData"
+            ></p-chart>
+            <app-marketplace-widget
+              *ngSwitchCase="'app-marketplace-widget'"
+            ></app-marketplace-widget>
+          </ng-container>
         </p-card>
       </div>
     </div>

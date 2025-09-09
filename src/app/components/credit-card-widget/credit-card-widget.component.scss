@@ -1,21 +1,26 @@
 /* Main Container */
 :host {
   display: block;
-  padding: 1.5rem;
-  background-color: #fff;
 }
 
 /* Credit Cards Grid */
 .credit-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Exactly 2 cards per row */
+  display: flex;
+  flex-wrap: wrap;
   gap: 1.5rem;
   margin-top: 1.5rem;
+  justify-content: flex-start; /* Align items to the start */
+}
 
-  /* Responsive breakpoints */
-  @media (max-width: 1200px) {
-    grid-template-columns: 1fr; /* Single column on smaller screens */
-    gap: 1rem;
+.credit-card-wrapper {
+  flex: 0 0 auto; 
+  min-width: 500px; /* Minimum width for the card */
+}
+
+/* Adjust for smaller screens */
+@media (max-width: 1200px) {
+  .credit-card-wrapper {
+    max-width: 100%; /* Full width on smaller screens */
   }
 }
 
@@ -33,7 +38,6 @@
 
 
   .p-card-body {
-    padding: 1.5rem;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -141,18 +145,6 @@
 }
 
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .header h1 {
-    font-size: 2rem;
-  }
-  
-  .header p {
-    font-size: 1rem;
-  }
-}
-
-
 ::ng-deep .p-card-footer{
   justify-content: end !important;
   display: flex !important; 
@@ -162,4 +154,19 @@
 ::ng-deep .p-button:not(:disabled):hover{
   background-color: var(--primary-dark) !important;
   border-color: var(--primary-dark) !important;
+}
+
+
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus, ::ng-deep .p-select-option.p-select-option-selected
+{
+  border-color: #fff !important;
+  background-color: var(--surface-card) !important;
+}
+
+.p-dropdown{
+  margin-bottom: 10px !important;
 }

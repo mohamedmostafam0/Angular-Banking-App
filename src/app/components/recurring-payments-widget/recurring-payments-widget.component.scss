@@ -1,0 +1,216 @@
+:host {
+
+    display: block;
+    padding: 1.5rem;
+  }
+
+  .form{
+      background-color: var(--surface-card);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+  ::ng-deep .p-splitter {
+    background: transparent;
+    border: none;
+  }
+  ::ng-deep .p-splitter-gutter {
+    background-color: var(--surface-card) !important;
+    pointer-events: none;
+    cursor: default;
+  }
+  
+
+
+    .p-inputtext, ::ng-deep .p-inputnumber-input, .p-dropdown .p-calendar{
+    background-color: var(white) !important;
+    width: 100%;
+  }
+
+      ::ng-deep .p-inputtext, .p-inputnumber, .p-dropdown {
+      background-color: var(--white) !important;
+      width: 100% !important;
+    }
+
+    ::ng-deep .p-calendar{
+            background-color: var(--white) !important;
+      width: 100% !important;
+
+    }
+
+
+::ng-deep .p-splitter {
+  background: transparent !important;
+  border: none !important;
+
+}
+::ng-deep .p-splitter-gutter {
+  background-color: var(--surface-card);
+  pointer-events: none;
+  cursor: default;
+}
+
+.field {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  label {
+    display: block;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+}
+
+.centered-image {
+  display: flex;
+  justify-content: center;
+}
+
+.select-button {
+  width: auto !important;
+  min-width: 100px !important;
+}
+
+
+.utility-item {
+    border: 1px solid #e9ecef;
+    border-radius: 3px;
+    margin: .3rem;
+    text-align: center;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+
+  .instructions {
+    background-color: var(--surface-card);
+    padding-right: 2rem;
+    border-color: var(--surface-card);
+    
+    h4 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--text-color-secondary);
+    }
+
+    p {
+      color: var(--text-color-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style-position: inside;
+      padding-left: 0;
+      color: var(--text-color-secondary);
+
+      li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+
+        strong {
+          color: var(--text-color-secondary);
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+// ::ng-deep .SchedulePaymentButton.p-button:not(:disabled):hover{
+//   background-color: var(--primary-dark) !important;
+//   border-color: var(--primary-dark) !important;
+// }
+
+::ng-deep .p-carousel-indicator-active .p-carousel-indicator-button{
+  background-color: var(--primary-color) !important;
+} 
+  
+.p-grid{
+  display: flex;
+}
+
+
+
+.p-select:not(.p-disabled).p-focus{
+  border-color: var(--primary-color);
+}
+
+
+  .buttons-div {
+    justify-content: flex-end;
+    margin-top: 2rem;
+
+
+      .ReviewBtn {
+        display: block !important;
+        width: 100% !important;
+        
+        button {
+          width: 100% !important;
+        }
+      }
+  }
+
+
+  
+::ng-deep .p-button { 
+  padding: 1rem 1.5rem !important;  /* top-bottom | left-right */
+  font-size: 1rem !important;       /* adjust text size if needed */
+}
+
+::ng-deep .SetPaymentButton.p-button:not(:disabled):hover{
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+  color: var(--white) !important;
+}
+
+
+::ng-deep .SetPaymentButton{
+  width: 100% !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  margin-bottom: 1rem !important;
+}
+
+
+
+::ng-deep .p-toolbar{
+  border: transparent !important;
+  justify-content: end !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+}
+
+
+  .instructions {
+    padding-right: 2rem;
+    border-color: var(--surface-card);
+    
+    h4 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--text-color-secondary);
+    }
+
+    p {
+      color: var(--text-color-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style-position: inside;
+      padding-left: 0;
+      color: var(--text-color-secondary);
+
+      li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+
+        strong {
+          color: var(--text-color-secondary);
+          font-weight: 600;
+        }
+      }
+    }
+  }

@@ -1,135 +1,144 @@
 <p-toast></p-toast>
 <div class="transfer-page">
-  <div class="header">
+  <div class="header" *ngIf="!isOnDashboard">
     <h1>Domestic Transfer</h1>
     <p>Transfer funds to another account in the same country.</p>
   </div>
 
-  <p-card>
-    <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
-      <ng-template pTemplate="form">
-        <div class="flex h-full">
-          <div class="instructions">
-            <h2>Instructions for Domestic Transfer</h2>
-            <h4>Follow these steps to complete a domestic fund transfer</h4>
-            <ul>
-              <li>
-                <strong>Select From Account:</strong> Choose the account from
-                which you want to transfer funds.
-              </li>
-              <li>
-                <strong>Enter To Account:</strong> Provide the recipient's
-                account number within the same country.
-              </li>
-              <li>
-                <strong>Enter Amount and Currency:</strong> Specify the amount
-                you wish to transfer and select the currency.
-              </li>
-              <li>
-                <strong>Review and Confirm:</strong> Click "Review Transfer" to
-                verify details, then confirm.
-              </li>
-            </ul>
+  <ng-template #theForm>
+    <div class="flex align-items-center h-full" style="width: 100%">
+      <div class="col-12">
+        <form
+          class="transfer-form"
+          [formGroup]="transferForm"
+          (ngSubmit)="initiateTransfer()"
+        >
+          <div class="field mb-3">
+            <label>Select a Beneficiary</label>
+            <div class="beneficiary-chips">
+              <p-chip
+                *ngFor="let beneficiary of beneficiaries"
+                [label]="beneficiary.name"
+                styleClass="p-chip-clickable"
+                (click)="selectBeneficiary(beneficiary)"
+                [pTooltip]="'Account: ' + beneficiary.accountNumber"
+                tooltipPosition="top"
+              >
+              </p-chip>
+              <span
+                *ngIf="beneficiaries.length === 0"
+                class="no-beneficiaries-msg"
+                >No domestic beneficiaries found.</span
+              >
+            </div>
           </div>
-        </div>
-      </ng-template>
-      <ng-template pTemplate>
-        <div class="flex align-items-center h-full" style="width: 100%">
-          <div class="col-12">
-            <form
-              class="transfer-form"
-              [formGroup]="transferForm"
-              (ngSubmit)="initiateTransfer()"
-            >
+
+          <div class="p-fluid">
+            <div class="field mb-3">
               <div class="field mb-3">
-                <label>Select a Beneficiary</label>
-                <div class="beneficiary-chips">
-                  <p-chip
-                    *ngFor="let beneficiary of beneficiaries"
-                    [label]="beneficiary.name"
-                    styleClass="p-chip-clickable"
-                    (click)="selectBeneficiary(beneficiary)"
-                    [pTooltip]="'Account: ' + beneficiary.accountNumber"
-                    tooltipPosition="top"
-                  >
-                  </p-chip>
-                  <span
-                    *ngIf="beneficiaries.length === 0"
-                    class="no-beneficiaries-msg"
-                    >No domestic beneficiaries found.</span
-                  >
-                </div>
-              </div>
-
-              <div class="p-fluid">
-                <div class="field mb-3">
-                  <div class="field mb-3">
-                    <label for="fromAccount">From Account</label>
-                    <p-dropdown
-                      inputId="fromAccount"
-                      [options]="accounts"
-                      formControlName="fromAccount"
-                      placeholder="Select an account"
-                      optionLabel="number"
-                    >
-                    </p-dropdown>
-                  </div>
-                </div>
-
-                <div class="field mb-3">
-                  <label for="toAccount" class="col-12">To Account</label>
-                  <div class="col-12">
-                    <input
-                      pInputText
-                      id="toAccount"
-                      formControlName="toAccount"
-                      placeholder="Enter account number or select a beneficiary"
-                      class="'p-inputtext p-component p-element input-login text-left ng-untouched ng-pristine ng-invalid"
-                    />
-                  </div>
-                </div>
-
-                <div class="field mb-3">
-                  <label for="amount" class="col-12">Amount</label>
-                  <div class="col-12">
-                    <p-inputNumber
-                      inputId="amount"
-                      formControlName="amount"
-                      mode="currency"
-                      [currency]="transferForm.get('currency')?.value || 'USD'"
-                      locale="en-US"
-                    >
-                    </p-inputNumber>
-                  </div>
-                </div>
-                <div class="field mb-3">
-                  <label for="currency" class="col-12">Currency</label>
-                  <div class="col-12">
-                    <p-dropdown
-                      inputId="currency"
-                      [options]="supportedCurrencies"
-                      formControlName="currency"
-                      placeholder="Select a currency"
-                    >
-                    </p-dropdown>
-                  </div>
-                </div>
-              </div>
-
-              <div class="buttons-div">
-                <p-button
-                  label="Review Transfer"
-                  type="submit"
-                  [disabled]="transferForm.invalid"
-                  class="ReviewBtn"
-                  styleClass="nextAction w-full"
+                <label for="fromAccount">From Account</label>
+                <p-dropdown
+                  inputId="fromAccount"
+                  [options]="accounts"
+                  formControlName="fromAccount"
+                  placeholder="Select an account"
+                  optionLabel="number"
                 >
-                </p-button>
+                </p-dropdown>
               </div>
-            </form>
+            </div>
+
+            <div class="field mb-3">
+              <label for="toAccount" class="col-12">To Account</label>
+              <div class="col-12">
+                <input
+                  pInputText
+                  id="toAccount"
+                  formControlName="toAccount"
+                  placeholder="Enter account number or select a beneficiary"
+                  class="'p-inputtext p-component p-element input-login text-left ng-untouched ng-pristine ng-invalid"
+                />
+              </div>
+            </div>
+
+            <div class="field mb-3">
+              <label for="amount" class="col-12">Amount</label>
+              <div class="col-12">
+                <p-inputNumber
+                  inputId="amount"
+                  formControlName="amount"
+                  mode="currency"
+                  [currency]="transferForm.get('currency')?.value || 'USD'"
+                  locale="en-US"
+                >
+                </p-inputNumber>
+              </div>
+            </div>
+            <div class="field mb-3">
+              <label for="currency" class="col-12">Currency</label>
+              <div class="col-12">
+                <p-dropdown
+                  inputId="currency"
+                  [options]="supportedCurrencies"
+                  formControlName="currency"
+                  placeholder="Select a currency"
+                >
+                </p-dropdown>
+              </div>
+            </div>
           </div>
-        </div>
-      </ng-template>
-    </p-splitter>
+
+          <div class="buttons-div">
+            <p-button
+              label="Review Transfer"
+              type="submit"
+              [disabled]="transferForm.invalid || (isOnDashboard && !rearrangeMode)"
+              class="ReviewBtn"
+              styleClass="nextAction w-full"
+            >
+            </p-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+
+  <p-card>
+    <ng-container *ngIf="!isOnDashboard; else dashboardView">
+      <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
+        <ng-template pTemplate="form">
+          <div class="flex h-full">
+            <div class="instructions">
+              <h2>Instructions for Domestic Transfer</h2>
+              <h4>Follow these steps to complete a domestic fund transfer</h4>
+              <ul>
+                <li>
+                  <strong>Select From Account:</strong> Choose the account from
+                  which you want to transfer funds.
+                </li>
+                <li>
+                  <strong>Enter To Account:</strong> Provide the recipient's
+                  account number within the same country.
+                </li>
+                <li>
+                  <strong>Enter Amount and Currency:</strong> Specify the amount
+                  you wish to transfer and select the currency.
+                </li>
+                <li>
+                  <strong>Review and Confirm:</strong> Click "Review Transfer" to
+                  verify details, then confirm.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate>
+          <ng-container *ngTemplateOutlet="theForm"></ng-container>
+        </ng-template>
+      </p-splitter>
+    </ng-container>
+    <ng-template #dashboardView>
+      <ng-container *ngTemplateOutlet="theForm"></ng-container>
+    </ng-template>
   </p-card>
 </div>

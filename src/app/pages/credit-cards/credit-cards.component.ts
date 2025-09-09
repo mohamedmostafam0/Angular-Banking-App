@@ -58,6 +58,7 @@ export class CreditCardsComponent implements OnInit {
   accounts: Account[] = [];
   showRequestDialog = false;
   requestForm: FormGroup;
+  isOnDashboard: boolean = false;
 
   constructor(
     private bankingDataService: BankingDataService,
@@ -76,6 +77,7 @@ export class CreditCardsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isOnDashboard = this.router.url.includes('/dashboard');
     this.loadCreditCards();
     this.loadAccounts();
   }

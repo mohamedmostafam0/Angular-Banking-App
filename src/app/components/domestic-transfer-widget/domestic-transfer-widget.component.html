@@ -1,0 +1,94 @@
+<p-toast></p-toast>
+<div class="flex align-items-center h-full" style="width: 100%">
+  <div class="col-12">
+    <form
+      class="transfer-form"
+      [formGroup]="transferForm"
+      (ngSubmit)="initiateTransfer()"
+    >
+      <div class="field mb-3">
+        <label>Select a Beneficiary</label>
+        <div class="beneficiary-chips">
+          <p-chip
+            *ngFor="let beneficiary of beneficiaries"
+            [label]="beneficiary.name"
+            styleClass="p-chip-clickable"
+            (click)="selectBeneficiary(beneficiary)"
+            [pTooltip]="'Account: ' + beneficiary.accountNumber"
+            tooltipPosition="top"
+          >
+          </p-chip>
+          <span *ngIf="beneficiaries.length === 0" class="no-beneficiaries-msg"
+            >No domestic beneficiaries found.</span
+          >
+        </div>
+      </div>
+
+      <div class="p-fluid">
+        <div class="field mb-3">
+          <div class="field mb-3">
+            <label for="fromAccount">From Account</label>
+            <p-dropdown
+              inputId="fromAccount"
+              [options]="accounts"
+              formControlName="fromAccount"
+              placeholder="Select an account"
+              optionLabel="number"
+            >
+            </p-dropdown>
+          </div>
+        </div>
+
+        <div class="field mb-3">
+          <label for="toAccount" class="col-12">To Account</label>
+          <div class="col-12">
+            <input
+              pInputText
+              id="toAccount"
+              formControlName="toAccount"
+              placeholder="Enter account number or select a beneficiary"
+              class="'p-inputtext p-component p-element input-login text-left ng-untouched ng-pristine ng-invalid"
+            />
+          </div>
+        </div>
+
+        <div class="field mb-3">
+          <label for="amount" class="col-12">Amount</label>
+          <div class="col-12">
+            <p-inputNumber
+              inputId="amount"
+              formControlName="amount"
+              mode="currency"
+              [currency]="transferForm.get('currency')?.value || 'USD'"
+              locale="en-US"
+            >
+            </p-inputNumber>
+          </div>
+        </div>
+        <div class="field mb-3">
+          <label for="currency" class="col-12">Currency</label>
+          <div class="col-12">
+            <p-dropdown
+              inputId="currency"
+              [options]="supportedCurrencies"
+              formControlName="currency"
+              placeholder="Select a currency"
+            >
+            </p-dropdown>
+          </div>
+        </div>
+      </div>
+
+      <div class="buttons-div">
+        <p-button
+          label="Review Transfer"
+          type="submit"
+          [disabled]="transferForm.invalid"
+          class="ReviewBtn"
+          styleClass="nextAction w-full"
+        >
+        </p-button>
+      </div>
+    </form>
+  </div>
+</div>

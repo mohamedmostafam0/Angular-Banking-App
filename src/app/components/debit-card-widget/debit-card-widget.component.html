@@ -1,0 +1,49 @@
+<div class="debit-card-widget">
+  <p-dropdown 
+    [options]="cardOptions" 
+    [(ngModel)]="selectedDebitCard" 
+    placeholder="Select a Debit Card" 
+    optionLabel="label"
+    optionValue="value"
+    (onChange)="onCardChange($event)">
+  </p-dropdown>
+
+  <div *ngIf="selectedDebitCard" class="debit-card-wrapper">
+    <p-card styleClass="debit-card">
+      <ng-template pTemplate="header">
+        <div class="card-header">
+          <div class="card-type">
+            <i class="pi pi-credit-card"></i>
+            <span>Debit Card</span>
+          </div>
+          <p-tag
+            [value]="selectedDebitCard.status"
+            [severity]="getStatusSeverity(selectedDebitCard.status)"
+          ></p-tag>
+        </div>
+      </ng-template>
+
+      <div class="card-content">
+        <div class="card-number">
+          {{ selectedDebitCard.cardNumber | creditCardNumber }}
+        </div>
+
+        <div class="card-details">
+          <div class="card-holder">
+            <span class="label">Cardholder Name</span>
+            <span class="value">{{ selectedDebitCard.cardholderName | uppercaseText }}</span>
+          </div>
+          <div class="valid-until">
+            <span class="label">Valid Until</span>
+            <span class="value">{{ selectedDebitCard.expirationDate }}</span>
+          </div>
+        </div>
+
+        <div class="linked-account">
+          <span class="label">Linked Account</span>
+          <span class="value">{{ selectedDebitCard.linkedAccountNumber }}</span>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>

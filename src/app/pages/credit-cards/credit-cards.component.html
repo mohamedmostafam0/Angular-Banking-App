@@ -10,6 +10,7 @@
   <p-toolbar styleClass="mb-4">
     <div class="p-toolbar-group-end">
       <button
+        *ngIf="!isOnDashboard"
         pButton
         label="Request Credit Card"
         icon="pi pi-plus"
@@ -48,9 +49,7 @@
           <div class="card-details">
             <div class="card-holder">
               <span class="label">Cardholder Name</span>
-              <span class="value">{{
-                card.cardholderName | uppercaseText
-              }}</span>
+              <span class="value">{{ card.cardholderName | uppercaseText }}</span>
             </div>
             <div class="valid-until">
               <span class="label">Valid Until</span>
@@ -109,9 +108,7 @@
           <div class="card-details">
             <div class="card-holder">
               <span class="label">Cardholder Name</span>
-              <span class="value">{{
-                card.cardholderName | uppercaseText
-              }}</span>
+              <span class="value">{{ card.cardholderName | uppercaseText }}</span>
             </div>
             <div class="valid-until">
               <span class="label">Valid Until</span>
@@ -170,9 +167,7 @@
           <div class="card-details">
             <div class="card-holder">
               <span class="label">Cardholder Name</span>
-              <span class="value">{{
-                card.cardholderName | uppercaseText
-              }}</span>
+              <span class="value">{{ card.cardholderName | uppercaseText }}</span>
             </div>
             <div class="valid-until">
               <span class="label">Valid Until</span>

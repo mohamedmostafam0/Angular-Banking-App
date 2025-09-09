@@ -1,11 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BankingDataService } from '../../../services/banking-data.service';
-import { CurrencyExchangeService } from '../../../services/currency-exchange.service';
-import { Account } from '../../../interfaces/Account.interface';
-import { Beneficiary } from '../../../interfaces/beneficiary';
+import { BankingDataService } from '../../services/banking-data.service';
+import { CurrencyExchangeService } from '../../services/currency-exchange.service';
+import { Account } from '../../interfaces/Account.interface';
+import { Beneficiary } from '../../interfaces/beneficiary';
 import { MessageService, ConfirmationService, ConfirmEventType, MenuItem } from 'primeng/api';
 
 // PrimeNG Modules
@@ -15,15 +14,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
-import { SplitterModule } from 'primeng/splitter';
 import { ChipModule } from 'primeng/chip';
 import { TooltipModule } from 'primeng/tooltip';
-import { StepsModule } from 'primeng/steps';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
-  selector: 'app-international-transfer',
+  selector: 'app-international-transfer-widget',
   standalone: true,
   imports: [
     CommonModule,
@@ -34,19 +31,16 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     InputTextModule,
     InputNumberModule,
     ToastModule,
-    SplitterModule,
     ChipModule,
     TooltipModule,
-    StepsModule,
     DialogModule,
     ConfirmDialogModule
   ],
-  templateUrl: './international-transfer.component.html',
-  styleUrls: ['./international-transfer.component.scss'],
+  templateUrl: './international-transfer-widget.component.html',
+  styleUrls: ['./international-transfer-widget.component.scss'],
   providers: [MessageService, ConfirmationService]
 })
-export class InternationalTransferComponent implements OnInit {
-  @Input() rearrangeMode: boolean = false;
+export class InternationalTransferWidgetComponent implements OnInit {
   transferForm!: FormGroup;
   steps: MenuItem[] = [];
   activeIndex: number = 0;
@@ -54,21 +48,16 @@ export class InternationalTransferComponent implements OnInit {
   supportedCurrencies: string[] = [];
   countries: { label: string, value: string }[] = [];
   beneficiaries: Beneficiary[] = [];
-  isOnDashboard: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private bankingDataService: BankingDataService,
     private currencyExchangeService: CurrencyExchangeService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService,
-    private route: ActivatedRoute,
-    private router: Router
+    private confirmationService: ConfirmationService
   ){}
 
   ngOnInit(): void {
-    this.isOnDashboard = this.router.url.includes('/dashboard');
-
     this.countries = [    'Afghanistan',
     'Albania',
     'Algeria',
@@ -294,21 +283,13 @@ export class InternationalTransferComponent implements OnInit {
 
     this.bankingDataService.accounts$.subscribe(accounts => {
       this.accounts = accounts;
+      console.log('InternationalTransferWidget - Accounts:', this.accounts);
     });
 
     this.supportedCurrencies = this.currencyExchangeService.getSupportedCurrencies();
 
     this.loadBeneficiaries();
-
-    this.route.params.subscribe(params => {
-      const beneficiaryId = params['beneficiaryId'];
-      if (beneficiaryId) {
-        const selectedBeneficiary = this.beneficiaries.find(b => b.id === beneficiaryId);
-        if (selectedBeneficiary) {
-          this.selectBeneficiary(selectedBeneficiary);
-        }
-      }
-    });
+    console.log('InternationalTransferWidget - Supported Currencies:', this.supportedCurrencies);
 
     this.transferForm.get('country')?.valueChanges.subscribe(country => {
       const sortCodeControl = this.transferForm.get('sortCode');
@@ -362,6 +343,7 @@ export class InternationalTransferComponent implements OnInit {
     const data = localStorage.getItem('beneficiaries');
     this.beneficiaries = data ? JSON.parse(data) : [];
     this.beneficiaries = this.beneficiaries.filter(b => b.isInternational);
+    console.log('InternationalTransferWidget - Beneficiaries:', this.beneficiaries);
   }
 
   selectBeneficiary(beneficiary: Beneficiary) {
@@ -388,22 +370,9 @@ export class InternationalTransferComponent implements OnInit {
         const convertedAmount = amount * rate;
 
         this.confirmationService.confirm({
-          message: `Please review the following international transfer details:<br><br>
-                    <strong>From Account:</strong> ${fromAccount.number}<br>
-                    <strong>Beneficiary:</strong> ${beneficiaryName}<br>
-                    <strong>Beneficiary Address:</strong> ${beneficiaryAddress}<br>
-                    <strong>Beneficiary Account:</strong> ${toAccount}<br>
-                    <strong>IBAN:</strong> ${iban}<br>
-                    <strong>Bank:</strong> ${bankName}<br>
-                    <strong>Bank Address:</strong> ${bankAddress}<br>
-                    <strong>SWIFT/BIC:</strong> ${swiftBic}<br>
-                    <strong>Purpose:</strong> ${purpose}<br><br>
-                    <strong>Amount to Transfer:</strong> ${amount} ${currency}<br>
-                    <strong>Recipient will receive approximately:</strong> ${convertedAmount.toFixed(2)} ${toCurrency}<br>
-                    <strong>Exchange Rate:</strong> 1 ${currency} = ${rate} ${toCurrency}<br><br>
-                    Do you want to proceed?`,
+          message: `Please review the following international transfer details:<br><br>\n                    <strong>From Account:</strong> ${fromAccount.number}<br>\n                    <strong>Beneficiary:</strong> ${beneficiaryName}<br>\n                    <strong>Beneficiary Address:</strong> ${beneficiaryAddress}<br>\n                    <strong>Beneficiary Account:</strong> ${toAccount}<br>\n                    <strong>IBAN:</strong> ${iban}<br>\n                    <strong>Bank:</strong> ${bankName}<br>\n                    <strong>Bank Address:</strong> ${bankAddress}<br>\n                    <strong>SWIFT/BIC:</strong> ${swiftBic}<br>\n                    <strong>Purpose:</strong> ${purpose}<br><br>\n                    <strong>Amount to Transfer:</strong> ${amount} ${currency}<br>\n                    <strong>Recipient will receive approximately:</strong> ${convertedAmount.toFixed(2)} ${toCurrency}<br>\n                    <strong>Exchange Rate:</strong> 1 ${currency} = ${rate} ${toCurrency}<br><br>\n                    Do you want to proceed?`,
           header: 'Confirm International Transfer',
-          icon: 'pi pi-globe',
+          icon: 'pi-globe',
           accept: () => {
             this.executeTransfer(convertedAmount);
           },

@@ -16,6 +16,7 @@ import { Account } from '../../interfaces/Account.interface';
 import { DebitCard } from '../../interfaces/DebitCard.interface';
 import { CreditCardNumberPipe } from '../../pipes/credit-card-number.pipe';
 import { UppercaseTextPipe } from '../../pipes/uppercase-text.pipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-debit-cards',
@@ -44,15 +45,19 @@ export class DebitCardsComponent implements OnInit {
   requestForm!: FormGroup;
   accounts: Account[] = [];
   debitCards: DebitCard[] = [];
+  isOnDashboard: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private bankingDataService: BankingDataService
+    private bankingDataService: BankingDataService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.isOnDashboard = this.router.url.includes('/dashboard');
+
     this.requestForm = this.fb.group({
       cardholderName: ['', Validators.required],
       tiedAccount: [null, Validators.required]

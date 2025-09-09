@@ -1,15 +1,5 @@
 <p-toast></p-toast>
-<div class="transfer-page">
-  <div class="header" *ngIf="!isOnDashboard">
-    <h1>Intra-Account Transfer</h1>
-    <p>
-      Transfer funds to another account within the same bank under the same
-      user.
-    </p>
-  </div>
-
-  <ng-template #theForm>
-    <div class="flex align-items-center h-full" style="width: 100%">
+<div class="flex align-items-center h-full" style="width: 100%">
       <div class="col-12">
         <form
           class="transfer-form"
@@ -71,54 +61,10 @@
               type="submit"
               class="ReviewBtn"
               styleClass="nextAction w-full"
-              [disabled]="transferForm.invalid || (isOnDashboard && !rearrangeMode)"
+              [disabled]="transferForm.invalid"
             >
             </p-button>
           </div>
         </form>
       </div>
     </div>
-  </ng-template>
-
-  <p-card>
-    <ng-container *ngIf="!isOnDashboard; else dashboardView">
-      <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
-        <ng-template pTemplate="form">
-          <div class="flex h-full">
-            <div class="instructions">
-              <h2>Instructions for Intra-Account Transfer</h2>
-              <h4>
-                Follow these steps to complete a transfer between your own
-                accounts:
-              </h4>
-              <ul>
-                <li>
-                  <strong>Select From Account:</strong> Choose the account from
-                  which you want to transfer funds.
-                </li>
-                <li>
-                  <strong>Select To Account:</strong> Choose the account to which
-                  you want to transfer funds.
-                </li>
-                <li>
-                  <strong>Enter Amount and Currency:</strong> Specify the amount
-                  you wish to transfer and select the currency.
-                </li>
-                <li>
-                  <strong>Review and Confirm:</strong> Click "Review Transfer" to
-                  verify details, then confirm.
-                </li>
-              </ul>
-            </div>
-          </div>
-        </ng-template>
-        <ng-template pTemplate>
-          <ng-container *ngTemplateOutlet="theForm"></ng-container>
-        </ng-template>
-      </p-splitter>
-    </ng-container>
-    <ng-template #dashboardView>
-      <ng-container *ngTemplateOutlet="theForm"></ng-container>
-    </ng-template>
-  </p-card>
-</div>

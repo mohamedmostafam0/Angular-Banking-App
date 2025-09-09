@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BankingDataService } from '../../../services/banking-data.service';
 import { Account } from '../../../interfaces/Account.interface';
 import { MessageService, ConfirmationService, ConfirmEventType } from 'primeng/api';
@@ -39,10 +39,12 @@ import { TooltipModule } from 'primeng/tooltip';
   providers: []
 })
 export class DomesticTransferComponent implements OnInit {
+  @Input() rearrangeMode: boolean = false;
   transferForm!: FormGroup;
   accounts: Account[] = [];
   supportedCurrencies: string[] = [];
   beneficiaries: Beneficiary[] = [];
+  isOnDashboard: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -50,10 +52,13 @@ export class DomesticTransferComponent implements OnInit {
     private messageService: MessageService,
     private currencyExchangeService: CurrencyExchangeService,
     private confirmationService: ConfirmationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.isOnDashboard = this.router.url.includes('/dashboard');
+
     this.transferForm = this.fb.group({
       fromAccount: [null, Validators.required],
       toAccount: ['', Validators.required],

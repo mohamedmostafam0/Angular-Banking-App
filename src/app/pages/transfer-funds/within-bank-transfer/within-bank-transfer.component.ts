@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { BankingDataService } from '../../../services/banking-data.service';
 import { Account } from '../../../interfaces/Account.interface';
 import { MessageService, ConfirmationService, ConfirmEventType } from 'primeng/api';
@@ -36,19 +37,24 @@ import { InputTextModule } from 'primeng/inputtext';
   providers: [MessageService, ConfirmationService]
 })
 export class WithinBankTransferComponent implements OnInit {
+  @Input() rearrangeMode: boolean = false;
   transferForm!: FormGroup;
   accounts: Account[] = [];
   supportedCurrencies: string[] = [];
+  isOnDashboard: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private bankingDataService: BankingDataService,
     private messageService: MessageService,
     private currencyExchangeService: CurrencyExchangeService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.isOnDashboard = this.router.url.includes('/dashboard');
+
     this.transferForm = this.fb.group({
       fromAccount: [null, Validators.required],
       recipientAccount: ['', [Validators.required, Validators.pattern('^[0-9]{10,16}$')]], // Assuming account numbers are 10-16 digits

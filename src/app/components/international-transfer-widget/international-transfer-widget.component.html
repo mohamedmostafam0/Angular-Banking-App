@@ -1,19 +1,6 @@
 <p-toast></p-toast>
-<div class="transfer-page" id="RequestCreditCardPage">
-  <div class="header" *ngIf="!isOnDashboard">
-    <h1>International Transfer</h1>
-    <p>Transfer funds to an account in another country.</p>
-  </div>
-
-  <p-steps
-    *ngIf="!isOnDashboard"
-    [model]="steps"
-    [(activeIndex)]="activeIndex"
-    [readonly]="true"
-  ></p-steps>
-
-  <ng-template #theForm>
-    <div class="flex align-items-center h-full" style="width: 100%">
+<p-confirmDialog></p-confirmDialog>
+<div class="flex align-items-center h-full" style="width: 100%">
       <div class="col-12">
         <form class="transfer-form" [formGroup]="transferForm">
           <!-- Step 0: Beneficiary Details -->
@@ -291,7 +278,7 @@
               type="submit"
               icon="pi pi-check"
               (click)="initiateTransfer()"
-              [disabled]="transferForm.invalid || (isOnDashboard && !rearrangeMode)"
+              [disabled]="transferForm.invalid"
               class="nextBtn"
               styleClass="nextButton w-full"
             ></p-button>
@@ -299,46 +286,3 @@
         </form>
       </div>
     </div>
-  </ng-template>
-
-  <p-card>
-    <ng-container *ngIf="!isOnDashboard; else dashboardView">
-      <p-splitter styleClass="mb-5" [panelSizes]="[35, 65]">
-        <ng-template pTemplate="form">
-          <div class="flex h-full">
-            <div class="instructions">
-              <h2>Instructions for International Transfer</h2>
-              <h4>
-                Follow these steps to complete an international fund transfer:
-              </h4>
-              <ul>
-                <li>
-                  <strong>Step 1: Beneficiary Details:</strong> Provide the
-                  recipient's account and personal information.
-                </li>
-                <li>
-                  <strong>Step 2: Bank Details:</strong> Enter the recipient's
-                  bank information.
-                </li>
-                <li>
-                  <strong>Step 3: Amount & Purpose:</strong> Specify the transfer
-                  amount, currencies, and purpose.
-                </li>
-                <li>
-                  <strong>Step 4: Confirmation:</strong> Review all details and
-                  confirm the transfer.
-                </li>
-              </ul>
-            </div>
-          </div>
-        </ng-template>
-        <ng-template pTemplate>
-          <ng-container *ngTemplateOutlet="theForm"></ng-container>
-        </ng-template>
-      </p-splitter>
-    </ng-container>
-    <ng-template #dashboardView>
-      <ng-container *ngTemplateOutlet="theForm"></ng-container>
-    </ng-template>
-  </p-card>
-</div>

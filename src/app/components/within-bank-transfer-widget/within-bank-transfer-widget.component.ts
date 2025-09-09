@@ -1,11 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { BankingDataService } from '../../../services/banking-data.service';
-import { Account } from '../../../interfaces/Account.interface';
+import { BankingDataService } from '../../services/banking-data.service';
+import { Account } from '../../interfaces/Account.interface';
 import { MessageService, ConfirmationService, ConfirmEventType } from 'primeng/api';
-import { CurrencyExchangeService } from '../../../services/currency-exchange.service';
+import { CurrencyExchangeService } from '../../services/currency-exchange.service';
 
 // PrimeNG Modules
 import { CardModule } from 'primeng/card';
@@ -13,10 +12,11 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
-import { SplitterModule } from 'primeng/splitter';
-import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InputTextModule } from 'primeng/inputtext';
+
 @Component({
-  selector: 'app-intra-account-transfer',
+  selector: 'app-within-bank-transfer-widget',
   standalone: true,
   imports: [
     CommonModule,
@@ -26,37 +26,33 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
     DropdownModule,
     InputNumberModule,
     ToastModule,
-    SplitterModule,
-    ConfirmDialog
+    ConfirmDialogModule,
+    InputTextModule
   ],
-  templateUrl: './intra-account-transfer.component.html',
-  styleUrls: ['./intra-account-transfer.component.scss'],
-  providers: []
+  templateUrl: './within-bank-transfer-widget.component.html',
+  styleUrls: ['./within-bank-transfer-widget.component.scss'],
+  providers: [MessageService, ConfirmationService]
 })
-export class IntraAccountTransferComponent implements OnInit {
-  @Input() rearrangeMode: boolean = false;
+export class WithinBankTransferWidgetComponent implements OnInit {
   transferForm!: FormGroup;
   accounts: Account[] = [];
   supportedCurrencies: string[] = [];
-  isOnDashboard: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private bankingDataService: BankingDataService,
     private messageService: MessageService,
     private currencyExchangeService: CurrencyExchangeService,
-    private confirmationService: ConfirmationService,
-    private router: Router
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
-    this.isOnDashboard = this.router.url.includes('/dashboard');
-
     this.transferForm = this.fb.group({
       fromAccount: [null, Validators.required],
-      toAccount: [null, Validators.required],
+      recipientAccount: ['', [Validators.required, Validators.pattern('^[0-9]{10,16}$')]], // Assuming account numbers are 10-16 digits
       amount: [null, [Validators.required, Validators.min(0.01)]],
-      currency: ['USD', Validators.required]
+      currency: ['USD', Validators.required],
+      description: ['']
     });
 
     this.bankingDataService.accounts$.subscribe(accounts => {
@@ -72,10 +68,10 @@ export class IntraAccountTransferComponent implements OnInit {
       return;
     }
 
-    const { fromAccount, toAccount, amount, currency } = this.transferForm.value;
+    const { fromAccount, recipientAccount, amount, currency } = this.transferForm.value;
 
     this.confirmationService.confirm({
-      message: `Are you sure you want to transfer ${amount} ${currency} from account ${fromAccount.number} to ${toAccount.number}?`,
+      message: `Are you sure you want to transfer ${amount} ${currency} from account ${fromAccount.number} to ${recipientAccount}?`,
       header: 'Confirm Transfer',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -95,17 +91,18 @@ export class IntraAccountTransferComponent implements OnInit {
   }
 
   executeTransfer() {
-    const { fromAccount, toAccount, amount } = this.transferForm.value;
+    const { fromAccount, recipientAccount, amount } = this.transferForm.value;
 
     if (fromAccount.balance < amount) {
       this.messageService.add({ severity: 'error', summary: 'Insufficient Funds', detail: 'You do not have enough money to make this transfer.' });
       return;
     }
 
+    // For demonstration, we'll just deduct from the source account.
+    // In a real app, you'd also credit the recipient's account.
     this.bankingDataService.withdraw(fromAccount.number, amount);
-    this.bankingDataService.deposit(toAccount.number, amount);
 
     this.messageService.add({ severity: 'success', summary: 'Transfer Successful', detail: 'The funds have been transferred.' });
-    this.transferForm.reset();
+    this.transferForm.reset({ currency: 'USD' });
   }
 }

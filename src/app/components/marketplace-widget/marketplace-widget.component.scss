@@ -95,6 +95,7 @@
 {
   border-color: #fff !important;
   background-color: var(--surface-card) !important;
+  color: var(--text-color) !important;
 }
 
 ::ng-deep .p-button:not(:disabled):hover{
@@ -109,3 +110,18 @@
 ::ng-deep .p-button-text:not(:disabled):hover{
   color: white !important;
 }
+
+.disabled-widget {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.utility-item {
+    border: 1px solid #e9ecef;
+    border-radius: 3px;
+    margin: .3rem;
+    text-align: center;
+    padding: 1rem;
+    cursor: pointer;
+}
+

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms'; // Added for ngModel
@@ -12,6 +12,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog'; // Added for p-dialog
 import { ToastModule } from 'primeng/toast'; // Added for MessageService
+import { TooltipModule } from 'primeng/tooltip';
 import { MessageService } from 'primeng/api'; // Added for MessageService
 
 // Services and Interfaces
@@ -33,12 +34,14 @@ import { Account } from '../../interfaces/Account.interface';
     CardModule,
     DialogModule, // Added
     ToastModule, // Added
+    TooltipModule // Added
   ],
   templateUrl: './marketplace-widget.component.html',
   styleUrls: ['./marketplace-widget.component.scss'],
   providers: [MessageService, BankingDataService] // Added BankingDataService and MessageService
 })
 export class MarketplaceWidgetComponent implements OnInit {
+  @Input() rearrangeMode: boolean = false;
   marketplaceForm!: FormGroup;
   products: any[] = []; // This was for the original carousel, keeping it for now
   categories: any[] = [

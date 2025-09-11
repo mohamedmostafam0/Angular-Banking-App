@@ -7,7 +7,7 @@
     [responsiveOptions]="responsiveOptions"
   >
     <ng-template let-utility pTemplate="item">
-      <div class="utility-item" (click)="selectUtility(utility)">
+      <div class="utility-item" (click)="rearrangeMode ? $event.stopPropagation() : selectUtility(utility)" [pTooltip]="rearrangeMode ? 'Cannot perform transactions in rearrange mode' : ''" [ngClass]="{'disabled-widget': rearrangeMode}">
         <div class="utility-item-content">
           <div class="p-mb-3 text-center">
             <img

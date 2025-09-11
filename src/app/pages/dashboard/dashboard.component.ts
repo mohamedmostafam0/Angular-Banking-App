@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { BankingDataService } from '../../services/banking-data.service';
 import { AuthService } from '../../services/auth.service';
 import { Observable, of, Subscription } from 'rxjs';
@@ -28,6 +28,8 @@ import { WithinBankTransferWidgetComponent } from '../../components/within-bank-
 import { CreditCardWidgetComponent } from '../../components/credit-card-widget/credit-card-widget.component';
 import { DebitCardWidgetComponent } from '../../components/debit-card-widget/debit-card-widget.component';
 import { MarketplaceWidgetComponent } from '../../components/marketplace-widget/marketplace-widget.component';
+
+
 
 @Component({
   selector: 'app-dashboard',
@@ -83,7 +85,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     { name: 'Debit Cards', component: 'app-debit-card-widget' },
     { name: 'New Recurring Payment', component: 'app-recurring-payments-widget' },
     { name: 'Domestic Transfer', component: 'app-domestic-transfer-widget' },
-    { name: 'International Transfer', component: 'ap~p-international-transfer-widget' },
+    { name: 'International Transfer', component: 'app-international-transfer-widget' },
     { name: 'Intra-Account Transfer', component: 'app-intra-account-transfer-widget' },
     { name: 'Within-Bank Transfer', component: 'app-within-bank-transfer-widget' },
     { name: 'Cash-flow Waterfall', component: 'cash-flow-waterfall-chart' },

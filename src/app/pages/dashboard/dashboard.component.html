@@ -95,9 +95,7 @@
               type="bar"
               [data]="cashflowData"
             ></p-chart>
-            <app-marketplace-widget
-              *ngSwitchCase="'app-marketplace-widget'"
-            ></app-marketplace-widget>
+            <app-marketplace-widget [rearrangeMode]="rearrangeMode" *ngSwitchCase="'app-marketplace-widget'"></app-marketplace-widget>
           </ng-container>
         </p-card>
       </div>
